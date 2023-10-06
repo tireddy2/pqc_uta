@@ -108,7 +108,7 @@ The "ohttp" SvcParamKey defined in {{?I-D.ietf-ohai-svcb-config}} is used to ind
 
 Oblivious HTTP uses HPKE {{!RFC9180}} for encapsulating binary HTTP messages to protect their contents. Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. DNS over Oblivious HTTP may be vulnerable to decryption if an attacker gains access to the traditional asymmetric keys used in the HPKE. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret. If an attacker possesses copies of an entire set of encapsulated HTTP messages, it could use CRQC to potentially decrypt the message content by determining the private key. The attacker can potentially be the Oblivious Relay Resource.
 
-HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. The DNS over Oblivious HTTP protocol MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
+HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs. The DNS over Oblivious HTTP protocol MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
 
 # Security Considerations
 
