@@ -98,7 +98,7 @@ While CRQCs could retroactively decrypt previous TLS sessions, DNS server authen
 
 The Quantum-Ready authentication property ensures authentication through either a Post-Quantum Certificate or a PQ/T hybrid scheme. A Post-Quantum X.509 Certificate using Dilithium is defined in {{?I-D.lamps-dilithium-certificates}}. The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the LAMPS WG, and consensus may evolve over time regarding its adoption.
 
-To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for encrypted DNS, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs.
+To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for encrypted DNS server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs.
 
 # Security Considerations
 
