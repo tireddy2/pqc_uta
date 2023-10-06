@@ -1,1 +1,1 @@
-# pqc_dns
+# PQC_DNS
