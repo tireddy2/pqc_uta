@@ -80,8 +80,6 @@ This document makes use of the terms defined in {{?I-D.ietf-pquip-pqt-hybrid-ter
 
 The timeline and driving motivation for Quantum-Ready Encrypted DNS transition differ between data confidentiality and data authentication (e.g., signature). Digital signatures are used within X.509 certificates, Certificate Revocation Lists (CRLs), and to sign messages.
 
-Encrypted payloads transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric keys used in the TLS key exchange. TLS implementations commonly employ Diffie-Hellman schemes for key exchange. If an attacker possesses copies of an entire set of encrypted payloads, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key.
-
 Encrypted payloads transmitted via Transport Layer Security (TLS) can be susceptible to decryption if an attacker gains access to the traditional asymmetric keys used in the TLS key exchange. TLS implementations commonly utilize Diffie-Hellman schemes for key exchange. If an attacker has copies of an entire set of encrypted payloads, including the TLS setup, it could employ CRQCs to potentially decrypt the payload by determining the private key.
 
 For data confidentiality, we are concerned with the so-called "Harvest Now, Decrypt Later" attack where a malicious actor with adequate resources can launch an attack to store encrypted data today that can be decrypted once a CRQC is available. This implies that, every day, encrypted data is susceptible to the attack by not implementing quantum-safe strategies, as it corresponds to data being deciphered in the future.  
