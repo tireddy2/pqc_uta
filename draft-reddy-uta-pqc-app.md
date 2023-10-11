@@ -1,6 +1,6 @@
 ---
-title: "Post-Quantum Cryptography Profile for Applications"
-abbrev: "PQC for Applications"
+title: "Post-Quantum Cryptography Recommendations for Internet Applications"
+abbrev: "PQC Recommendations for Applications"
 category: std
 
 docname: draft-reddy-uta-pqc-app
@@ -34,6 +34,10 @@ author:
     region: Karnataka
     country: India
     email: "kondtir@gmail.com"
+ -
+    name: Dan Wing
+    organization: Cloud Software Group Holdings, Inc.
+    email: dwing-ietf@fuggles.com
 
 normative:
 
@@ -45,7 +49,9 @@ informative:
       
 --- abstract
 
-This document discusses Quantum-Ready usage profiles for applications.
+Post-quantum cryptography brings some new challenges to applications, end users, and system administrators. 
+This document describes characteristics unique to application protocols and best practices for deploying 
+Quantum-Ready usage profiles for applications.
 
 --- middle
 
@@ -56,7 +62,7 @@ The visible face of the Internet largely consists of services that employ a clie
 The presence of a Cryptographically Relevant Quantum Computer (CRQC) would render state-of-the-art, traditional public-key algorithms deployed today obsolete, since the assumptions about the intractability of the mathematical problems for these algorithms that offer confident levels of security today no longer apply in the presence of a CRQC. This means there is a requirement to update protocols and infrastructure to use post-quantum algorithms, which are public-key algorithms designed to be secure against CRQCs as well as classical computers. The 
 traditional cryptographic primitives that need to be replaced by PQC are discussed in {{?I-D.ietf-pquip-pqc-engineers}}.
 
-This document discusses Quantum-Ready usage profiles for applications designed to defend against passive and on-path attacks utilizing CRQCs. 
+All applications can be vulnerable to active or passive attacks by adversaries utilizing CRQCs, each to varying degrees of significance for both the user and the underlying system. This document delves into Quantum-Ready usage profiles for applications specifically designed to protect against passive and on-path attacks using CRQCs.
 
 # Conventions and Definitions
 
@@ -74,7 +80,9 @@ This document makes use of the terms defined in {{?I-D.ietf-pquip-pqt-hybrid-ter
 
 The timeline and driving motivation for Quantum-Ready Encrypted DNS transition differ between data confidentiality and data authentication (e.g., signature). Digital signatures are used within X.509 certificates, Certificate Revocation Lists (CRLs), and to sign messages.
 
-Encrypted messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric keys used in the TLS key exchange. TLS implementations commonly employ Diffie-Hellman schemes for key exchange. If an attacker possesses copies of an entire set of encrypted messages, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key.
+Encrypted payloads transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric keys used in the TLS key exchange. TLS implementations commonly employ Diffie-Hellman schemes for key exchange. If an attacker possesses copies of an entire set of encrypted payloads, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key.
+
+Encrypted payloads transmitted via Transport Layer Security (TLS) can be susceptible to decryption if an attacker gains access to the traditional asymmetric keys used in the TLS key exchange. TLS implementations commonly utilize Diffie-Hellman schemes for key exchange. If an attacker has copies of an entire set of encrypted payloads, including the TLS setup, it could employ CRQCs to potentially decrypt the payload by determining the private key.
 
 For data confidentiality, we are concerned with the so-called "Harvest Now, Decrypt Later" attack where a malicious actor with adequate resources can launch an attack to store encrypted data today that can be decrypted once a CRQC is available. This implies that, every day, encrypted data is susceptible to the attack by not implementing quantum-safe strategies, as it corresponds to data being deciphered in the future.  
 
@@ -99,13 +107,17 @@ The Quantum-Ready authentication property ensures authentication through either 
 
 To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for encrypted DNS server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs.
 
-# Encrypted DNS
+# Application Protocols
+
+## Encrypted DNS
 
 The privacy risks for end users exchanging DNS messages in clear text are discussed in {{!RFC7518}}. Transport Layer Security (TLS) is employed to ensure privacy for DNS. DNS encryption provided by TLS (e.g., DNS-over-HTTPS, DNS-over-TLS, DNS-over-QUIC) eliminates opportunities for eavesdropping and on-path tampering while in transit through the network.
 
-Encrypted DNS protocols will have to support the Quantum-Ready usage profile discussed in {#confident}.
+Encrypted DNS messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric keys used in the TLS key exchange. If an attacker possesses copies of an entire set of encrypted DNS messages, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key.
 
-# DNS over Oblivious HTTP 
+Encrypted DNS protocols will have to support the Quantum-Ready usage profile discussed in {#confident}. 
+
+## DNS over Oblivious HTTP 
 
 Oblivious HTTP {{?I-D.ietf-ohai-ohttp}} allows clients to encrypt messages exchanged with an Oblivious Target Resource (target). The messages are encapsulated in encrypted messages to an Oblivious Gateway Resource (gateway), which offers Oblivious HTTP access to the target. The gateway is accessed via an Oblivious Relay Resource (relay), which proxies the encapsulated messages to hide the identity of the client. Overall, this architecture is designed in such a way that the relay cannot inspect the contents of messages, and the gateway and target cannot learn the client's identity from a single transaction.
 
@@ -114,6 +126,32 @@ The "ohttp" SvcParamKey defined in {{?I-D.ietf-ohai-svcb-config}} is used to ind
 Oblivious HTTP uses HPKE {{!RFC9180}} for encapsulating binary HTTP messages to protect their contents. Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. DNS over Oblivious HTTP may be vulnerable to decryption if an attacker gains access to the traditional asymmetric keys used in the HPKE. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret. If an attacker possesses copies of an entire set of encapsulated HTTP messages, it could use CRQC to potentially decrypt the message content by determining the private key. The attacker can potentially be the Oblivious Relay Resource.
 
 HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs. The DNS over Oblivious HTTP protocol MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
+
+## HTTP
+
+TODO
+
+## NFS
+
+NFS can use TLS, but prefers using it opportunistically {{!RFC9289}}.  Discuss.
+
+## NTP
+
+NTP can run over TLS {{!RFC8915}}.  Compromise of NTP can cause a system's clock to advance backwards
+or forwards from real time, causing either success or failure to use a certificate or other time-based
+authenticator.
+
+## SMTP
+
+TODO
+
+## IMAP
+
+TODO
+
+## FTP
+
+TODO
 
 # Security Considerations
 
