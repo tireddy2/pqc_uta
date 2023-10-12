@@ -115,23 +115,36 @@ Encrypted DNS messages transmitted using Transport Layer Security (TLS) may be v
 
 Encrypted DNS protocols will have to support the Quantum-Ready usage profile discussed in {#confident}. 
 
-## DNS over Oblivious HTTP 
+## Hybrid public-key encryption (HPKE)
 
-Oblivious HTTP {{?I-D.ietf-ohai-ohttp}} allows clients to encrypt messages exchanged with an Oblivious Target Resource (target). The messages are encapsulated in encrypted messages to an Oblivious Gateway Resource (gateway), which offers Oblivious HTTP access to the target. The gateway is accessed via an Oblivious Relay Resource (relay), which proxies the encapsulated messages to hide the identity of the client. Overall, this architecture is designed in such a way that the relay cannot inspect the contents of messages, and the gateway and target cannot learn the client's identity from a single transaction.
+Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. DNS over Oblivious HTTP is vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the HPKE. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret. If an attacker possesses copies of an entire set of encapsulated HTTP messages, it could use CRQC to potentially decrypt the message content by determining the private key. The attacker can potentially be the Oblivious Relay Resource.
+
+HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs.
+
+### DNS over Oblivious HTTP 
+
+Oblivious HTTP {{?I-D.ietf-ohai-ohttp}} allows clients to encrypt messages exchanged with an Oblivious Target Resource (target). The messages are encapsulated in encrypted messages to an Oblivious Gateway Resource (gateway), which offers Oblivious HTTP access to the target. The gateway is accessed via an Oblivious Relay Resource (relay), which proxies the encapsulated messages to hide the identity of the client. Overall, this architecture is designed in such a way that the relay cannot inspect the contents of messages, and the gateway and target cannot learn the client's identity from a single transaction. Oblivious HTTP uses HPKE for encapsulating binary HTTP messages to protect their contents. 
 
 The "ohttp" SvcParamKey defined in {{?I-D.ietf-ohai-svcb-config}} is used to indicate that a service described in an SVCB RR can be accessed as a target using an associated gateway. For the "dns" scheme, as defined in {{!I-D.draft-ietf-add-svcb-dns}}, the presence of the "ohttp" parameter means that the DNS server being described has a DNS over HTTP (DoH) {{!RFC8484}} service that can be accessed using Oblivious HTTP.
 
-Oblivious HTTP uses HPKE {{!RFC9180}} for encapsulating binary HTTP messages to protect their contents. Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. DNS over Oblivious HTTP is vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the HPKE. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret. If an attacker possesses copies of an entire set of encapsulated HTTP messages, it could use CRQC to potentially decrypt the message content by determining the private key. The attacker can potentially be the Oblivious Relay Resource.
-
-HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs. 
-
 The DNS over Oblivious HTTP protocol MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
+
+### Encrypted Client Hello
+
+Applications can use Encrypted Client Hello (ECH) extension {{?I-D.ietf-tls-esni}} to prevent passive observation of the TLS Server Name Indication extension and other potentially sensitive fields, such as the ALPN {{!RFC7301}}.  To effectively provide that privacy protection, ECH extension needs to be used in conjunction with DNS encryption (e.g., DoH). An attacker passively inspecting ECH extension cannot observe the encrypted SNI nor observe the encrypted DNS traffic. 
+
+ECH uses HPKE for public key encryption. ECH MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
 
 ## WebRTC
 
-In WebRTC, secure channels are setup via DTLS [RFC6347] and DTLS-SRTP [RFC5763] keying for SRTP [RFC3711] for the media channel and the Stream Control Transmission Protocol (SCTP) over DTLS [RFC8261] for data channels. 
+In WebRTC, secure channels are setup via DTLS and DTLS-SRTP {{!RFC5763}} keying for SRTP {{!RFC3711}} for the media channel and the Stream Control Transmission Protocol (SCTP) over DTLS {{!RFC8261}} for data channels. 
 
 Secure channels may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the DTLS key exchange. If an attacker possesses copies of an entire set of encrypted media, including the DTLS setup, it could use CRQC to potentially decrypt the media by determining the private key.
+
+WebRTC media and data channels will have to support the Quantum-Ready usage profile discussed in {#confident}. 
+
+The other challenge is that PQC KEMs often come with large public keys and PQC Signature schemes come with larges
+signatuers in comparision with tradtional algorithms (as discussed in Section 12 and 13 of {{?I-D.ietf-pquip-pqc-engineers}}). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels. One potential mitigation strategy is to prevent the duplication of key shares, as discussed in Section 4 of {{!I-D.ietf-tls-hybrid-design}}.  
 
 ## HTTP
 
@@ -147,17 +160,6 @@ NTP can run over TLS {{!RFC8915}}.  Compromise of NTP can cause a system's clock
 or forwards from real time, causing either success or failure to use a certificate or other time-based
 authenticator.
 
-## SMTP
-
-TODO
-
-## IMAP
-
-TODO
-
-## FTP
-
-TODO
 
 # Security Considerations
 
