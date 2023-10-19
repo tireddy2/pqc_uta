@@ -121,6 +121,13 @@ the establishment of a shared secret which remains secure as long as as one of t
 
 Applications MUST migrate to TLS 1.3 and support hybrid key exchange defined in {{!I-D.ietf-tls-hybrid-design}}. In the future, there may be a transition away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to bring benefits in terms of CPU efficiency and reduced data transmission overhead.
 
+The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client doesn't know whether the server supports Hybrid key exchange. To mitigate this, the client will send both the traditional and hybrid key exchange algorithms to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations, results in a larger amount of data transmitted over the network, and may cause the ClientHello message to be fragmented. The client may only indicate support for hybrid key exchange and send a traditional key exchange algorithm keyshare in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm keyshare from the client. The client can then sends the hybrid key exchange algorithm keyshare in the second ClientHello message.
+
+The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of two strategies:
+
+1. Send Both Traditional and Hybrid Key Exchange Algorithms: In the first ClientHello message, the client can send both traditional and hybrid key exchange algorithm key shares to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations, results in a larger amount of data transmitted over the network, and may cause the ClientHello message to be fragmented.
+
+2. Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message.
 
 # Authentication
 
@@ -181,9 +188,15 @@ WebRTC media and data channels will have to support the Quantum-Ready usage prof
 The other challenge is that PQC KEMs often come with large public keys and PQC Signature schemes come with large
 signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of {{?I-D.ietf-pquip-pqc-engineers}}). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels. One potential mitigation strategy to avoid the delay is to prevent the duplication of key shares, as discussed in Section 4 of {{!I-D.ietf-tls-hybrid-design}}.
 
-## HTTP
+## HTTPS
 
-TODO.
+HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP used for secure data exchange over the web. HTTPS primarily relies on the TLS (Transport Layer Security) protocol to provide encryption, integrity, and authenticity for data in transit. 
+
+HTTP messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the TLS key exchange. If an attacker possesses copies of an entire set of encrypted HTTP messages, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key. This traffic can include sensitive information, such as login credentials, personal data, or financial details, depending on the nature of the communication. 
+
+If an attacker can decrypt the message content before the expiry of the login credentails, the attacker can steal the credentails. The theft of login credentials is a serious security concern that can have a wide range of consequences for individuals and organizations. The most immediate and obvious challenge is that the attacker gains unauthorized access to the victim's accounts, systems, or data. This can lead to data breaches, privacy violations, and various forms of cybercrime.
+
+HTTPS will have to support the Quantum-Ready usage profile discussed in {#confident}. Reverse proxies operated between clients and origin servers will also have to support {#confident}. 
 
 ## Email Submission
 
