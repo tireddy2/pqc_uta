@@ -85,7 +85,7 @@ into three classes:
 on integer factorisation, finite field discrete logarithms or elliptic
 curve discrete logarithms. In the context of TLS, examples of
 traditional key exchange algorithms include Elliptic Curve
-Diffie-Hellman (ECHD); which is almost always used in the ephemeral mode ECDHE.
+Diffie-Hellman (ECDH); which is almost always used in the ephemeral mode ECDHE.
 
 "Post-Quantum Algorithm": An asymmetric cryptographic algorithm that
 is believed to be secure against attacks using quantum computers as
@@ -106,7 +106,7 @@ The same categories also apply to digital signature algorithms as used in X.509 
 
 The timeline and driving motivation for Quantum-Ready Encrypted DNS transition differ between data confidentiality and data authentication (e.g., signature). Digital signatures are used within X.509 certificates, Certificate Revocation Lists (CRLs), and to sign messages.
 
-Encrypted payloads transmitted via Transport Layer Security (TLS) can be susceptible to decryption if an attacker equiped with a CRQC gains access to the traditional asymmetric public keys used in the TLS key exchange and the transmitted ciphertext. TLS implementations commonly utilize Diffie-Hellman schemes for key exchange. If an attacker has copies of an entire set of encrypted payloads, including the TLS setup, it could employ CRQCs to potentially decrypt the payload by determining the private key.
+Encrypted payloads transmitted via Transport Layer Security (TLS) can be susceptible to decryption if an attacker equipped with a CRQC gains access to the traditional asymmetric public keys used in the TLS key exchange and the transmitted ciphertext. TLS implementations commonly utilize Diffie-Hellman schemes for key exchange. If an attacker has copies of an entire set of encrypted payloads, including the TLS setup, it could employ CRQCs to potentially decrypt the payload by determining the private key.
 
 For data confidentiality, we are concerned with the so-called "Harvest Now, Decrypt Later" attack where a malicious actor with adequate resources can launch an attack to store encrypted data today that can be decrypted once a CRQC is available. This implies that, even today, encrypted data is susceptible to the attack by not implementing quantum-safe strategies, as it corresponds to data being deciphered in the future. The storage time and effective security lifetime of this encrypted data might vary from seconds to decades.
 
