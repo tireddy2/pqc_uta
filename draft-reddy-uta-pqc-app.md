@@ -85,7 +85,8 @@ into three classes:
 on integer factorisation, finite field discrete logarithms or elliptic
 curve discrete logarithms. In the context of TLS, examples of
 traditional key exchange algorithms include Elliptic Curve
-Diffie-Hellman (ECDH); which is almost always used in the ephemeral mode ECDHE.
+Diffie-Hellman (ECDH); which is almost always used in the ephemeral mode referred to 
+as Elliptic Curve Diffie-Hellman Ephemeral (ECDHE).
 
 "Post-Quantum Algorithm": An asymmetric cryptographic algorithm that
 is believed to be secure against attacks using quantum computers as
@@ -99,7 +100,7 @@ least one of the component key exchange algorithms remains
 unbroken. It is referred to as PQ/T Hybrid Scheme in
 {{?I-D.ietf-pquip-pqt-hybrid-terminology}}.
 
-The same categories also apply to digital signature algorithms as used in X.509 certificates, Certificate Transparancy SCTs, OCSP statements, Remote Attestations, and any other mechanism that contributes signatures to a TLS handshake.
+The same categories also apply to digital signature algorithms as used in X.509 certificates, Certificate Transparency SCTs, OCSP statements, Remote Attestations, and any other mechanism that contributes signatures to a TLS handshake.
 
 
 # Timeline for transition {#timeline}
@@ -121,7 +122,7 @@ the establishment of a shared secret which remains secure as long as as one of t
 
 {{!I-D.ietf-tls-hybrid-design}} provides a construction for hybrid key exchange in TLS 1.3 version. It meets the the primary goal of hybrid key exchange and other additional goals are discussed in Section 1.5 of {{!I-D.ietf-tls-hybrid-design}}.
 
-Applications MUST migrate to TLS 1.3 and support hybrid key exchange defined in {{!I-D.ietf-tls-hybrid-design}}. In the future, we expect to see a transition away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to bring benefits in terms of CPU efficiency and reduced data transmission overhead.
+Applications MUST migrate to TLS 1.3 and support the hybrid key exchange, as defined in {{!I-D.ietf-tls-hybrid-design}}. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.
 
 The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client doesn't know whether the server supports Hybrid key exchange. To address this, the client will send both the traditional and hybrid key exchange algorithms to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations, results in a larger amount of data transmitted over the network, and may cause the ClientHello message to be fragmented. The client may only indicate support for hybrid key exchange and send a traditional key exchange algorithm keyshare in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm keyshare from the client. The client can then sends the hybrid key exchange algorithm keyshare in the second ClientHello message.
 
@@ -157,17 +158,12 @@ Hybrid public-key encryption (HPKE) is a scheme that provides public key encrypt
 
 HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs.
 
-### Interaction with Application Encrypted Client Hello {#ech}
+### Interaction with Encrypted Client Hello {#ech}
 
 Client TLS libraries and applications use Encrypted Client Hello (ECH) {{?I-D.ietf-tls-esni}} to prevent passive
-observation of the intended server identity in the TLS handshake which requires also deploying encrypted DNS (DNS over TLS),
-otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was
-being protected with ECH.
+observation of the intended server identity in the TLS handshake which requires also deploying encrypted DNS (DNS over TLS), otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was being protected with ECH. ECH uses HPKE for public key encryption.
 
-To protect against a CRQC, with TLS exchange with the DNS server and with the application server have to
-both be either post-quantum algorithms or hybrid algorithms.
-
-ECH uses HPKE for public key encryption. ECH MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
+ECH MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
 
 ### Oblivious HTTP
 
