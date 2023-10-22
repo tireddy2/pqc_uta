@@ -17,6 +17,7 @@ keyword:
  - WebRTC
  - HPKE
  - ESNI
+ - Hybrid
 
 venue:
   group: "uta"
@@ -56,20 +57,18 @@ Quantum-Ready usage profiles for applications.
 
 # Introduction
 
-The visible face of the Internet largely consists of services that employ a client-server architecture in which a client communicates with an application service.  When a client communicates with an application service using protocols such as TLS 1.3 {{?RFC8446}}, DTLS 1.3 {{?RFC9147}}, or a protocol built on those (QUIC {{?RFC9001}} being a notable example), the client and server can perform ephemeral public-key exchange mechanisms, such as ECDH, to derive the shared secret for forward secrecy. They can validate each other's identity using X.509 certificates to establish secure communication.
+The visible face of the Internet largely consists of services that employ a client-server architecture in which a client communicates with an application service.  When a client communicates with an application service using protocols such as TLS 1.3 {{?RFC8446}}, DTLS 1.3 {{?RFC9147}}, or a protocol built on those (QUIC {{?RFC9001}} being a notable example), the client and server can perform ephemeral public-key exchange mechanism, such as ECDH, to derive the shared secret for forward secrecy. They can validate each other's identity using X.509 certificates to establish secure communication.
 
-The presence of a Cryptographically Relevant Quantum Computer (CRQC) would render state-of-the-art, traditional public-key algorithms deployed today obsolete and insecure, since the assumptions about the intractability of the mathematical problems for these algorithms that offer confident levels of security today no longer apply in the presence of a CRQC. This means there is a requirement to update protocols and infrastructure to use post-quantum algorithms, which are public-key algorithms designed to be secure against CRQCs as well as classical computers. The
-traditional cryptographic primitives that need to be replaced by PQC are discussed in {{?I-D.ietf-pquip-pqc-engineers}}.
+The presence of a Cryptographically Relevant Quantum Computer (CRQC) would render state-of-the-art, traditional public-key algorithms deployed today obsolete and insecure, since the assumptions about the intractability of the mathematical problems for these algorithms that offer confident levels of security today no longer apply in the presence of a CRQC. This means there is a requirement to update protocols and infrastructure to use post-quantum algorithms, which are public-key algorithms designed to be secure against CRQCs as well as classical computers. The traditional cryptographic primitives that need to be replaced by PQC are discussed in {{?I-D.ietf-pquip-pqc-engineers}}.
 
 The industry has successfully upgraded TLS versions while deprecating old versions (e.g., SSLv2), and many
-protocols have transitioned from RSA to Elliptic Curve Cryptography (ECC) improving security while also reducing key sizes.  The
-transition to post-quantum crypto brings different challenges, most significantly, the new Post-Quantum algorithms:
+protocols have transitioned from RSA to Elliptic Curve Cryptography (ECC) improving security while also reducing key sizes. The transition to post-quantum crypto brings different challenges, most significantly, the new Post-Quantum algorithms:
 
   1. are not fully trusted
   2. use larger key sizes
   3. have higher CPU and memory utilization
 
-All applications transmitting messages over untrusted networks can be susceptible to active or passive attacks by adversaries using CRQCs, with varying degrees of significance for both users and the underlying systems. This document explores Quantum-Ready usage profiles for applications specifically designed to defend against passive and on-path attacks employing CRQCs. TLS client and server implementations, as well as applications, can mitigate the impact of these challenges through various techniques described in subsequent sections
+All applications transmitting messages over untrusted networks can be susceptible to active or passive attacks by adversaries using CRQCs, with varying degrees of significance for both users and the underlying systems. This document explores Quantum-Ready usage profiles for applications specifically designed to defend against passive and on-path attacks employing CRQCs. TLS client and server implementations, as well as applications, can mitigate the impact of these challenges through various techniques described in subsequent sections.
 
 
 # Conventions and Definitions
@@ -88,13 +87,10 @@ traditional key exchange algorithms include Elliptic Curve
 Diffie-Hellman (ECDH); which is almost always used in the ephemeral mode referred to 
 as Elliptic Curve Diffie-Hellman Ephemeral (ECDHE).
 
-"Post-Quantum Algorithm": An asymmetric cryptographic algorithm that
-is believed to be secure against attacks using quantum computers as
-well as classical computers. Examples of PQC key exchange algorithms
-include the Module-Lattice Key Encapsulation Mecahanism (ML-KEM), also called Kyber.
+"Post-Quantum Algorithm": An asymmetric cryptographic algorithm that is believed to be secure against attacks using quantum computers as well as classical computers. Examples of PQC key exchange algorithms include the Module-Lattice Key Encapsulation Mechanism (ML-KEM), also called Kyber.
 
 "Hybrid" key exchange, in this context, means the use of two component
-key exchange algorithms -- one one traditional algorithm and one
+key exchange algorithms -- one traditional algorithm and one
 Post-Quantum algorithm.  The final shared secret key is secure when at
 least one of the component key exchange algorithms remains
 unbroken. It is referred to as PQ/T Hybrid Scheme in
@@ -105,13 +101,13 @@ The same categories also apply to digital signature algorithms as used in X.509 
 
 # Timeline for transition {#timeline}
 
-The timeline and driving motivation for Quantum-Ready Encrypted DNS transition differ between data confidentiality and data authentication (e.g., signature). Digital signatures are used within X.509 certificates, Certificate Revocation Lists (CRLs), and to sign messages.
+The timeline and driving motivation for Quantum-Ready transition differ between data confidentiality and data authentication (e.g., signature). Digital signatures are used within X.509 certificates, Certificate Revocation Lists (CRLs), and to sign messages.
 
 Encrypted payloads transmitted via Transport Layer Security (TLS) can be susceptible to decryption if an attacker equipped with a CRQC gains access to the traditional asymmetric public keys used in the TLS key exchange and the transmitted ciphertext. TLS implementations commonly utilize Diffie-Hellman schemes for key exchange. If an attacker has copies of an entire set of encrypted payloads, including the TLS setup, it could employ CRQCs to potentially decrypt the payload by determining the private key.
 
 For data confidentiality, we are concerned with the so-called "Harvest Now, Decrypt Later" attack where a malicious actor with adequate resources can launch an attack to store encrypted data today that can be decrypted once a CRQC is available. This implies that, even today, encrypted data is susceptible to the attack by not implementing quantum-safe strategies, as it corresponds to data being deciphered in the future. The storage time and effective security lifetime of this encrypted data might vary from seconds to decades.
 
-For client/server certificate based authentication, it is often the case that the certificate's signature in the handshake has a very short lifetime, which means that the time between the certificate signing the CertificateVerify message and its verification by the peer during the TLS handshake is limited. However, we could question the security lifetime of the digital signatures on the X.509 certificates themselves, including the root CAs, which can have lifetimes of 20 years or more, root CRLs which can have lifetimes of a year or more, and delegated credentials such as CRL or OCSP signing certificates which can have lifetimes anywhere in between.
+For client/server certificate based authentication, it is often the case that the certificate's signature in the handshake has a very short lifetime, which means that the time between the certificate signing the CertificateVerify message and its verification by the peer during the TLS handshake is limited. However, we could question the security lifetime of the digital signatures on the X.509 certificates themselves, including the root CAs, which can have lifetimes of 20 years or more, root CRLs which can have lifetimes of a year or more, and delegated credentials such as CRL Signing Certificates or OCSP response signing certificates which can have lifetimes anywhere in between.
 
 # Data Confidentiality {#confident}
 
@@ -120,11 +116,9 @@ The migration to PQC is unique in the history of modern digital cryptography in 
 During the transition from traditional to post-quantum algorithms, there is a desire or a requirement for protocols that use both algorithm types. The primary goal of a hybrid key exchange mechanism is to facilitate
 the establishment of a shared secret which remains secure as long as as one of the component key exchange mechanisms remains unbroken.
 
-{{!I-D.ietf-tls-hybrid-design}} provides a construction for hybrid key exchange in TLS 1.3 version. It meets the the primary goal of hybrid key exchange and other additional goals are discussed in Section 1.5 of {{!I-D.ietf-tls-hybrid-design}}.
+{{!I-D.ietf-tls-hybrid-design}} provides a construction for hybrid key exchange in TLS 1.3. It fulfills the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.
 
 Applications MUST migrate to TLS 1.3 and support the hybrid key exchange, as defined in {{!I-D.ietf-tls-hybrid-design}}. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.
-
-The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client doesn't know whether the server supports Hybrid key exchange. To address this, the client will send both the traditional and hybrid key exchange algorithms to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations, results in a larger amount of data transmitted over the network, and may cause the ClientHello message to be fragmented. The client may only indicate support for hybrid key exchange and send a traditional key exchange algorithm keyshare in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm keyshare from the client. The client can then sends the hybrid key exchange algorithm keyshare in the second ClientHello message.
 
 The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of two strategies:
 
@@ -140,7 +134,7 @@ The Quantum-Ready authentication property can be utilized in scenarios where an 
 
 The Quantum-Ready authentication property ensures authentication through either a pure Post-Quantum or a PQ/T hybrid Certificate. A Post-Quantum X.509 Certificate using Module-Lattice Digital Signature Algorithm (ML-DSA), also called Dilithium, is defined in {{?I-D.ietf-lamps-dilithium-certificates}}. The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the LAMPS WG, and consensus may evolve over time regarding its adoption.
 
-To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for client and server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs. For example, applications that have extremely short key lifetimes -- for example less than an hour -- may decide that it is an acceptable risk to leave those on Traditional algorithms for the forseeable future under the assumption that quantum key factoring attacks take longer to run than the key lifetimes. It may be advantageous to explore heterogeneous PKI architectures where the long-lived CAs are using Post-Quantum algorithms but the server and client certificates are not.
+To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for client and server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs. For example, applications that have extremely short key lifetimes -- for example less than an hour -- may decide that it is an acceptable risk to leave those on Traditional algorithms for the foreseeable future under the assumption that quantum key factoring attacks take longer to run than the key lifetimes. It may be advantageous to explore heterogeneous PKI architectures where the long-lived CAs are using Post-Quantum algorithms but the server and client certificates are not.
 
 # Application Protocols
 
@@ -160,8 +154,7 @@ HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms
 
 ### Interaction with Encrypted Client Hello {#ech}
 
-Client TLS libraries and applications use Encrypted Client Hello (ECH) {{?I-D.ietf-tls-esni}} to prevent passive
-observation of the intended server identity in the TLS handshake which requires also deploying encrypted DNS (DNS over TLS), otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was being protected with ECH. ECH uses HPKE for public key encryption.
+Client TLS libraries and applications can use Encrypted Client Hello (ECH) {{?I-D.ietf-tls-esni}} to prevent passive observation of the intended server identity in the TLS handshake which requires also deploying encrypted DNS (DNS over TLS), otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was being protected with ECH. ECH uses HPKE for public key encryption.
 
 ECH MUST incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.
 
@@ -177,14 +170,13 @@ Oblivious HTTP and DNS over Oblivious HTTP MUST incorporate support for hybrid p
 
 ## WebRTC
 
-In WebRTC, secure channels are setup via DTLS and DTLS-SRTP {{!RFC5763}} keying for SRTP {{!RFC3711}} for  media channels and the Stream Control Transmission Protocol (SCTP) over DTLS {{!RFC8261}} for data channels.
+In WebRTC, secure channels are setup via DTLS and DTLS-SRTP {{!RFC5763}} keying for SRTP {{!RFC3711}} for media channels and the Stream Control Transmission Protocol (SCTP) over DTLS {{!RFC8261}} for data channels.
 
 Secure channels may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the DTLS key exchange. If an attacker possesses copies of an entire set of encrypted media, including the DTLS setup, it could use CRQC to potentially decrypt the media by determining the private key.
 
-WebRTC media and data channels will have to support the Quantum-Ready usage profile discussed in {#confident}.
+WebRTC media and data channels MUST support the Quantum-Ready usage profile discussed in {#confident}.
 
-The other challenge is that PQC KEMs often come with large public keys and PQC Signature schemes come with large
-signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of {{?I-D.ietf-pquip-pqc-engineers}}). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels. One potential mitigation strategy to avoid the delay is to prevent the duplication of key shares, as discussed in Section 4 of {{!I-D.ietf-tls-hybrid-design}}.
+The other challenge with WebRTC is that PQC KEMs often come with large public keys and PQC Signature schemes come with large signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of {{?I-D.ietf-pquip-pqc-engineers}}). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels. One potential mitigation strategy to avoid the delay is to prevent the duplication of key shares, as discussed in Section 4 of {{!I-D.ietf-tls-hybrid-design}}.
 
 ## HTTPS
 
@@ -194,7 +186,7 @@ HTTP messages transmitted using Transport Layer Security (TLS) may be vulnerable
 
 If an attacker can decrypt the message content before the expiry of the login credentails, the attacker can steal the credentails. The theft of login credentials is a serious security concern that can have a wide range of consequences for individuals and organizations. The most immediate and obvious challenge is that the attacker gains unauthorized access to the victim's accounts, systems, or data. This can lead to data breaches, privacy violations, and various forms of cybercrime.
 
-HTTPS will have to support the Quantum-Ready usage profile discussed in {#confident}. Reverse proxies operated between clients and origin servers will also have to support {#confident}. 
+HTTPS MUST support the Quantum-Ready usage profile discussed in {#confident}. Reverse proxies operated between clients and origin servers will also have to support {#confident}. 
 
 ## Email Submission
 
@@ -216,7 +208,7 @@ for time to react in the case of the announcement of a devastating
 attack agaist any one algorithm, while not fully abandoning
 traditional cryptosystems.
 
-Implementing hybrid modes improperly can introduce security issues at the cryptographic layer, for example how the Traditional and PQ schemes are combined; at the algorithm selection layer, for example if 192-bit secure KEM is used with a 128-bit secure combiner; or at the protocol layer in how the upgrade / downgrade mechanism works. Hybrid mechanisms should be implemented carefully and all relevant specifications implemented correctly.
+Implementing hybrid modes improperly can introduce security issues at the cryptographic layer, for example how the Traditional and PQ schemes are combined; at the algorithm selection layer, mismatched security levels for example if 192-bit KEM is used with a 128-bit secure combiner; or at the protocol layer in how the upgrade/downgrade mechanism works. Hybrid mechanisms should be implemented carefully and all relevant specifications implemented correctly.
 
 # Acknowledgements
 {:numbered="false"}
