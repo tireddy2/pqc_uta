@@ -186,7 +186,7 @@ HTTP messages transmitted using Transport Layer Security (TLS) may be vulnerable
 
 If an attacker can decrypt the message content before the expiry of the login credentails, the attacker can steal the credentails. The theft of login credentials is a serious security concern that can have a wide range of consequences for individuals and organizations. The most immediate and obvious challenge is that the attacker gains unauthorized access to the victim's accounts, systems, or data. This can lead to data breaches, privacy violations, and various forms of cybercrime.
 
-HTTPS MUST support the Quantum-Ready usage profile discussed in {#confident}. Reverse proxies operated between clients and origin servers will also have to support {#confident}. 
+Applications using HTTPS to exchange sensitive data MUST support the Quantum-Ready usage profile discussed in {#confident}. If the data is genuinely non-sensitive and has no privacy or security implications, the motivation for an attacker to invest resources in capturing and later decrypting it would likely be very low. In such cases, the "Harvest Now, Decrypt Later" attack may not be relevant. In similar lines, reverse proxies operated between clients and origin servers will also have to support {#confident}. 
 
 ## Email Submission
 
