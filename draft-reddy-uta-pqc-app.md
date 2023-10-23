@@ -87,7 +87,7 @@ traditional key exchange algorithms include Elliptic Curve
 Diffie-Hellman (ECDH); which is almost always used in the ephemeral mode referred to 
 as Elliptic Curve Diffie-Hellman Ephemeral (ECDHE).
 
-"Post-Quantum Algorithm": An asymmetric cryptographic algorithm that is believed to be secure against attacks using quantum computers as well as classical computers. Examples of PQC key exchange algorithms include the Module-Lattice Key Encapsulation Mechanism (ML-KEM), also called Kyber.
+"Post-Quantum Algorithm": An asymmetric cryptographic algorithm that is believed to be secure against attacks using quantum computers as well as classical computers. Examples of PQC key exchange algorithms include the Module-Lattice Key Encapsulation Mechanism (ML-KEM), which is widely known as Kyber.
 
 "Hybrid" key exchange, in this context, means the use of two component
 key exchange algorithms -- one traditional algorithm and one
@@ -111,12 +111,12 @@ In client/server certificate-based authentication, it's common for the certifica
 
 # Data Confidentiality {#confident}
 
-The migration to PQC is unique in the history of modern digital cryptography in that neither the traditional algorithms nor the post-quantum algorithms are fully trusted to protect data for the required data lifetimes. The traditional algorithms, such as RSA and elliptic curve, will fall to quantum cryptalanysis, while the post-quantum algorithms face uncertainty about the underlying mathematics, compliance issues (when certified implementations will be commercially available), unknown vulnerabilities, hardware and software implementations that have not had sufficient maturing time to rule out classical cryptanalytic attacks and implementation bugs.
+The migration to PQC is unique in the history of modern digital cryptography in that neither the traditional algorithms nor the post-quantum algorithms are fully trusted to protect data for the required data lifetimes. The traditional algorithms, such as RSA and elliptic curve, will fall to quantum cryptanalysis, while the post-quantum algorithms face uncertainty about the underlying mathematics, compliance issues (when certified implementations will be commercially available), unknown vulnerabilities, hardware and software implementations that have not had sufficient maturing time to rule out classical cryptanalytic attacks and implementation bugs.
 
 During the transition from traditional to post-quantum algorithms, there is a desire or a requirement for protocols that use both algorithm types. The primary goal of a hybrid key exchange mechanism is to facilitate
 the establishment of a shared secret which remains secure as long as as one of the component key exchange mechanisms remains unbroken.
 
-{{!I-D.ietf-tls-hybrid-design}} provides a construction for hybrid key exchange in TLS 1.3. It fulfills the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.
+{{!I-D.ietf-tls-hybrid-design}} provides a construction for hybrid key exchange in TLS 1.3. It fulfils the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.
 
 Applications MUST migrate to TLS 1.3 and support the hybrid key exchange, as defined in {{!I-D.ietf-tls-hybrid-design}}. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.
 
@@ -196,7 +196,7 @@ HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP used fo
 
 HTTP messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the TLS key exchange. If an attacker possesses copies of an entire set of encrypted HTTP messages, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key. This traffic can include sensitive information, such as login credentials, personal data, or financial details, depending on the nature of the communication. 
 
-If an attacker can decrypt the message content before the expiry of the login credentails, the attacker can steal the credentails. The theft of login credentials is a serious security concern that can have a wide range of consequences for individuals and organizations. The most immediate and obvious challenge is that the attacker gains unauthorized access to the victim's accounts, systems, or data. This can lead to data breaches, privacy violations, and various forms of cybercrime.
+If an attacker can decrypt the message content before the expiry of the login credentials, the attacker can steal the credentials. The theft of login credentials is a serious security concern that can have a wide range of consequences for individuals and organizations. The most immediate and obvious challenge is that the attacker gains unauthorized access to the victim's accounts, systems, or data. This can lead to data breaches, privacy violations, and various forms of cybercrime.
 
 Applications using HTTPS to exchange sensitive data MUST support the Quantum-Ready usage profile discussed in {#confident}. If the data is genuinely non-sensitive and has no privacy or security implications, the motivation for an attacker to invest resources in capturing and later decrypting it would likely be very low. In such cases, the "Harvest Now, Decrypt Later" attack may not be relevant. In similar lines, reverse proxies operated between clients and origin servers will also have to support {#confident}. 
 
@@ -217,7 +217,7 @@ algorithms due to regulatory constraints, for example FIPS
 {{SP-800-56C}} or PCI compliance. Hybrid key exchange enables
 potential security against "Harvest Now, Decrypt Later" attack provide
 for time to react in the case of the announcement of a devastating
-attack agaist any one algorithm, while not fully abandoning
+attack against any one algorithm, while not fully abandoning
 traditional cryptosystems.
 
 Implementing hybrid modes improperly can introduce security issues at the cryptographic layer, for example how the Traditional and PQ schemes are combined; at the algorithm selection layer, mismatched security levels for example if 192-bit KEM is used with a 128-bit secure combiner; or at the protocol layer in how the upgrade/downgrade mechanism works. Hybrid mechanisms should be implemented carefully and all relevant specifications implemented correctly.
