@@ -46,12 +46,13 @@ informative:
      title: "Recommendation for Key-Derivation Methods in Key-Establishment Schemes"
      target: https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf
      date: false
+---
 
 --- abstract
 
 Post-quantum cryptography brings some new challenges to applications, end users, and system administrators.
 This document describes characteristics unique to application protocols and best practices for deploying
-Quantum-Ready usage profiles for applications.
+Quantum-Ready usage profiles for applications using TLS.
 
 --- middle
 
@@ -112,10 +113,12 @@ In client/server certificate-based authentication, it's common for the certifica
 
 # Data Confidentiality {#confident}
 
-The migration to PQC is unique in the history of modern digital cryptography in that neither the traditional algorithms nor the post-quantum algorithms are fully capable of protecting data for the required data lifetimes of years. The traditional algorithms, such as RSA and elliptic curve, will fall to quantum cryptanalysis, while the post-quantum algorithms face uncertainty about the underlying mathematics, compliance issues (when certified implementations will be commercially available), unknown vulnerabilities, hardware and software implementations that have not had sufficient maturing time to rule out classical cryptanalytic attacks and implementation bugs.
+Data may need to be protected for lifetimes measured in years.
+The possibility of CRQCs being developed means that we need to move away from traditional algorithms,
+but at the same time uncertainty about post-quantum algorithm implementation security, lag in standardization, regulatory requirements, and maturity of cryptanalysis may require the continued use of mature traditional algorithms alongside the new post-quantum primitives.
 
-During the transition from traditional to post-quantum algorithms, there is a desire or a requirement for protocols that use both algorithm types. The primary goal of a hybrid key exchange mechanism is to facilitate
-the establishment of a shared secret which remains secure as long as as one of the component key exchange mechanisms remains unbroken.
+The primary goal of a hybrid key exchange mechanism is to facilitate
+the establishment of a shared secret which remains secure as long as one of the component key exchange mechanisms remains unbroken.
 
 {{!I-D.ietf-tls-hybrid-design}} provides a construction for hybrid key exchange in TLS 1.3. It fulfils the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.
 
@@ -123,9 +126,11 @@ Applications MUST migrate to TLS 1.3 and support the hybrid key exchange, as def
 
 The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of two strategies:
 
-1. Send Both Traditional and Hybrid Key Exchange Algorithms: In the first ClientHello message, the client can send both traditional and hybrid key exchange algorithm key shares to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations.
+1. Send Both Traditional and Hybrid Key Exchange Algorithms: In the first ClientHello message, the client can send both traditional and hybrid key exchange algorithm key shares to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations and increases handshake traffic.
 
 2. Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message.
+
+Clients MAY use information from completed handshakes to cache the server's preferences for key exchange algorithms ({{!RFC8446}}, section 4.2.7).
 
 In order to avoid fragmentation of ClientHello message, the client would have to prevent the duplication of PQC KEM public key shares in the ClientHello, avoiding duplication of key shares is discussed in Section 4 of {{!I-D.ietf-tls-hybrid-design}}.
 
@@ -155,9 +160,11 @@ Encrypted DNS messages transmitted using Transport Layer Security (TLS) may be v
 
 Encrypted DNS protocols will have to support the Quantum-Ready usage profile discussed in {#confident}.
 
+Note that post-quantum security of DNSSEC {{?RFC9364}}, which provides authenticity for DNS records, is a separate issue from the requirements for encrypted DNS transports.
+
 ## Hybrid public-key encryption (HPKE)
 
-Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret.  The motivation for standardizing a public key encryption scheme is explained in the introduction of {{!RFC9180}}.
+Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret.  The motivation for standardizing a public key encryption scheme is explained in the introduction of {{?RFC9180}}.
 
 HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs.
 
@@ -183,7 +190,7 @@ TODO
 
 ## WebRTC
 
-In WebRTC, secure channels are setup via DTLS and DTLS-SRTP {{!RFC5763}} keying for SRTP {{!RFC3711}} for media channels and the Stream Control Transmission Protocol (SCTP) over DTLS {{!RFC8261}} for data channels.
+In WebRTC, secure channels are set up via DTLS and DTLS-SRTP {{!RFC5763}} keying for SRTP {{!RFC3711}} for media channels and the Stream Control Transmission Protocol (SCTP) over DTLS {{!RFC8261}} for data channels.
 
 Secure channels may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the DTLS key exchange. If an attacker possesses copies of an entire set of encrypted media, including the DTLS setup, it could use CRQC to potentially decrypt the media by determining the private key.
 
