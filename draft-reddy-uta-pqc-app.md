@@ -67,7 +67,7 @@ protocols have transitioned from RSA to Elliptic Curve Cryptography (ECC) improv
 
   1. are still being evaluated against both classical and post-quantum attacks,
   2. use larger key sizes (which increases handshake packet size), and
-  3. have higher CPU utilization than classical algorithms.
+  3. have higher CPU utilization than traditional algorithms.
 
 
 All applications transmitting messages over untrusted networks can be susceptible to active or passive attacks by adversaries using CRQCs, with varying degrees of significance for both users and the underlying systems. This document explores Quantum-Ready usage profiles for applications specifically designed to defend against passive and on-path attacks employing CRQCs. TLS client and server implementations, as well as applications, can mitigate the impact of these challenges through various techniques described in subsequent sections.
@@ -122,7 +122,7 @@ the establishment of a shared secret which remains secure as long as one of the 
 
 {{!I-D.ietf-tls-hybrid-design}} provides a construction for hybrid key exchange in TLS 1.3. It fulfils the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.
 
-Applications MUST migrate to TLS 1.3 and support the hybrid key exchange, as defined in {{!I-D.ietf-tls-hybrid-design}}. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.
+Applications that use (D)TLS and susceptible to CRQC attack MUST migrate to (D)TLS 1.3 and support the hybrid key exchange, as defined in {{!I-D.ietf-tls-hybrid-design}}. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.
 
 The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of two strategies:
 
@@ -146,7 +146,7 @@ To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T
 
 # Informing Users of PQC Security Compatibility Issues
 
-When the server detects that the client doesn't support PQC or hybrid key exchange, it can send an alert or error page to the client. This page or alert should be served over the same TLS session. The message can inform the end-user that their client is not compatible with the PQC security features offered by the server.
+When the server detects that the client doesn't support PQC or hybrid key exchange, it can send an 'insufficient_security' fatal alert to the client. The client can inform the end-users that the server they are trying to access requires a level of security that the client cannot provide due to the lack of PQC support. Furthermore, the client may log the event for diagnostic and security auditing purposes and report the security-related issue to the client development team.
 
 Similarly, when the client detects that the server doesn't support PQC or hybrid key exchange, it can send an alert or error page to the client. The message can inform the end-user that the server is not compatible with the PQC security features offered by the client.
 
