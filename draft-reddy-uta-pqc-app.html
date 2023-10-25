@@ -17,7 +17,7 @@ Quantum-Ready usage profiles for applications using TLS.
 <meta content="WebRTC" name="keyword">
 <meta content="HPKE" name="keyword">
 <meta content="ESNI" name="keyword">
-<meta content="Hybrid" name="keyword">
+<meta content="PQ/T Hybrid" name="keyword">
 <meta content="draft-reddy-uta-pqc-app-latest" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.18.2
@@ -1273,7 +1273,7 @@ unbroken. It is referred to as PQ/T Hybrid Scheme in
       <h2 id="name-data-confidentiality">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-data-confidentiality" class="section-name selfRef">Data Confidentiality</a>
       </h2>
-<p id="section-4-1">Data may need to be protected for lifetimes measured in years.
+<p id="section-4-1">Data in transit may need to be protected for lifetimes measured in years.
 The possibility of CRQCs being developed means that we need to move away from traditional algorithms,
 but at the same time uncertainty about post-quantum algorithm implementation security, lag in standardization, regulatory requirements, and maturity of cryptanalysis may require the continued use of mature traditional algorithms alongside the new post-quantum primitives.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">The primary goal of a hybrid key exchange mechanism is to facilitate
@@ -1335,14 +1335,14 @@ the establishment of a shared secret which remains secure as long as one of the 
 <a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-hybrid-public-key-encryptio" class="section-name selfRef">Hybrid public-key encryption (HPKE)</a>
         </h3>
 <p id="section-7.2-1">Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret.  The motivation for standardizing a public key encryption scheme is explained in the introduction of <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2-2">HPKE can be extended to support hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in <span>[<a href="#I-D.westerbaan-cfrg-hpke-xyber768d00-02" class="cite xref">I-D.westerbaan-cfrg-hpke-xyber768d00-02</a>]</span>. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">HPKE can be extended to support PQ/T Hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in <span>[<a href="#I-D.westerbaan-cfrg-hpke-xyber768d00-02" class="cite xref">I-D.westerbaan-cfrg-hpke-xyber768d00-02</a>]</span>. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
 <div id="ech">
 <section id="section-7.2.1">
           <h4 id="name-interaction-with-encrypted-">
 <a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-interaction-with-encrypted-" class="section-name selfRef">Interaction with Encrypted Client Hello</a>
           </h4>
 <p id="section-7.2.1-1">Client TLS libraries and applications can use Encrypted Client Hello (ECH) <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span> to prevent passive observation of the intended server identity in the TLS handshake which requires also deploying encrypted DNS (DNS over TLS), otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was being protected with ECH. ECH uses HPKE for public key encryption.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-2">ECH <span class="bcp14">MUST</span> incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-2">ECH <span class="bcp14">MUST</span> incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="oblivious-http">
@@ -1353,7 +1353,7 @@ the establishment of a shared secret which remains secure as long as one of the 
 <p id="section-7.2.2-1">Oblivious HTTP <span>[<a href="#I-D.ietf-ohai-ohttp" class="cite xref">I-D.ietf-ohai-ohttp</a>]</span> allows clients to encrypt messages exchanged with an Oblivious Target Resource (target). The messages are encapsulated in encrypted messages to an Oblivious Gateway Resource (gateway), which offers Oblivious HTTP access to the target. The gateway is accessed via an Oblivious Relay Resource (relay), which proxies the encapsulated messages to hide the identity of the client. Overall, this architecture is designed in such a way that the relay cannot inspect the contents of messages, and the gateway and target cannot learn the client's identity from a single transaction. Oblivious HTTP uses HPKE for encapsulating binary HTTP messages to protect their contents.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-2">Oblivious HTTP is vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the HPKE. If an attacker possesses copies of an entire set of encapsulated HTTP messages, it could use CRQC to potentially decrypt the message content by determining the private key. The attacker can potentially be the Oblivious Relay Resource.<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
 <p id="section-7.2.2-3">The "ohttp" SvcParamKey defined in <span>[<a href="#I-D.ietf-ohai-svcb-config" class="cite xref">I-D.ietf-ohai-svcb-config</a>]</span> is used to indicate that a service described in an SVCB RR can be accessed as a target using an associated gateway. For the "dns" scheme, as defined in <span>[<a href="#I-D.draft-ietf-add-svcb-dns" class="cite xref">I-D.draft-ietf-add-svcb-dns</a>]</span>, the presence of the "ohttp" parameter means that the DNS server being described has a DNS over HTTP (DoH) <span>[<a href="#RFC8484" class="cite xref">RFC8484</a>]</span> service that can be accessed using Oblivious HTTP.<a href="#section-7.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-4">Oblivious HTTP and DNS over Oblivious HTTP <span class="bcp14">MUST</span> incorporate support for hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-4">Oblivious HTTP and DNS over Oblivious HTTP <span class="bcp14">MUST</span> incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="mls">
@@ -1415,7 +1415,7 @@ potential security against "Harvest Now, Decrypt Later" attack provide
 for time to react in the case of the announcement of a devastating
 attack against any one algorithm, while not fully abandoning
 traditional cryptosystems.<a href="#section-8-1" class="pilcrow">¶</a></p>
-<p id="section-8-2">Implementing hybrid modes improperly can introduce security issues at the cryptographic layer, for example how the Traditional and PQ schemes are combined; at the algorithm selection layer, mismatched security levels for example if 192-bit KEM is used with a 128-bit secure combiner; or at the protocol layer in how the upgrade/downgrade mechanism works. Hybrid mechanisms should be implemented carefully and all relevant specifications implemented correctly.<a href="#section-8-2" class="pilcrow">¶</a></p>
+<p id="section-8-2">Implementing PQ/T hybrid schemes improperly can introduce security issues at the cryptographic layer, for example how the Traditional and PQ schemes are combined; at the algorithm selection layer, mismatched security levels for example if 192-bit KEM is used with a 128-bit secure combiner; or at the protocol layer in how the upgrade/downgrade mechanism works. PQ/T hybrid schemes should be implemented carefully and all relevant specifications implemented correctly.<a href="#section-8-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="acknowledgements">

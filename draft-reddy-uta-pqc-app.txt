@@ -212,11 +212,11 @@ Table of Contents
 
 4.  Data Confidentiality
 
-   Data may need to be protected for lifetimes measured in years.  The
-   possibility of CRQCs being developed means that we need to move away
-   from traditional algorithms, but at the same time uncertainty about
-   post-quantum algorithm implementation security, lag in
-   standardization, regulatory requirements, and maturity of
+   Data in transit may need to be protected for lifetimes measured in
+   years.  The possibility of CRQCs being developed means that we need
+   to move away from traditional algorithms, but at the same time
+   uncertainty about post-quantum algorithm implementation security, lag
+   in standardization, regulatory requirements, and maturity of
    cryptanalysis may require the continued use of mature traditional
    algorithms alongside the new post-quantum primitives.
 
@@ -357,8 +357,8 @@ Table of Contents
    standardizing a public key encryption scheme is explained in the
    introduction of [RFC9180].
 
-   HPKE can be extended to support hybrid post-quantum Key Encapsulation
-   Mechanisms (KEMs) as defined in
+   HPKE can be extended to support PQ/T Hybrid post-quantum Key
+   Encapsulation Mechanisms (KEMs) as defined in
    [I-D.westerbaan-cfrg-hpke-xyber768d00-02].  Kyber, which is a KEM
    does not support the static-ephemeral key exchange that allows HPKE
    based on DH based KEMs.
@@ -373,8 +373,8 @@ Table of Contents
    that was being protected with ECH.  ECH uses HPKE for public key
    encryption.
 
-   ECH MUST incorporate support for hybrid post-quantum KEMs to protect
-   against the 'Harvest Now, Decrypt Later' attack.
+   ECH MUST incorporate support for PQ/T Hybrid post-quantum KEMs to
+   protect against the 'Harvest Now, Decrypt Later' attack.
 
 7.2.2.  Oblivious HTTP
 
@@ -406,8 +406,8 @@ Table of Contents
    Oblivious HTTP.
 
    Oblivious HTTP and DNS over Oblivious HTTP MUST incorporate support
-   for hybrid post-quantum KEMs to protect against the 'Harvest Now,
-   Decrypt Later' attack.
+   for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest
+   Now, Decrypt Later' attack.
 
 7.2.3.  MLS
 
@@ -499,12 +499,12 @@ Table of Contents
    case of the announcement of a devastating attack against any one
    algorithm, while not fully abandoning traditional cryptosystems.
 
-   Implementing hybrid modes improperly can introduce security issues at
-   the cryptographic layer, for example how the Traditional and PQ
-   schemes are combined; at the algorithm selection layer, mismatched
-   security levels for example if 192-bit KEM is used with a 128-bit
-   secure combiner; or at the protocol layer in how the upgrade/
-   downgrade mechanism works.  Hybrid mechanisms should be implemented
+   Implementing PQ/T hybrid schemes improperly can introduce security
+   issues at the cryptographic layer, for example how the Traditional
+   and PQ schemes are combined; at the algorithm selection layer,
+   mismatched security levels for example if 192-bit KEM is used with a
+   128-bit secure combiner; or at the protocol layer in how the upgrade/
+   downgrade mechanism works.  PQ/T hybrid schemes should be implemented
    carefully and all relevant specifications implemented correctly.
 
 Acknowledgements
