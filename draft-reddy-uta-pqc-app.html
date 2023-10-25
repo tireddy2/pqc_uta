@@ -1222,7 +1222,7 @@ protocols have transitioned from RSA to Elliptic Curve Cryptography (ECC) improv
           <p id="section-1-4.2.1">use larger key sizes (which increases handshake packet size), and<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-4.3">
-          <p id="section-1-4.3.1">have higher CPU utilization than classical algorithms.<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.3.1">have higher CPU utilization than traditional algorithms.<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <p id="section-1-5">All applications transmitting messages over untrusted networks can be susceptible to active or passive attacks by adversaries using CRQCs, with varying degrees of significance for both users and the underlying systems. This document explores Quantum-Ready usage profiles for applications specifically designed to defend against passive and on-path attacks employing CRQCs. TLS client and server implementations, as well as applications, can mitigate the impact of these challenges through various techniques described in subsequent sections.<a href="#section-1-5" class="pilcrow">¶</a></p>
@@ -1279,7 +1279,7 @@ but at the same time uncertainty about post-quantum algorithm implementation sec
 <p id="section-4-2">The primary goal of a hybrid key exchange mechanism is to facilitate
 the establishment of a shared secret which remains secure as long as one of the component key exchange mechanisms remains unbroken.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3"><span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span> provides a construction for hybrid key exchange in TLS 1.3. It fulfils the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">Applications <span class="bcp14">MUST</span> migrate to TLS 1.3 and support the hybrid key exchange, as defined in <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-4">Applications that use (D)TLS and susceptible to CRQC attack <span class="bcp14">MUST</span> migrate to (D)TLS 1.3 and support the hybrid key exchange, as defined in <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <p id="section-4-5">The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of two strategies:<a href="#section-4-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-6">
 <li id="section-4-6.1">
@@ -1309,7 +1309,7 @@ the establishment of a shared secret which remains secure as long as one of the 
       <h2 id="name-informing-users-of-pqc-secu">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-informing-users-of-pqc-secu" class="section-name selfRef">Informing Users of PQC Security Compatibility Issues</a>
       </h2>
-<p id="section-6-1">When the server detects that the client doesn't support PQC or hybrid key exchange, it can send an alert or error page to the client. This page or alert should be served over the same TLS session. The message can inform the end-user that their client is not compatible with the PQC security features offered by the server.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">When the server detects that the client doesn't support PQC or hybrid key exchange, it can send an 'insufficient_security' fatal alert to the client. The client can inform the end-users that the server they are trying to access requires a level of security that the client cannot provide due to the lack of PQC support. Furthermore, the client may log the event for diagnostic and security auditing purposes and report the security-related issue to the client development team.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">Similarly, when the client detects that the server doesn't support PQC or hybrid key exchange, it can send an alert or error page to the client. The message can inform the end-user that the server is not compatible with the PQC security features offered by the client.<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>

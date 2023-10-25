@@ -122,7 +122,7 @@ Table of Contents
 
    2.  use larger key sizes (which increases handshake packet size), and
 
-   3.  have higher CPU utilization than classical algorithms.
+   3.  have higher CPU utilization than traditional algorithms.
 
    All applications transmitting messages over untrusted networks can be
    susceptible to active or passive attacks by adversaries using CRQCs,
@@ -229,12 +229,13 @@ Table of Contents
    exchange, with additional objectives discussed in Section 1.5 of the
    same document.
 
-   Applications MUST migrate to TLS 1.3 and support the hybrid key
-   exchange, as defined in [I-D.ietf-tls-hybrid-design].  In the future,
-   we anticipate a shift away from traditional cryptographic algorithms
-   in favor of post-quantum algorithms.  This transition is expected to
-   provide benefits in terms of CPU efficiency and reduced data
-   transmission overhead compared to hybrid key exchange.
+   Applications that use (D)TLS and susceptible to CRQC attack MUST
+   migrate to (D)TLS 1.3 and support the hybrid key exchange, as defined
+   in [I-D.ietf-tls-hybrid-design].  In the future, we anticipate a
+   shift away from traditional cryptographic algorithms in favor of
+   post-quantum algorithms.  This transition is expected to provide
+   benefits in terms of CPU efficiency and reduced data transmission
+   overhead compared to hybrid key exchange.
 
    The client initiates the TLS handshake by sending a list of key
    agreement methods it supports in the key_share extension.  One of the
@@ -312,10 +313,13 @@ Table of Contents
 6.  Informing Users of PQC Security Compatibility Issues
 
    When the server detects that the client doesn't support PQC or hybrid
-   key exchange, it can send an alert or error page to the client.  This
-   page or alert should be served over the same TLS session.  The
-   message can inform the end-user that their client is not compatible
-   with the PQC security features offered by the server.
+   key exchange, it can send an 'insufficient_security' fatal alert to
+   the client.  The client can inform the end-users that the server they
+   are trying to access requires a level of security that the client
+   cannot provide due to the lack of PQC support.  Furthermore, the
+   client may log the event for diagnostic and security auditing
+   purposes and report the security-related issue to the client
+   development team.
 
    Similarly, when the client detects that the server doesn't support
    PQC or hybrid key exchange, it can send an alert or error page to the
