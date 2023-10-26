@@ -210,9 +210,7 @@ Applications using HTTPS to exchange sensitive data MUST support the Quantum-Rea
 
 ## Email Submission
 
-TLS support for Email Submission/Access is described in {{Section 3.3 of
-?RFC8314}}. The Mail User Agent (MUA) and a Mail Submission Server or Mail Access 
-Server MUST support the Quantum-Ready usage profile discussed in {#confident}. 
+Email often contains information that needs protection from passive monitoring or active modification. While some standards exist for protecting integrity and for encrypting content of messages themselves (see {{?RFC8551}}), transport encryption is also frequently used. TLS support for Email Submission/Access is described in {{Section 3.3 of ?RFC8314}}. The Mail User Agent (MUA) and a Mail Submission Server or Mail Access Server MUST support the Quantum-Ready usage profile discussed in {#confident}. 
 
 # Security Considerations
 
