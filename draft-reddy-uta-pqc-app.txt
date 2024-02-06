@@ -4,8 +4,8 @@
 
 uta                                                             T. Reddy
 Internet-Draft                                                     Nokia
-Intended status: Standards Track                         25 October 2023
-Expires: 27 April 2024
+Intended status: Standards Track                         6 February 2024
+Expires: 9 August 2024
 
 
   Post-Quantum Cryptography Recommendations for Internet Applications
@@ -46,11 +46,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 27 April 2024.
+   This Internet-Draft will expire on 9 August 2024.
 
 Copyright Notice
 
-   Copyright (c) 2023 IETF Trust and the persons identified as the
+   Copyright (c) 2024 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -198,7 +198,7 @@ Table of Contents
    lifetime of this encrypted data might vary from seconds to decades.
 
    In client/server certificate-based authentication, it's common for
-   the certificate's signature in the handshake to have a very short
+   the certificate's signature in the TLS handshake to have a short
    lifetime.  This means that the time between the certificate signing
    the CertificateVerify message and its verification by the peer during
    the TLS handshake is limited.  However, it's worth questioning the
@@ -248,7 +248,12 @@ Table of Contents
        and hybrid key exchange algorithm key shares to the server,
        avoiding the need for multiple round trips.  However, this
        approach requires the client to perform additional computations
-       and increases handshake traffic.
+       and increases handshake traffic.  During the TLS handshake, the
+       server responds to the ClientHello with its public key and
+       ciphertext.  If the combined size of these exceeds the MTU, the
+       ServerHello message may be split across multiple TCP packets,
+       raising the risk of lost packets and delays due to
+       retransmission.
 
    2.  Indicate Support for Hybrid Key Exchange: Alternatively, the
        client may initially indicate support for hybrid key exchange and
@@ -263,10 +268,10 @@ Table of Contents
    server's preferences for key exchange algorithms ([RFC8446], section
    4.2.7).
 
-   In order to avoid fragmentation of ClientHello message, the client
-   would have to prevent the duplication of PQC KEM public key shares in
-   the ClientHello, avoiding duplication of key shares is discussed in
-   Section 4 of [I-D.ietf-tls-hybrid-design].
+   In order to avoid multiple packets to send ClientHello message, the
+   client would have to prevent the duplication of PQC KEM public key
+   shares in the ClientHello, avoiding duplication of key shares is
+   discussed in Section 4 of [I-D.ietf-tls-hybrid-design].
 
 5.  Authentication
 
@@ -289,13 +294,34 @@ Table of Contents
    interception of user data and communications.
 
    The Quantum-Ready authentication property ensures authentication
-   through either a pure Post-Quantum or a PQ/T hybrid Certificate.  A
-   Post-Quantum X.509 Certificate using Module-Lattice Digital Signature
-   Algorithm (ML-DSA), also called Dilithium, is defined in
-   [I-D.ietf-lamps-dilithium-certificates].  The PQ/T Hybrid
-   Authentication property is currently still under active exploration
-   and discussion in the LAMPS WG, and consensus may evolve over time
-   regarding its adoption.
+   through either a pure Post-Quantum or a PQ/T hybrid Certificate.
+
+   *  A Post-Quantum X.509 Certificate using Module-Lattice Digital
+      Signature Algorithm (ML-DSA), also called Dilithium, is defined in
+      [I-D.ietf-lamps-dilithium-certificates].
+
+   *  The PQ/T Hybrid Authentication property is currently still under
+      active exploration and discussion in the LAMPS WG, and consensus
+      may evolve over time regarding its adoption.
+
+   *  The non-composite hybrid authentication discussed in
+      [I-D.ietf-lamps-cert-binding-for-multi-auth] enables peers to
+      employ the same certificates in hybrid authentication as in
+      authentication done with only traditional or post-quantum
+      algorithms.  In TLS, peers can request that both traditional and
+      PQ certificate be used for authentication.  For instance,
+      traditional certificates can be exchanged during the TLS handshake
+      and PQ certificates can be exchanged after the session has been
+      established using the mechanism defined in [RFC9261].
+
+   *  The composite signature contains two signatures in a single atomic
+      container that have been generated using two different
+      cryptographic algorithms.  For example, NIST define a dual
+      signature as "two or more signatures on a common message".  The
+      goal of this approach is to define a signature format which
+      requires both contained signatures to be verified.  This concept
+      is described in Composite Signatures For Use In Internet PKI
+      [I-D.ounsworth-pq-composite-sigs].
 
    To decide whether and when to support a Post-Quantum Certificate
    (PQC) or a PQ/T hybrid scheme for client and server authentication,
@@ -308,7 +334,10 @@ Table of Contents
    attacks take longer to run than the key lifetimes.  It may be
    advantageous to explore heterogeneous PKI architectures where the
    long-lived CAs are using Post-Quantum algorithms but the server and
-   client certificates are not.
+   client certificates are not.  In summary, if the signature is not
+   post-quantum secure, further evaluation is needed to determine
+   whether the attempt to achieve post-quantum security using short-
+   lived keys is effective or not.
 
 6.  Informing Users of PQC Security Compatibility Issues
 
@@ -365,20 +394,35 @@ Table of Contents
    Encapsulation Mechanisms (KEMs) as defined in
    [I-D.westerbaan-cfrg-hpke-xyber768d00-02].  Kyber, which is a KEM
    does not support the static-ephemeral key exchange that allows HPKE
-   based on DH based KEMs.
+   based on DH based KEMs.  Note that X25519Kyber768Draft00 is IND-CCA2
+   secure (Section 4 of [I-D.westerbaan-cfrg-hpke-xyber768d00-02]).
 
 7.2.1.  Interaction with Encrypted Client Hello
 
    Client TLS libraries and applications can use Encrypted Client Hello
    (ECH) [I-D.ietf-tls-esni] to prevent passive observation of the
    intended server identity in the TLS handshake which requires also
-   deploying encrypted DNS (DNS over TLS), otherwise a passive listener
+   deploying Encrypted DNS (DNS over TLS), otherwise a passive listener
    can observe DNS queries (or responses) and infer same server identity
    that was being protected with ECH.  ECH uses HPKE for public key
    encryption.
 
    ECH MUST incorporate support for PQ/T Hybrid post-quantum KEMs to
    protect against the 'Harvest Now, Decrypt Later' attack.
+
+   To use ECH the client needs to learn the ECH configuration for a
+   server before it attempts a connection to the server.  Bootstrapping
+   TLS Encrypted ClientHello with DNS Service Bindings specification
+   [I-D.draft-ietf-tls-svcb-ech] provides a mechanism for conveying the
+   ECH configuration information via DNS, using a SVCB or HTTPS record.
+   The "ech" SvcParamKey is used in SVCB or HTTPS or DNS records, and is
+   intended to serve as the primary bootstrap mechanism for ECH.  The
+   value of the parameter is an ECHConfigList (Section 4 of
+   [I-D.ietf-tls-esni]).  The public_key in HpkeKeyConfig structure
+   would carry the concatenation of traditional and PQC KEM public keys
+   which would increase DNS resposnse size that could exceed the path
+   MTU.  It would require the use of reliable transport and Encrypted
+   DNS (e.g., DoT, DoH or DoQ).
 
 7.2.2.  Oblivious HTTP
 
@@ -485,9 +529,14 @@ Table of Contents
 
 7.5.  Email Submission
 
-   TLS support for Email Submission/Access is described in Section 3.3
-   of [RFC8314].  There are no specific recommendations for SUBMISSION
-   beyond Section 7.2.1.
+   Email often contains information that needs protection from passive
+   monitoring or active modification.  While some standards exist for
+   protecting integrity and for encrypting content of messages
+   themselves (see [RFC8551]), transport encryption is also frequently
+   used.  TLS support for Email Submission/Access is described in
+   Section 3.3 of [RFC8314].  The Mail User Agent (MUA) and a Mail
+   Submission Server or Mail Access Server MUST support the Quantum-
+   Ready usage profile discussed in {#confident}.
 
 8.  Security Considerations
 
@@ -514,7 +563,8 @@ Table of Contents
 Acknowledgements
 
    Thanks to Dan Wing for suggesting wider document scope.  Thanks to
-   Mike Ounsworth for early review and feedback.
+   Mike Ounsworth, Scott Fluhrer and Thom Wiggers for review and
+   feedback.
 
 References
 
@@ -571,15 +621,35 @@ Normative References
               (DoH)", RFC 8484, DOI 10.17487/RFC8484, October 2018,
               <https://www.rfc-editor.org/rfc/rfc8484>.
 
+   [RFC9261]  Sullivan, N., "Exported Authenticators in TLS", RFC 9261,
+              DOI 10.17487/RFC9261, July 2022,
+              <https://www.rfc-editor.org/rfc/rfc9261>.
+
 Informative References
+
+   [I-D.draft-ietf-tls-svcb-ech]
+              Schwartz, B. M., Bishop, M., and E. Nygren, "Bootstrapping
+              TLS Encrypted ClientHello with DNS Service Bindings", Work
+              in Progress, Internet-Draft, draft-ietf-tls-svcb-ech-00,
+              26 September 2023, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-tls-svcb-ech-00>.
+
+   [I-D.ietf-lamps-cert-binding-for-multi-auth]
+              Becker, A., Guthrie, R., and M. J. Jenkins, "Related
+              Certificates for Use in Multiple Authentications within a
+              Protocol", Work in Progress, Internet-Draft, draft-ietf-
+              lamps-cert-binding-for-multi-auth-03, 29 November 2023,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-lamps-
+              cert-binding-for-multi-auth-03>.
 
    [I-D.ietf-lamps-dilithium-certificates]
               Massimo, J., Kampanakis, P., Turner, S., and B.
               Westerbaan, "Internet X.509 Public Key Infrastructure:
-              Algorithm Identifiers for Dilithium", Work in Progress,
+              Algorithm Identifiers for ML-DSA", Work in Progress,
               Internet-Draft, draft-ietf-lamps-dilithium-certificates-
-              02, 7 August 2023, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-lamps-dilithium-certificates-02>.
+              03, 5 February 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-lamps-
+              dilithium-certificates-03>.
 
    [I-D.ietf-ohai-ohttp]
               Thomson, M. and C. A. Wood, "Oblivious HTTP", Work in
@@ -605,9 +675,9 @@ Informative References
    [I-D.ietf-pquip-pqt-hybrid-terminology]
               D, F., "Terminology for Post-Quantum Traditional Hybrid
               Schemes", Work in Progress, Internet-Draft, draft-ietf-
-              pquip-pqt-hybrid-terminology-01, 20 October 2023,
+              pquip-pqt-hybrid-terminology-02, 2 February 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-pquip-
-              pqt-hybrid-terminology-01>.
+              pqt-hybrid-terminology-02>.
 
    [I-D.ietf-tls-esni]
               Rescorla, E., Oku, K., Sullivan, N., and C. A. Wood, "TLS
@@ -615,6 +685,14 @@ Informative References
               draft-ietf-tls-esni-17, 9 October 2023,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
               esni-17>.
+
+   [I-D.ounsworth-pq-composite-sigs]
+              Ounsworth, M., Gray, J., Pala, M., and J. Klaußner,
+              "Composite Signatures For Use In Internet PKI", Work in
+              Progress, Internet-Draft, draft-ounsworth-pq-composite-
+              sigs-11, 20 December 2023,
+              <https://datatracker.ietf.org/doc/html/draft-ounsworth-pq-
+              composite-sigs-11>.
 
    [I-D.westerbaan-cfrg-hpke-xyber768d00-02]
               Westerbaan, B. and C. A. Wood, "X25519Kyber768Draft00
@@ -627,6 +705,11 @@ Informative References
               Use of Transport Layer Security (TLS) for Email Submission
               and Access", RFC 8314, DOI 10.17487/RFC8314, January 2018,
               <https://www.rfc-editor.org/rfc/rfc8314>.
+
+   [RFC8551]  Schaad, J., Ramsdell, B., and S. Turner, "Secure/
+              Multipurpose Internet Mail Extensions (S/MIME) Version 4.0
+              Message Specification", RFC 8551, DOI 10.17487/RFC8551,
+              April 2019, <https://www.rfc-editor.org/rfc/rfc8551>.
 
    [RFC9001]  Thomson, M., Ed. and S. Turner, Ed., "Using TLS to Secure
               QUIC", RFC 9001, DOI 10.17487/RFC9001, May 2021,
