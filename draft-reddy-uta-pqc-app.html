@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Post-Quantum Cryptography Recommendations for Internet Applications</title>
+<meta content="Tirumaleswar Reddy" name="author">
+<meta content="
+       Post-quantum cryptography brings some new challenges to applications, end users, and system administrators.
+This document describes characteristics unique to application protocols and best practices for deploying
+Quantum-Ready usage profiles for applications using TLS. 
+    " name="description">
+<meta content="xml2rfc 3.19.2" name="generator">
+<meta content="PQC" name="keyword">
+<meta content="DNS" name="keyword">
+<meta content="WebRTC" name="keyword">
+<meta content="HPKE" name="keyword">
+<meta content="ESNI" name="keyword">
+<meta content="PQ/T Hybrid" name="keyword">
+<meta content="draft-reddy-uta-pqc-app-latest" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.19.2
+    Python 3.11.6
+    ConfigArgParse 1.7
+    google-i18n-address 3.1.0
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    lxml 4.9.3
+    platformdirs 4.2.0
+    pycountry 22.3.5
+    PyYAML 6.0.1
+    requests 2.31.0
+    setuptools 68.2.2
+    six 1.16.0
+    wcwidth 0.2.13
+-->
+<link href="draft-reddy-uta-pqc-app.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Italic'), local('Lora-Italic'), url('https://martinthomson.github.io/rfc-css/fonts/lora-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Lora Regular'), local('Lora-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/lora-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic-ext.woff2') format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-cyrillic.woff2') format('woff2');
+  unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('Lora Bold'), local('Lora-Bold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-bold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Lora';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Lora SemiBold'), local('Lora-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/lora-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-vietnamese.woff2') format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Cabin Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: local('Cabin Condensed SemiBold'), local('CabinCondensed-SemiBold'), url('https://martinthomson.github.io/rfc-css/fonts/cabincondensed-semibold-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Oxygen Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('Oxygen Mono'), local('OxygenMono-Regular'), url('https://martinthomson.github.io/rfc-css/fonts/oxygenmono-regular-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  color-scheme: light dark;
+  --background-color: #fff;
+  --text-color: #222;
+  --title-color: #191919;
+  --link-color: #2a6496;
+  --highlight-color: #f9f9f9;
+  --line-color: #eee;
+  --pilcrow-weak: #ddd;
+  --pilcrow-strong: #bbb;
+  --small-font-size: 14.5px;
+  --font-mono: 'Oxygen Mono', monospace;
+  scrollbar-color: #bbb #eee;
+}
+body {
+  max-width: 600px;
+  margin: 75px auto;
+  padding: 0 5px;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  font: 16px/22px "Lora", serif;
+  scroll-behavior: smooth;
+}
+
+.ears {
+  display: none;
+}
+
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Cabin Condensed", sans-serif;
+  font-weight: 600;
+  margin: 0.8em 0 0.3em;
+  font-size-adjust: 0.5;
+  color: var(--title-color);
+}
+h1#title {
+  font-size: 32px;
+  line-height: 40px;
+  clear: both;
+}
+h1#title, h1#rfcnum {
+  margin: 1.5em 0 0.2em;
+}
+h1#rfcnum + h1#title {
+  margin: 0.2em 0;
+}
+
+h1, h2, h3 {
+  font-size: 22px;
+  line-height: 27px;
+}
+h4, h5, h6 {
+  font-size: 20px;
+  line-height: 24px;
+}
+
+/* general structure */
+.author {
+  padding-bottom: 0.3em;
+}
+#abstract+p {
+  font-size: 18px;
+  line-height: 24px;
+}
+#abstract+p code, #abstract+p samp, #abstract+p tt {
+  font-size: 16px;
+  line-height: 0;
+}
+
+p {
+  padding: 0;
+  margin: 0.5em 0;
+  text-align: left;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+/* font-family isn't space-separated, but =~ will have to do */
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: var(--highlight-color);
+  border: 1px solid var(--line-color);
+  border-radius: 3px;
+  padding: 0.5em 1em 0;
+  margin-bottom: 0.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+  width: auto;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 0.5em 2em;
+}
+:is(ol, ul) :is(ol, ul) {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+:is(ul, ol).compact, .ulCompact, .olCompact {
+  line-height: 1;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+  clear: left;
+  --indent: 3ch;
+  /* --indent: attr(indent ch); not supported in any browser, but we can dream */
+}
+dl.olPercent {
+  --indent: 5ch;
+}
+dl > dt {
+  float: left;
+  margin-right: 2ch;
+  min-width: 8ch;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+dl > dd {
+  margin-bottom: .8em;
+  margin-left: var(--indent) !important; /* stupid element overrides */
+  min-height: 2ex;
+}
+dl.olPercent > dt {
+  min-width: calc(var(--indent) - 2ch);
+}
+:is(dl.compact, .dlCompact) > dd {
+  margin-bottom: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:first-child, .break:first-child + *) {
+  margin-top: 0;
+}
+:is(dl.compact, .dlCompact) > dd > :is(:last-child) {
+  margin-bottom: 0;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+:is(dd, span).break {
+  display: none;
+}
+
+/* links */
+a, a[href].selfRef:hover {
+  text-decoration: none;
+}
+a[href] {
+  color: var(--link-color);
+}
+a[href].selfRef, .iref + a[href].internal {
+  color: var(--text-color);
+}
+a[href]:hover {
+  text-decoration: underline;
+}
+a[href].selfRef:hover {
+  background-color: var(--highlight-color);
+}
+a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
+  white-space: nowrap;
+}
+
+/* Figures */
+tt, code, pre {
+  background-color: var(--highlight-color);
+  font: 14px/22px var(--font-mono);
+}
+tt, code {
+  /* changing the font for inline elements leads to different ascender
+     and descender heights; as we want to retain baseline alignment,
+     remove leading to avoid altering the final height of lines
+     note: this fails if these blocks take an entire line,
+     a different solution would be great */
+  line-height: 0;
+}
+:is(h1, h2, h3, h4, h5, h6) :is(tt, code) {
+  font-size: 84%;
+}
+pre {
+  border: 1px solid var(--line-color);
+  font-size: 13.5px;
+  line-height: 16px;
+  letter-spacing: -0.2px;
+  margin: 5px;
+  padding: 5px;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0.5em 0;
+  padding: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption, caption {
+  font-style: italic;
+  margin: 0.5em 1.5em;
+  text-align: left;
+}
+@media screen {
+  /* Auto-collapse boilerplate. */
+  :is(#status-of-memo, #copyright) p {
+    margin: -2px 0;
+    max-height: 0;
+    transition: max-height 2s ease, margin 0.5s ease 0.5s;
+    overflow: hidden;
+  }
+  :is(#status-of-memo, #copyright):hover p,
+  :is(#status-of-memo, #copyright) h2:target ~ p {
+    margin: 0.5em 0;
+    max-height: 500px;
+    overflow: auto;
+  }
+  pre, svg {
+    display: inline-block;
+    overflow-x: auto;
+  }
+  pre {
+    max-width: 100%;
+    width: calc(100% - 22px - 1em);
+  }
+  svg {
+    max-width: calc(100% - 22px - 1em);
+  }
+  figure pre {
+    display: block;
+    width: calc(100% - 25px);
+  }
+  :is(pre, svg) + .pilcrow {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-bottom: 8px;
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 0 2em;
+  font-style: italic;
+}
+blockquote {
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  max-width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+}
+table.right {
+  margin-left: auto;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+table.left {
+  margin-right: auto;
+}
+thead, tbody {
+  border: 1px solid var(--line-color);
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 5px 10px;
+}
+th {
+  background-color: var(--line-color);
+}
+:is(tr:nth-child(2n), thead+tbody > tr:nth-child(2n+1)) > td {
+  background-color: var(--background-color);
+}
+:is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
+  background-color: var(--highlight-color);
+}
+table caption {
+  margin: 0;
+  padding: 3px 0 3px 1em;
+}
+table p {
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  margin-left: 3px;
+  opacity: 0.2;
+  user-select: none;
+}
+a.pilcrow[href] { color: var(--pilcrow-weak); }
+a.pilcrow[href]:hover { text-decoration: none; }
+@media not print {
+  :hover > a.pilcrow {
+    opacity: 1;
+  }
+  a.pilcrow[href]:hover {
+    color: var(--pilcrow-strong);
+    background-color: transparent;
+  }
+}
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line-color);
+}
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: 600;
+  font-size: var(--small-font-size);
+}
+.role {
+  font-variant: all-small-caps;
+}
+sub, sup {
+  line-height: 1;
+  font-size: 80%;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: var(--small-font-size);
+  line-height: 18px;
+  --identifier-width: 15ch;
+}
+#identifiers dt {
+  width: var(--identifier-width);
+  min-width: var(--identifier-width);
+  clear: left;
+  float: left;
+  text-align: right;
+  margin-right: 1ch;
+}
+#identifiers dd {
+  margin: 0;
+  margin-left: calc(1em + var(--identifier-width)) !important;
+  min-width: 5em;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #999;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+#toc nav ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+#toc nav li {
+  line-height: 1.3em;
+  margin: 2px 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+#toc a.xref {
+  white-space: normal;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 10ch;
+  margin-right: 1.5ch;
+}
+.references dt:target::before {
+  content: "⇒";
+  width: 15px;
+  margin: 0 10px 0 -25px;
+}
+.references dd {
+  margin-left: 12ch !important;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+#rfc\.index\.index + ul {
+  margin-left: 0;
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+@media (min-width: 500px) {
+  #authors-addresses > section {
+    column-count: 2;
+    column-gap: 20px;
+  }
+  #authors-addresses > section > h2 {
+    column-span: all;
+  }
+  /* hack for break-inside: avoid-column */
+  #authors-addresses address {
+    display: inline-block;
+    break-inside: avoid-column;
+  }
+}
+
+.rfcEditorRemove p:first-of-type {
+  font-style: italic;
+}
+.cref {
+  background-color: rgba(249, 232, 105, 0.3);
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 929px) {
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 1px 0 0 0;
+    margin: 0;
+    border-bottom: 1px solid #ccc;
+    opacity: 0.6;
+  }
+  #toc.active {
+      opacity: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 2px 0 2px 6px;
+    padding-right: 1em;
+    font-size: 18px;
+    line-height: 24px;
+    min-width: 190px;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 8px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    background-color: var(--background-color);
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+  #toc.active nav {
+    display: block;
+  }
+  /* Make the collapsed ToC header render white on gray also when it's a link */
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+  #toc a.toplink {
+    margin-top: 2px;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 930px) {
+  body {
+    padding-right: 360px;
+    padding-right: calc(min(180px + 20%, 500px));
+  }
+  #toc {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    right: calc(50vw - 480px);
+    width: 312px;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+  }
+  #toc h2 {
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 2em;
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  #toc nav > ul  {
+    margin-bottom: 2em;
+  }
+  #toc ul {
+    margin: 0 0 0 4px;
+    font-size: var(--small-font-size);
+  }
+  #toc ul :is(p, li) {
+    margin: 2px 0;
+    line-height: 22px;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre, .vcard {
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  :is(h2, h3, h4, h5, h6)+*, dd {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+  .toplink {
+    display: none;
+  }
+}
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+}
+
+/* Changes introduced to fix issues found during implementation */
+
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin: 8px 0.5em 0;
+}
+
+/* Provide styling for table cell text alignment */
+table .text-left {
+  text-align: left;
+}
+table .text-center {
+  text-align: center;
+}
+table .text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 20em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Dark mode. */
+@media (prefers-color-scheme: dark) {
+:root {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --title-color: #fff;
+  --link-color: #4da4f0;
+  --highlight-color: #282828;
+  --line-color: #444;
+  --pilcrow-weak: #444;
+  --pilcrow-strong: #666;
+  scrollbar-color: #777 #333;
+}
+}
+
+/* SVG Trick: a prefix match works because only black and white are allowed */
+svg :is([stroke="black"], [stroke^="#000"]) {
+  stroke: var(--text-color);
+}
+svg :is([stroke="white"], [stroke^="#fff"]) {
+  stroke: var(--background-color);
+}
+svg :is([fill="black"], [fill^="#000"], :not([fill])) {
+  fill: var(--text-color);
+}
+svg :is([fill="white"], [fill^="#fff"]) {
+  fill: var(--background-color);
+}
+</style>
+
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">PQC Recommendations for Applications</td>
+<td class="right">February 2024</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Reddy</td>
+<td class="center">Expires 9 August 2024</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">uta</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-reddy-uta-pqc-app-latest</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2024-02-06" class="published">6 February 2024</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Standards Track</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2024-08-09">9 August 2024</time></dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">T. Reddy</div>
+<div class="org">Nokia</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Post-Quantum Cryptography Recommendations for Internet Applications</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">Post-quantum cryptography brings some new challenges to applications, end users, and system administrators.
+This document describes characteristics unique to application protocols and best practices for deploying
+Quantum-Ready usage profiles for applications using TLS.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<section class="note rfcEditorRemove" id="section-note.1">
+      <h2 id="name-about-this-document">
+<a href="#name-about-this-document" class="section-name selfRef">About This Document</a>
+      </h2>
+<p id="section-note.1-1">This note is to be removed before publishing as an RFC.<a href="#section-note.1-1" class="pilcrow">¶</a></p>
+<p id="section-note.1-2">
+        Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-reddy-uta-pqc-app/">https://datatracker.ietf.org/doc/draft-reddy-uta-pqc-app/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
+<p id="section-note.1-3">
+        Discussion of this document takes place on the
+        uta Working Group mailing list (<span><a href="mailto:uta@ietf.org">mailto:uta@ietf.org</a></span>),
+        which is archived at <span><a href="https://mailarchive.ietf.org/arch/browse/uta/">https://mailarchive.ietf.org/arch/browse/uta/</a></span>.
+        Subscribe at <span><a href="https://www.ietf.org/mailman/listinfo/uta/">https://www.ietf.org/mailman/listinfo/uta/</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 9 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2024 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-timeline-for-transition" class="internal xref">Timeline for transition</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-data-confidentiality" class="internal xref">Data Confidentiality</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-authentication" class="internal xref">Authentication</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-informing-users-of-pqc-secu" class="internal xref">Informing Users of PQC Security Compatibility Issues</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-application-protocols" class="internal xref">Application Protocols</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-encrypted-dns" class="internal xref">Encrypted DNS</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-hybrid-public-key-encryptio" class="internal xref">Hybrid public-key encryption (HPKE)</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-interaction-with-encrypted-" class="internal xref">Interaction with Encrypted Client Hello</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
+                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-oblivious-http" class="internal xref">Oblivious HTTP</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.3">
+                    <p id="section-toc.1-1.7.2.2.2.3.1"><a href="#section-7.2.3" class="auto internal xref">7.2.3</a>.  <a href="#name-mls" class="internal xref">MLS</a></p>
+</li>
+                </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#section-7.3" class="auto internal xref">7.3</a>.  <a href="#name-webrtc" class="internal xref">WebRTC</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#section-7.4" class="auto internal xref">7.4</a>.  <a href="#name-https" class="internal xref">HTTPS</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.5">
+                <p id="section-toc.1-1.7.2.5.1"><a href="#section-7.5" class="auto internal xref">7.5</a>.  <a href="#name-email-submission" class="internal xref">Email Submission</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref"></a><a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref"></a><a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref"></a><a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref"></a><a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The visible face of the Internet largely consists of services that employ a client-server architecture in which a client communicates with an application service.  When a client communicates with an application service using protocols such as TLS 1.3 <span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>, DTLS 1.3 <span>[<a href="#RFC9147" class="cite xref">RFC9147</a>]</span>, or a protocol built on those (QUIC <span>[<a href="#RFC9001" class="cite xref">RFC9001</a>]</span> being a notable example), the client and server can perform ephemeral public-key exchange mechanism, such as ECDH, to derive the shared secret for forward secrecy. They can validate each other's identity using X.509 certificates to establish secure communication.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">The presence of a Cryptographically Relevant Quantum Computer (CRQC) would render state-of-the-art, traditional public-key algorithms deployed today obsolete and insecure, since the assumptions about the intractability of the mathematical problems for these algorithms that offer confident levels of security today no longer apply in the presence of a CRQC. This means there is a requirement to update protocols and infrastructure to use post-quantum algorithms, which are public-key algorithms designed to be secure against CRQCs as well as classical computers. The traditional cryptographic primitives that need to be replaced by PQC are discussed in <span>[<a href="#I-D.ietf-pquip-pqc-engineers" class="cite xref">I-D.ietf-pquip-pqc-engineers</a>]</span>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">The industry has successfully upgraded TLS versions while deprecating old versions (e.g., SSLv2), and many
+protocols have transitioned from RSA to Elliptic Curve Cryptography (ECC) improving security while also reducing key sizes. The transition to post-quantum crypto brings different challenges, most significantly, the new Post-Quantum algorithms:<a href="#section-1-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-1-4">
+<li id="section-1-4.1">
+          <p id="section-1-4.1.1">are still being evaluated against both classical and post-quantum attacks,<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-1-4.2">
+          <p id="section-1-4.2.1">use larger key sizes (which increases handshake packet size), and<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-1-4.3">
+          <p id="section-1-4.3.1">have higher CPU utilization than traditional algorithms.<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<p id="section-1-5">All applications transmitting messages over untrusted networks can be susceptible to active or passive attacks by adversaries using CRQCs, with varying degrees of significance for both users and the underlying systems. This document explores Quantum-Ready usage profiles for applications specifically designed to defend against passive and on-path attacks employing CRQCs. TLS client and server implementations, as well as applications, can mitigate the impact of these challenges through various techniques described in subsequent sections.<a href="#section-1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="conventions-and-definitions">
+<section id="section-2">
+      <h2 id="name-conventions-and-definitions">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-conventions-and-definitions" class="section-name selfRef">Conventions and Definitions</a>
+      </h2>
+<p id="section-2-1">The key words "<span class="bcp14">MUST</span>", "<span class="bcp14">MUST NOT</span>", "<span class="bcp14">REQUIRED</span>", "<span class="bcp14">SHALL</span>", "<span class="bcp14">SHALL NOT</span>", "<span class="bcp14">SHOULD</span>", "<span class="bcp14">SHOULD NOT</span>", "<span class="bcp14">RECOMMENDED</span>", "<span class="bcp14">NOT RECOMMENDED</span>",
+"<span class="bcp14">MAY</span>", and "<span class="bcp14">OPTIONAL</span>" in this document are to be interpreted as
+described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they
+appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">This document uses terms defined in
+<span>[<a href="#I-D.ietf-pquip-pqt-hybrid-terminology" class="cite xref">I-D.ietf-pquip-pqt-hybrid-terminology</a>]</span>. For the purposes of this
+document, it is helpful to be able to divide cryptographic algorithms
+into three classes:<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">"Traditional Algorithm": An asymmetric cryptographic algorithm based
+on integer factorisation, finite field discrete logarithms or elliptic
+curve discrete logarithms. In the context of TLS, examples of
+traditional key exchange algorithms include Elliptic Curve
+Diffie-Hellman (ECDH); which is almost always used in the ephemeral mode referred to
+as Elliptic Curve Diffie-Hellman Ephemeral (ECDHE).<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">"Post-Quantum Algorithm": An asymmetric cryptographic algorithm that is believed to be secure against attacks using quantum computers as well as classical computers. Examples of PQC key exchange algorithms include the Module-Lattice Key Encapsulation Mechanism (ML-KEM), which is widely known as Kyber.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">"Hybrid" key exchange, in this context, means the use of two component
+key exchange algorithms -- one traditional algorithm and one
+Post-Quantum algorithm.  The final shared secret key is secure when at
+least one of the component key exchange algorithms remains
+unbroken. It is referred to as PQ/T Hybrid Scheme in
+<span>[<a href="#I-D.ietf-pquip-pqt-hybrid-terminology" class="cite xref">I-D.ietf-pquip-pqt-hybrid-terminology</a>]</span>.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-6">The same categories also apply to digital signature algorithms as used in X.509 certificates, Certificate Transparency SCTs, OCSP statements, Remote Attestations, and any other mechanism that contributes signatures to a TLS handshake.<a href="#section-2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="timeline">
+<section id="section-3">
+      <h2 id="name-timeline-for-transition">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-timeline-for-transition" class="section-name selfRef">Timeline for transition</a>
+      </h2>
+<p id="section-3-1">The timeline and driving motivation for Quantum-Ready transition differ between data confidentiality and data authentication (e.g., signature). Digital signatures are used within X.509 certificates, Certificate Revocation Lists (CRLs), and to sign messages.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">Encrypted payloads transmitted via Transport Layer Security (TLS) can be susceptible to decryption if an attacker equipped with a CRQC gains access to the traditional asymmetric public keys used in the TLS key exchange and the transmitted ciphertext. TLS implementations commonly utilize Diffie-Hellman schemes for key exchange. If an attacker has copies of an entire set of encrypted payloads, including the TLS setup, it could employ CRQCs to potentially decrypt the payload by determining the private key.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">For data confidentiality, we are concerned with the so-called "Harvest Now, Decrypt Later" attack where a malicious actor with adequate resources can launch an attack to store encrypted data today that can be decrypted once a CRQC is available. This implies that, even today, encrypted data is susceptible to the attack by not implementing quantum-safe strategies, as it corresponds to data being deciphered in the future. The storage time and effective security lifetime of this encrypted data might vary from seconds to decades.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">In client/server certificate-based authentication, it's common for the certificate's signature in the TLS handshake to have a short lifetime. This means that the time between the certificate signing the CertificateVerify message and its verification by the peer during the TLS handshake is limited. However, it's worth questioning the security lifetime of the digital signatures on X.509 certificates, including those issued by root Certificate Authorities (CAs). Root CAs can have lifetimes of 20 years or more. Additionally, root Certificate Revocation Lists (CRLs) may have lifetimes of a year or more, while delegated credentials like CRL Signing Certificates or OCSP response signing certificates can have lifetimes that fall anywhere in between.<a href="#section-3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="confident">
+<section id="section-4">
+      <h2 id="name-data-confidentiality">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-data-confidentiality" class="section-name selfRef">Data Confidentiality</a>
+      </h2>
+<p id="section-4-1">Data in transit may need to be protected for lifetimes measured in years.
+The possibility of CRQCs being developed means that we need to move away from traditional algorithms,
+but at the same time uncertainty about post-quantum algorithm implementation security, lag in standardization, regulatory requirements, and maturity of cryptanalysis may require the continued use of mature traditional algorithms alongside the new post-quantum primitives.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">The primary goal of a hybrid key exchange mechanism is to facilitate
+the establishment of a shared secret which remains secure as long as one of the component key exchange mechanisms remains unbroken.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3"><span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span> provides a construction for hybrid key exchange in TLS 1.3. It fulfils the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">Applications that use (D)TLS and susceptible to CRQC attack <span class="bcp14">MUST</span> migrate to (D)TLS 1.3 and support the hybrid key exchange, as defined in <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of two strategies:<a href="#section-4-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4-6">
+<li id="section-4-6.1">
+          <p id="section-4-6.1.1">Send Both Traditional and Hybrid Key Exchange Algorithms: In the first ClientHello message, the client can send both traditional and hybrid key exchange algorithm key shares to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations and increases handshake traffic. During the TLS handshake, the server responds to the ClientHello with its public key and ciphertext. If the combined size of these exceeds the MTU, the ServerHello message may be split across multiple TCP packets, raising the risk of lost packets and delays due to retransmission.<a href="#section-4-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-4-6.2">
+          <p id="section-4-6.2.1">Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message.<a href="#section-4-6.2.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<p id="section-4-7">Clients <span class="bcp14">MAY</span> use information from completed handshakes to cache the server's preferences for key exchange algorithms (<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>, section 4.2.7).<a href="#section-4-7" class="pilcrow">¶</a></p>
+<p id="section-4-8">In order to avoid multiple packets to send ClientHello message, the client would have to prevent the duplication of PQC KEM public key shares in the ClientHello, avoiding duplication of key shares is discussed in Section 4 of <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>.<a href="#section-4-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authentication">
+<section id="section-5">
+      <h2 id="name-authentication">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-authentication" class="section-name selfRef">Authentication</a>
+      </h2>
+<p id="section-5-1">While CRQCs could decrypt previous TLS sessions, client/server authentication based on certificates cannot be retroactively broken. However, given the multi-year lead-time required to establish, certify, and embed new root CAs, it would be difficult to react in a timely manner if CRQCs come online sooner than anticipated. So while PQ migration of X.509 certificates has more time than key exchanges, we should not delay this work for too long.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The Quantum-Ready authentication property can be utilized in scenarios where an on-path attacker possesses network devices equipped with CRQCs, capable of breaking traditional authentication protocols. If an attacker uses CRQC to determine the private key of a server certificate before the certificate expiry, the attacker can create a fake server, and then every user will think that their connection is legitimate. The server impersonation leads to various security threats, including impersonation, data disclosure, and the interception of user data and communications.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">The Quantum-Ready authentication property ensures authentication through either a pure Post-Quantum or a PQ/T hybrid Certificate.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-4.1">
+          <p id="section-5-4.1.1">A Post-Quantum X.509 Certificate using Module-Lattice Digital Signature Algorithm (ML-DSA), also called
+Dilithium, is defined in <span>[<a href="#I-D.ietf-lamps-dilithium-certificates" class="cite xref">I-D.ietf-lamps-dilithium-certificates</a>]</span>.<a href="#section-5-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-4.2">
+          <p id="section-5-4.2.1">The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the
+LAMPS WG, and consensus may evolve over time regarding its adoption.<a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-4.3">
+          <p id="section-5-4.3.1">The non-composite hybrid authentication discussed in <span>[<a href="#I-D.ietf-lamps-cert-binding-for-multi-auth" class="cite xref">I-D.ietf-lamps-cert-binding-for-multi-auth</a>]</span>
+enables peers to employ the same certificates in hybrid authentication as in authentication done with only traditional or post-quantum algorithms. In TLS, peers can request that both traditional and PQ certificate be used for authentication. For instance, traditional certificates can be exchanged during the TLS handshake and PQ certificates can be exchanged after the session has been established using the mechanism defined in <span>[<a href="#RFC9261" class="cite xref">RFC9261</a>]</span>.<a href="#section-5-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-5-4.4">
+          <p id="section-5-4.4.1">The composite signature contains two signatures in a single atomic container that have been generated
+using two different cryptographic algorithms. For example, NIST define a dual signature as "two or more signatures on a common message". The goal of this approach is to define a signature format which requires both contained signatures to be verified. This concept is described in Composite Signatures For Use In Internet PKI <span>[<a href="#I-D.ounsworth-pq-composite-sigs" class="cite xref">I-D.ounsworth-pq-composite-sigs</a>]</span>.<a href="#section-5-4.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-5-5">To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for client and server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs. For example, applications that have extremely short key lifetimes -- for example less than an hour -- may decide that it is an acceptable risk to leave those on Traditional algorithms for the foreseeable future under the assumption that quantum key factoring attacks take longer to run than the key lifetimes. It may be advantageous to explore heterogeneous PKI architectures where the long-lived CAs are using Post-Quantum algorithms but the server and client certificates are not. In summary, if the signature is not post-quantum secure, further evaluation is needed to determine whether the attempt to achieve post-quantum security using short-lived keys is effective or not.<a href="#section-5-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="informing-users-of-pqc-security-compatibility-issues">
+<section id="section-6">
+      <h2 id="name-informing-users-of-pqc-secu">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-informing-users-of-pqc-secu" class="section-name selfRef">Informing Users of PQC Security Compatibility Issues</a>
+      </h2>
+<p id="section-6-1">When the server detects that the client doesn't support PQC or hybrid key exchange, it can send an 'insufficient_security' fatal alert to the client. The client can inform the end-users that the server they are trying to access requires a level of security that the client cannot provide due to the lack of PQC support. Furthermore, the client may log the event for diagnostic and security auditing purposes and report the security-related issue to the client development team.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Similarly, when the client detects that the server doesn't support PQC or hybrid key exchange, it can send an alert or error page to the client. The message can inform the end-user that the server is not compatible with the PQC security features offered by the client.<a href="#section-6-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="application-protocols">
+<section id="section-7">
+      <h2 id="name-application-protocols">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-application-protocols" class="section-name selfRef">Application Protocols</a>
+      </h2>
+<div id="encrypted-dns">
+<section id="section-7.1">
+        <h3 id="name-encrypted-dns">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-encrypted-dns" class="section-name selfRef">Encrypted DNS</a>
+        </h3>
+<p id="section-7.1-1">The privacy risks for end users exchanging DNS messages in clear text are discussed in <span>[<a href="#RFC7518" class="cite xref">RFC7518</a>]</span>. Transport Layer Security (TLS) is employed to ensure privacy for DNS. DNS encryption provided by TLS (e.g., DNS-over-HTTPS, DNS-over-TLS, DNS-over-QUIC) eliminates opportunities for eavesdropping and on-path tampering while in transit through the network.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">Encrypted DNS messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the TLS key exchange. If an attacker possesses copies of an entire set of encrypted DNS messages, including the TLS setup, it could use a CRQC to potentially decrypt the message content by determining the ephemeral key exchange private key.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">Encrypted DNS protocols will have to support the Quantum-Ready usage profile discussed in {#confident}.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-4">Note that post-quantum security of DNSSEC <span>[<a href="#RFC9364" class="cite xref">RFC9364</a>]</span>, which provides authenticity for DNS records, is a separate issue from the requirements for encrypted DNS transports.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="hybrid-public-key-encryption-hpke">
+<section id="section-7.2">
+        <h3 id="name-hybrid-public-key-encryptio">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-hybrid-public-key-encryptio" class="section-name selfRef">Hybrid public-key encryption (HPKE)</a>
+        </h3>
+<p id="section-7.2-1">Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret.  The motivation for standardizing a public key encryption scheme is explained in the introduction of <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">HPKE can be extended to support PQ/T Hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in <span>[<a href="#I-D.westerbaan-cfrg-hpke-xyber768d00-02" class="cite xref">I-D.westerbaan-cfrg-hpke-xyber768d00-02</a>]</span>. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs. Note that X25519Kyber768Draft00 is IND-CCA2 secure (Section 4 of <span>[<a href="#I-D.westerbaan-cfrg-hpke-xyber768d00-02" class="cite xref">I-D.westerbaan-cfrg-hpke-xyber768d00-02</a>]</span>).<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<div id="ech">
+<section id="section-7.2.1">
+          <h4 id="name-interaction-with-encrypted-">
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-interaction-with-encrypted-" class="section-name selfRef">Interaction with Encrypted Client Hello</a>
+          </h4>
+<p id="section-7.2.1-1">Client TLS libraries and applications can use Encrypted Client Hello (ECH) <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span> to prevent passive observation of the intended server identity in the TLS handshake which requires also deploying Encrypted DNS (DNS over TLS), otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was being protected with ECH. ECH uses HPKE for public key encryption.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-2">ECH <span class="bcp14">MUST</span> incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-3">To use ECH the client needs to learn the ECH configuration for a server before it attempts a connection to the server. Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings specification <span>[<a href="#I-D.draft-ietf-tls-svcb-ech" class="cite xref">I-D.draft-ietf-tls-svcb-ech</a>]</span> provides a mechanism for conveying the ECH configuration information via DNS, using a SVCB or HTTPS record. The "ech" SvcParamKey is used in SVCB or HTTPS or DNS records, and is intended to serve as the primary bootstrap mechanism for ECH. The value of the parameter is an ECHConfigList (Section 4 of <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span>). The public_key in HpkeKeyConfig structure would carry the concatenation of traditional and PQC KEM public keys which would increase DNS resposnse size that could exceed the path MTU. It would require the use of reliable transport and Encrypted DNS (e.g., DoT, DoH or DoQ).<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="oblivious-http">
+<section id="section-7.2.2">
+          <h4 id="name-oblivious-http">
+<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-oblivious-http" class="section-name selfRef">Oblivious HTTP</a>
+          </h4>
+<p id="section-7.2.2-1">Oblivious HTTP <span>[<a href="#I-D.ietf-ohai-ohttp" class="cite xref">I-D.ietf-ohai-ohttp</a>]</span> allows clients to encrypt messages exchanged with an Oblivious Target Resource (target). The messages are encapsulated in encrypted messages to an Oblivious Gateway Resource (gateway), which offers Oblivious HTTP access to the target. The gateway is accessed via an Oblivious Relay Resource (relay), which proxies the encapsulated messages to hide the identity of the client. Overall, this architecture is designed in such a way that the relay cannot inspect the contents of messages, and the gateway and target cannot learn the client's identity from a single transaction. Oblivious HTTP uses HPKE for encapsulating binary HTTP messages to protect their contents.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-2">Oblivious HTTP is vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the HPKE. If an attacker possesses copies of an entire set of encapsulated HTTP messages, it could use CRQC to potentially decrypt the message content by determining the private key. The attacker can potentially be the Oblivious Relay Resource.<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-3">The "ohttp" SvcParamKey defined in <span>[<a href="#I-D.ietf-ohai-svcb-config" class="cite xref">I-D.ietf-ohai-svcb-config</a>]</span> is used to indicate that a service described in an SVCB RR can be accessed as a target using an associated gateway. For the "dns" scheme, as defined in <span>[<a href="#I-D.draft-ietf-add-svcb-dns" class="cite xref">I-D.draft-ietf-add-svcb-dns</a>]</span>, the presence of the "ohttp" parameter means that the DNS server being described has a DNS over HTTP (DoH) <span>[<a href="#RFC8484" class="cite xref">RFC8484</a>]</span> service that can be accessed using Oblivious HTTP.<a href="#section-7.2.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.2.2-4">Oblivious HTTP and DNS over Oblivious HTTP <span class="bcp14">MUST</span> incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mls">
+<section id="section-7.2.3">
+          <h4 id="name-mls">
+<a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-mls" class="section-name selfRef">MLS</a>
+          </h4>
+<p id="section-7.2.3-1">TODO<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="webrtc">
+<section id="section-7.3">
+        <h3 id="name-webrtc">
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-webrtc" class="section-name selfRef">WebRTC</a>
+        </h3>
+<p id="section-7.3-1">In WebRTC, secure channels are set up via DTLS and DTLS-SRTP <span>[<a href="#RFC5763" class="cite xref">RFC5763</a>]</span> keying for SRTP <span>[<a href="#RFC3711" class="cite xref">RFC3711</a>]</span> for media channels and the Stream Control Transmission Protocol (SCTP) over DTLS <span>[<a href="#RFC8261" class="cite xref">RFC8261</a>]</span> for data channels.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
+<p id="section-7.3-2">Secure channels may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the DTLS key exchange. If an attacker possesses copies of an entire set of encrypted media, including the DTLS setup, it could use CRQC to potentially decrypt the media by determining the private key.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
+<p id="section-7.3-3">WebRTC media and data channels <span class="bcp14">MUST</span> support the Quantum-Ready usage profile discussed in {#confident}.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">The other challenge with WebRTC is that PQC KEMs often come with large public keys and PQC Signature schemes come with large signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of <span>[<a href="#I-D.ietf-pquip-pqc-engineers" class="cite xref">I-D.ietf-pquip-pqc-engineers</a>]</span>). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels. One potential mitigation strategy to avoid the delay is to prevent the duplication PQC KEM public key shares in the ClientHello, avoiding duplication of key shares is discussed in Section 4 of <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="https">
+<section id="section-7.4">
+        <h3 id="name-https">
+<a href="#section-7.4" class="section-number selfRef">7.4. </a><a href="#name-https" class="section-name selfRef">HTTPS</a>
+        </h3>
+<p id="section-7.4-1">HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP used for secure data exchange over the web. HTTPS primarily relies on the TLS (Transport Layer Security) protocol to provide encryption, integrity, and authenticity for data in transit.<a href="#section-7.4-1" class="pilcrow">¶</a></p>
+<p id="section-7.4-2">HTTP messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the TLS key exchange. If an attacker possesses copies of an entire set of encrypted HTTP messages, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key. This traffic can include sensitive information, such as login credentials, personal data, or financial details, depending on the nature of the communication.<a href="#section-7.4-2" class="pilcrow">¶</a></p>
+<p id="section-7.4-3">If an attacker can decrypt the message content before the expiry of the login credentials, the attacker can steal the credentials. The theft of login credentials is a serious security concern that can have a wide range of consequences for individuals and organizations. The most immediate and obvious challenge is that the attacker gains unauthorized access to the victim's accounts, systems, or data. This can lead to data breaches, privacy violations, and various forms of cybercrime.<a href="#section-7.4-3" class="pilcrow">¶</a></p>
+<p id="section-7.4-4">Applications using HTTPS to exchange sensitive data <span class="bcp14">MUST</span> support the Quantum-Ready usage profile discussed in {#confident}. If the data is genuinely non-sensitive and has no privacy or security implications, the motivation for an attacker to invest resources in capturing and later decrypting it would likely be very low. In such cases, the "Harvest Now, Decrypt Later" attack may not be relevant. In similar lines, reverse proxies operated between clients and origin servers will also have to support {#confident}.<a href="#section-7.4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="email-submission">
+<section id="section-7.5">
+        <h3 id="name-email-submission">
+<a href="#section-7.5" class="section-number selfRef">7.5. </a><a href="#name-email-submission" class="section-name selfRef">Email Submission</a>
+        </h3>
+<p id="section-7.5-1">Email often contains information that needs protection from passive monitoring or active modification. While some standards exist for protecting integrity and for encrypting content of messages themselves (see <span>[<a href="#RFC8551" class="cite xref">RFC8551</a>]</span>), transport encryption is also frequently used. TLS support for Email Submission/Access is described in <span><a href="https://rfc-editor.org/rfc/rfc8314#section-3.3" class="relref">Section 3.3</a> of [<a href="#RFC8314" class="cite xref">RFC8314</a>]</span>. The Mail User Agent (MUA) and a Mail Submission Server or Mail Access Server <span class="bcp14">MUST</span> support the Quantum-Ready usage profile discussed in {#confident}.<a href="#section-7.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-8">
+      <h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-8-1">Post-quantum algorithms selected for standardization are relatively
+new and they they have not been subject to the same depth of study as
+traditional algorithms. PQC implementations will also be new and
+therefore more likely to contain implementation bugs than the
+battle-tested crypto implementations that we rely on today. In
+addition, certain deployments may need to retain traditional
+algorithms due to regulatory constraints, for example FIPS
+<span>[<a href="#SP-800-56C" class="cite xref">SP-800-56C</a>]</span> or PCI compliance. Hybrid key exchange enables
+potential security against "Harvest Now, Decrypt Later" attack provide
+for time to react in the case of the announcement of a devastating
+attack against any one algorithm, while not fully abandoning
+traditional cryptosystems.<a href="#section-8-1" class="pilcrow">¶</a></p>
+<p id="section-8-2">Implementing PQ/T hybrid schemes improperly can introduce security issues at the cryptographic layer, for example how the Traditional and PQ schemes are combined; at the algorithm selection layer, mismatched security levels for example if 192-bit KEM is used with a 128-bit secure combiner; or at the protocol layer in how the upgrade/downgrade mechanism works. PQ/T hybrid schemes should be implemented carefully and all relevant specifications implemented correctly.<a href="#section-8-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgements">
+<section id="section-9">
+      <h2 id="name-acknowledgements">
+<a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="section-9-1">Thanks to Dan Wing for suggesting wider document scope. Thanks to Mike Ounsworth, Scott Fluhrer and Thom Wiggers for review and feedback.<a href="#section-9-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-10">
+      <h2 id="name-references">
+<a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<div id="sec-normative-references">
+<section id="section-10.1">
+        <h3 id="name-normative-references">
+<a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.draft-ietf-add-svcb-dns">[I-D.draft-ietf-add-svcb-dns]</dt>
+        <dd>
+<span class="refAuthor">Schwartz, B. M.</span>, <span class="refTitle">"Service Binding Mapping for DNS Servers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-add-svcb-dns-09</span>, <time datetime="2023-06-26" class="refDate">26 June 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-svcb-dns-09">https://datatracker.ietf.org/doc/html/draft-ietf-add-svcb-dns-09</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-tls-hybrid-design">[I-D.ietf-tls-hybrid-design]</dt>
+        <dd>
+<span class="refAuthor">Stebila, D.</span>, <span class="refAuthor">Fluhrer, S.</span>, and <span class="refAuthor">S. Gueron</span>, <span class="refTitle">"Hybrid key exchange in TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-hybrid-design-09</span>, <time datetime="2023-09-07" class="refDate">7 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-hybrid-design-09">https://datatracker.ietf.org/doc/html/draft-ietf-tls-hybrid-design-09</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3711">[RFC3711]</dt>
+        <dd>
+<span class="refAuthor">Baugher, M.</span>, <span class="refAuthor">McGrew, D.</span>, <span class="refAuthor">Naslund, M.</span>, <span class="refAuthor">Carrara, E.</span>, and <span class="refAuthor">K. Norrman</span>, <span class="refTitle">"The Secure Real-time Transport Protocol (SRTP)"</span>, <span class="seriesInfo">RFC 3711</span>, <span class="seriesInfo">DOI 10.17487/RFC3711</span>, <time datetime="2004-03" class="refDate">March 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3711">https://www.rfc-editor.org/rfc/rfc3711</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5763">[RFC5763]</dt>
+        <dd>
+<span class="refAuthor">Fischl, J.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">E. Rescorla</span>, <span class="refTitle">"Framework for Establishing a Secure Real-time Transport Protocol (SRTP) Security Context Using Datagram Transport Layer Security (DTLS)"</span>, <span class="seriesInfo">RFC 5763</span>, <span class="seriesInfo">DOI 10.17487/RFC5763</span>, <time datetime="2010-05" class="refDate">May 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5763">https://www.rfc-editor.org/rfc/rfc5763</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7518">[RFC7518]</dt>
+        <dd>
+<span class="refAuthor">Jones, M.</span>, <span class="refTitle">"JSON Web Algorithms (JWA)"</span>, <span class="seriesInfo">RFC 7518</span>, <span class="seriesInfo">DOI 10.17487/RFC7518</span>, <time datetime="2015-05" class="refDate">May 2015</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7518">https://www.rfc-editor.org/rfc/rfc7518</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+        <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8261">[RFC8261]</dt>
+        <dd>
+<span class="refAuthor">Tuexen, M.</span>, <span class="refAuthor">Stewart, R.</span>, <span class="refAuthor">Jesup, R.</span>, and <span class="refAuthor">S. Loreto</span>, <span class="refTitle">"Datagram Transport Layer Security (DTLS) Encapsulation of SCTP Packets"</span>, <span class="seriesInfo">RFC 8261</span>, <span class="seriesInfo">DOI 10.17487/RFC8261</span>, <time datetime="2017-11" class="refDate">November 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8261">https://www.rfc-editor.org/rfc/rfc8261</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8446">[RFC8446]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8484">[RFC8484]</dt>
+        <dd>
+<span class="refAuthor">Hoffman, P.</span> and <span class="refAuthor">P. McManus</span>, <span class="refTitle">"DNS Queries over HTTPS (DoH)"</span>, <span class="seriesInfo">RFC 8484</span>, <span class="seriesInfo">DOI 10.17487/RFC8484</span>, <time datetime="2018-10" class="refDate">October 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8484">https://www.rfc-editor.org/rfc/rfc8484</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9261">[RFC9261]</dt>
+      <dd>
+<span class="refAuthor">Sullivan, N.</span>, <span class="refTitle">"Exported Authenticators in TLS"</span>, <span class="seriesInfo">RFC 9261</span>, <span class="seriesInfo">DOI 10.17487/RFC9261</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9261">https://www.rfc-editor.org/rfc/rfc9261</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-10.2">
+        <h3 id="name-informative-references">
+<a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.draft-ietf-tls-svcb-ech">[I-D.draft-ietf-tls-svcb-ech]</dt>
+        <dd>
+<span class="refAuthor">Schwartz, B. M.</span>, <span class="refAuthor">Bishop, M.</span>, and <span class="refAuthor">E. Nygren</span>, <span class="refTitle">"Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-svcb-ech-00</span>, <time datetime="2023-09-26" class="refDate">26 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-00">https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-lamps-cert-binding-for-multi-auth">[I-D.ietf-lamps-cert-binding-for-multi-auth]</dt>
+        <dd>
+<span class="refAuthor">Becker, A.</span>, <span class="refAuthor">Guthrie, R.</span>, and <span class="refAuthor">M. J. Jenkins</span>, <span class="refTitle">"Related Certificates for Use in Multiple Authentications within a Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-cert-binding-for-multi-auth-03</span>, <time datetime="2023-11-29" class="refDate">29 November 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cert-binding-for-multi-auth-03">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cert-binding-for-multi-auth-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-lamps-dilithium-certificates">[I-D.ietf-lamps-dilithium-certificates]</dt>
+        <dd>
+<span class="refAuthor">Massimo, J.</span>, <span class="refAuthor">Kampanakis, P.</span>, <span class="refAuthor">Turner, S.</span>, and <span class="refAuthor">B. Westerbaan</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure: Algorithm Identifiers for ML-DSA"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-dilithium-certificates-03</span>, <time datetime="2024-02-05" class="refDate">5 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-dilithium-certificates-03">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-dilithium-certificates-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-ohai-ohttp">[I-D.ietf-ohai-ohttp]</dt>
+        <dd>
+<span class="refAuthor">Thomson, M.</span> and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Oblivious HTTP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ohai-ohttp-10</span>, <time datetime="2023-08-25" class="refDate">25 August 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ohai-ohttp-10">https://datatracker.ietf.org/doc/html/draft-ietf-ohai-ohttp-10</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-ohai-svcb-config">[I-D.ietf-ohai-svcb-config]</dt>
+        <dd>
+<span class="refAuthor">Pauly, T.</span> and <span class="refAuthor">T. Reddy.K</span>, <span class="refTitle">"Discovery of Oblivious Services via Service Binding Records"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ohai-svcb-config-07</span>, <time datetime="2023-10-06" class="refDate">6 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ohai-svcb-config-07">https://datatracker.ietf.org/doc/html/draft-ietf-ohai-svcb-config-07</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-pquip-pqc-engineers">[I-D.ietf-pquip-pqc-engineers]</dt>
+        <dd>
+<span class="refAuthor">Banerjee, A.</span>, <span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Schoinianakis, D.</span>, and <span class="refAuthor">T. Hollebeek</span>, <span class="refTitle">"Post-Quantum Cryptography for Engineers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-pquip-pqc-engineers-02</span>, <time datetime="2023-10-20" class="refDate">20 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqc-engineers-02">https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqc-engineers-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-pquip-pqt-hybrid-terminology">[I-D.ietf-pquip-pqt-hybrid-terminology]</dt>
+        <dd>
+<span class="refAuthor">D, F.</span>, <span class="refTitle">"Terminology for Post-Quantum Traditional Hybrid Schemes"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-pquip-pqt-hybrid-terminology-02</span>, <time datetime="2024-02-02" class="refDate">2 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqt-hybrid-terminology-02">https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqt-hybrid-terminology-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-tls-esni">[I-D.ietf-tls-esni]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-17</span>, <time datetime="2023-10-09" class="refDate">9 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ounsworth-pq-composite-sigs">[I-D.ounsworth-pq-composite-sigs]</dt>
+        <dd>
+<span class="refAuthor">Ounsworth, M.</span>, <span class="refAuthor">Gray, J.</span>, <span class="refAuthor">Pala, M.</span>, and <span class="refAuthor">J. Klaußner</span>, <span class="refTitle">"Composite Signatures For Use In Internet PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ounsworth-pq-composite-sigs-11</span>, <time datetime="2023-12-20" class="refDate">20 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ounsworth-pq-composite-sigs-11">https://datatracker.ietf.org/doc/html/draft-ounsworth-pq-composite-sigs-11</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.westerbaan-cfrg-hpke-xyber768d00-02">[I-D.westerbaan-cfrg-hpke-xyber768d00-02]</dt>
+        <dd>
+<span class="refAuthor">Westerbaan, B.</span> and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"X25519Kyber768Draft00 hybrid post-quantum KEM for HPKE"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-westerbaan-cfrg-hpke-xyber768d00-02</span>, <time datetime="2023-05-04" class="refDate">4 May 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-westerbaan-cfrg-hpke-xyber768d00-02">https://datatracker.ietf.org/doc/html/draft-westerbaan-cfrg-hpke-xyber768d00-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8314">[RFC8314]</dt>
+        <dd>
+<span class="refAuthor">Moore, K.</span> and <span class="refAuthor">C. Newman</span>, <span class="refTitle">"Cleartext Considered Obsolete: Use of Transport Layer Security (TLS) for Email Submission and Access"</span>, <span class="seriesInfo">RFC 8314</span>, <span class="seriesInfo">DOI 10.17487/RFC8314</span>, <time datetime="2018-01" class="refDate">January 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8314">https://www.rfc-editor.org/rfc/rfc8314</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8551">[RFC8551]</dt>
+        <dd>
+<span class="refAuthor">Schaad, J.</span>, <span class="refAuthor">Ramsdell, B.</span>, and <span class="refAuthor">S. Turner</span>, <span class="refTitle">"Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 4.0 Message Specification"</span>, <span class="seriesInfo">RFC 8551</span>, <span class="seriesInfo">DOI 10.17487/RFC8551</span>, <time datetime="2019-04" class="refDate">April 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8551">https://www.rfc-editor.org/rfc/rfc8551</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9001">[RFC9001]</dt>
+        <dd>
+<span class="refAuthor">Thomson, M., Ed.</span> and <span class="refAuthor">S. Turner, Ed.</span>, <span class="refTitle">"Using TLS to Secure QUIC"</span>, <span class="seriesInfo">RFC 9001</span>, <span class="seriesInfo">DOI 10.17487/RFC9001</span>, <time datetime="2021-05" class="refDate">May 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9001">https://www.rfc-editor.org/rfc/rfc9001</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9147">[RFC9147]</dt>
+        <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Tschofenig, H.</span>, and <span class="refAuthor">N. Modadugu</span>, <span class="refTitle">"The Datagram Transport Layer Security (DTLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 9147</span>, <span class="seriesInfo">DOI 10.17487/RFC9147</span>, <time datetime="2022-04" class="refDate">April 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9147">https://www.rfc-editor.org/rfc/rfc9147</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9180">[RFC9180]</dt>
+        <dd>
+<span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Bhargavan, K.</span>, <span class="refAuthor">Lipp, B.</span>, and <span class="refAuthor">C. Wood</span>, <span class="refTitle">"Hybrid Public Key Encryption"</span>, <span class="seriesInfo">RFC 9180</span>, <span class="seriesInfo">DOI 10.17487/RFC9180</span>, <time datetime="2022-02" class="refDate">February 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9180">https://www.rfc-editor.org/rfc/rfc9180</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9364">[RFC9364]</dt>
+        <dd>
+<span class="refAuthor">Hoffman, P.</span>, <span class="refTitle">"DNS Security Extensions (DNSSEC)"</span>, <span class="seriesInfo">BCP 237</span>, <span class="seriesInfo">RFC 9364</span>, <span class="seriesInfo">DOI 10.17487/RFC9364</span>, <time datetime="2023-02" class="refDate">February 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9364">https://www.rfc-editor.org/rfc/rfc9364</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SP-800-56C">[SP-800-56C]</dt>
+      <dd>
+<span class="refTitle">"Recommendation for Key-Derivation Methods in Key-Establishment Schemes"</span>, <span>&lt;<a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf">https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Cr2.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+<div id="authors-addresses">
+<section id="appendix-A">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tirumaleswar Reddy</span></div>
+<div dir="auto" class="left"><span class="org">Nokia</span></div>
+<div dir="auto" class="left">
+<span class="locality">Bangalore</span> </div>
+<div dir="auto" class="left"><span class="region">Karnataka</span></div>
+<div dir="auto" class="left"><span class="country-name">India</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:kondtir@gmail.com" class="email">kondtir@gmail.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
