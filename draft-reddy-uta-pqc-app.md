@@ -110,7 +110,7 @@ For data confidentiality, we are concerned with the so-called "Harvest Now, Decr
 
 For data authentication, our concern lies with an on-path attacker who possesses devices equipped with CRQCs capable of breaking traditional authentication protocols. For instance, the attacker can fake the identity of the target, leading victims to connect to the attacker's device instead of connecting to the actual target, resulting in an impersonation attack. While not an immediate threat, it is still a concern when compared to the 'Harvest Now, Decrypt Later' attack.
 
-In client/server certificate-based authentication, it's common for the certificate's signature in the TLS handshake to have a short lifetime. This means that the time between the certificate signing the CertificateVerify message and its verification by the peer during the TLS handshake is limited. However, it's worth questioning the security lifetime of the digital signatures on X.509 certificates, including those issued by root Certificate Authorities (CAs). Root CAs can have lifetimes of 20 years or more. Additionally, root Certificate Revocation Lists (CRLs) may have lifetimes of a year or more, while delegated credentials like CRL Signing Certificates or OCSP response signing certificates can have lifetimes that fall anywhere in between. 
+In client/server certificate-based authentication, it's common for the certificate's signature in the TLS handshake to have a short lifetime. This means that the time between the certificate signing the CertificateVerify message and its verification by the peer during the TLS handshake is limited. However, it's worth questioning the security lifetime of the digital signatures on X.509 certificates, including those issued by root Certificate Authorities (CAs). Root CAs can have lifetimes of 20 years or more. Additionally, root Certificate Revocation Lists (CRLs) may have lifetimes of a year or more, while delegated credentials like CRL Signing Certificates or OCSP response signing certificates can have lifetimes that fall anywhere in between.
 
 # Data Confidentiality {#confident}
 
@@ -142,22 +142,22 @@ While CRQCs could decrypt previous TLS sessions, client/server authentication ba
 
 The Quantum-Ready authentication property can be utilized in scenarios where an on-path attacker possesses network devices equipped with CRQCs, capable of breaking traditional authentication protocols. If an attacker uses CRQC to determine the private key of a server certificate before the certificate expiry, the attacker can create a fake server, and then every user will think that their connection is legitimate. The server impersonation leads to various security threats, including impersonation, data disclosure, and the interception of user data and communications.
 
-The Quantum-Ready authentication property ensures authentication through either a pure Post-Quantum or a PQ/T hybrid Certificate. 
+The Quantum-Ready authentication property ensures authentication through either a pure Post-Quantum or a PQ/T hybrid Certificate.
 
    *  A Post-Quantum X.509 Certificate using Module-Lattice Digital Signature Algorithm (ML-DSA) is defined in {{?I-D.ietf-lamps-dilithium-certificates}} and using SLH-DSA is defined in {{?I-D.ietf-lamps-cms-sphincs-plus}}.
 
    *  The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the LAMPS and PQUIP WGs, and consensus may evolve over time regarding its adoption.
 
-      *  Hybrid Signature: The hybrid signature refers to the output of a hybrid signature scheme's signature     
+      *  Hybrid Signature: The hybrid signature refers to the output of a hybrid signature scheme's signature
          generation process. For instance, NIST defines a dual signature as "two or more signatures on a common message". The objective of this approach is to establish a signature format that necessitates the verification of both contained signatures. This concept is discussed in the document titled "Composite Signatures For Use In Internet PKI" {{?I-D.ietf-lamps-pq-composite-sigs}}.
 
-      *  The non-composite hybrid authentication discussed in {{?I-D.ietf-lamps-cert-binding-for-multi-auth}} 
-         enables peers to employ the same certificates in hybrid authentication as in authentication done with only traditional or post-quantum algorithms. 
-         
-      *  In {{?I-D.okubo-certdiscovery}}, the Primary Certificate uses a widely adopted cryptographic algorithm 
+      *  The non-composite hybrid authentication discussed in {{?I-D.ietf-lamps-cert-binding-for-multi-auth}}
+         enables peers to employ the same certificates in hybrid authentication as in authentication done with only traditional or post-quantum algorithms.
+
+      *  In {{?I-D.okubo-certdiscovery}}, the Primary Certificate uses a widely adopted cryptographic algorithm
          while the Secondary Certificate uses the algorithm that is new and not widely adopted. In TLS, peers can request that both traditional and PQ certificate be used for authentication. For instance, traditional certificates can be exchanged during the TLS handshake and PQ certificates can be exchanged after the session has been established using the mechanism defined in {{!RFC9261}}.
 
-      *  {{?I-D.bonnell-lamps-chameleon-certs}} allows a relying party to extract information sufficient to       
+      *  {{?I-D.bonnell-lamps-chameleon-certs}} allows a relying party to extract information sufficient to
          construct the paired certificate and perform certification path validation using the constructed certificate.
 
 To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for client and server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs. For example, applications that have extremely short key lifetimes -- for example less than an hour -- may decide that it is an acceptable risk to leave those on Traditional algorithms for the foreseeable future under the assumption that quantum key factoring attacks take longer to run than the key lifetimes. It may be advantageous to explore heterogeneous PKI architectures where the long-lived CAs are using Post-Quantum algorithms but the server and client certificates are not. In summary, if the signature is not post-quantum secure, further evaluation is needed to determine whether the attempt to achieve post-quantum security using short-lived keys is effective or not.
@@ -184,7 +184,7 @@ Note that post-quantum security of DNSSEC {{?RFC9364}}, which provides authentic
 
 Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret.  The motivation for standardizing a public key encryption scheme is explained in the introduction of {{?RFC9180}}.
 
-HPKE can be extended to support PQ/T Hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs. Note that X25519Kyber768Draft00 is IND-CCA2 secure (Section 4 of {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}). 
+HPKE can be extended to support PQ/T Hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}. Kyber, which is a KEM does not support the static-ephemeral key exchange that allows HPKE based on DH based KEMs. Note that X25519Kyber768Draft00 is IND-CCA2 secure (Section 4 of {{?I-D.westerbaan-cfrg-hpke-xyber768d00-02}}).
 
 ### Interaction with Encrypted Client Hello {#ech}
 
@@ -192,7 +192,7 @@ Client TLS libraries and applications can use Encrypted Client Hello (ECH) {{?I-
 
 ECH MUST incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack. ECH uses HPKE for public key encryption. HPKE can be extended to support PQ/T Hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.connolly-cfrg-xwing-kem}}.
 
-To use ECH the client needs to learn the ECH configuration for a server before it attempts a connection to the server. Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings specification {{?I-D.draft-ietf-tls-svcb-ech}} provides a mechanism for conveying the ECH configuration information via DNS, using a SVCB or HTTPS record. The "ech" SvcParamKey is used in SVCB or HTTPS or DNS records, and is intended to serve as the primary bootstrap mechanism for ECH. The value of the parameter is an ECHConfigList (Section 4 of {{?I-D.ietf-tls-esni}}). The public_key in HpkeKeyConfig structure would carry the concatenation of traditional and PQC KEM public keys which would increase DNS resposnse size that could exceed the path MTU. It would require the use of reliable transport and Encrypted DNS (e.g., DoT, DoH or DoQ). 
+To use ECH the client needs to learn the ECH configuration for a server before it attempts a connection to the server. Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings specification {{?I-D.draft-ietf-tls-svcb-ech}} provides a mechanism for conveying the ECH configuration information via DNS, using a SVCB or HTTPS record. The "ech" SvcParamKey is used in SVCB or HTTPS or DNS records, and is intended to serve as the primary bootstrap mechanism for ECH. The value of the parameter is an ECHConfigList (Section 4 of {{?I-D.ietf-tls-esni}}). The public_key in HpkeKeyConfig structure would carry the concatenation of traditional and PQC KEM public keys which would increase DNS resposnse size that could exceed the path MTU. It would require the use of reliable transport and Encrypted DNS (e.g., DoT, DoH or DoQ).
 
 ## WebRTC
 
@@ -202,7 +202,7 @@ Secure channels may be vulnerable to decryption if an attacker gains access to t
 
 WebRTC media and data channels MUST support the Quantum-Ready usage profile discussed in {#confident}.
 
-The other challenge with WebRTC is that PQC KEMs often come with large public keys and PQC Signature schemes come with large signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of {{?I-D.ietf-pquip-pqc-engineers}}). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels. 
+The other challenge with WebRTC is that PQC KEMs often come with large public keys and PQC Signature schemes come with large signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of {{?I-D.ietf-pquip-pqc-engineers}}). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels.
 
 ## HTTPS
 
@@ -216,7 +216,7 @@ Applications using HTTPS to exchange sensitive data MUST support the Quantum-Rea
 
 ## Email Submission
 
-Email often contains information that needs protection from passive monitoring or active modification. While some standards exist for protecting integrity and for encrypting content of messages themselves (see {{?RFC8551}}), transport encryption is also frequently used. TLS support for Email Submission/Access is described in {{Section 3.3 of ?RFC8314}}. The Mail User Agent (MUA) and a Mail Submission Server or Mail Access Server MUST support the Quantum-Ready usage profile discussed in {#confident}. 
+Email often contains information that needs protection from passive monitoring or active modification. While some standards exist for protecting integrity and for encrypting content of messages themselves (see {{?RFC8551}}), transport encryption is also frequently used. TLS support for Email Submission/Access is described in {{Section 3.3 of ?RFC8314}}. The Mail User Agent (MUA) and a Mail Submission Server or Mail Access Server MUST support the Quantum-Ready usage profile discussed in {#confident}.
 
 # Security Considerations
 
@@ -238,7 +238,7 @@ Implementing PQ/T hybrid schemes improperly can introduce security issues at the
 # Acknowledgements
 {:numbered="false"}
 
-Thanks to Dan Wing for suggesting wider document scope. Thanks to Mike Ounsworth, Scott Fluhrer, 
+Thanks to Dan Wing for suggesting wider document scope. Thanks to Mike Ounsworth, Scott Fluhrer,
 Bas Westerbaan and Thom Wiggers for review and feedback.
 
 
