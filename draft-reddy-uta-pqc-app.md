@@ -144,18 +144,21 @@ The Quantum-Ready authentication property can be utilized in scenarios where an 
 
 The Quantum-Ready authentication property ensures authentication through either a pure Post-Quantum or a PQ/T hybrid Certificate. 
 
-   *  A Post-Quantum X.509 Certificate using Module-Lattice Digital Signature Algorithm (ML-DSA)is defined in {{?I-D.ietf-lamps-dilithium-certificates}}.
+   *  A Post-Quantum X.509 Certificate using Module-Lattice Digital Signature Algorithm (ML-DSA) is defined in {{?I-D.ietf-lamps-dilithium-certificates}} and using SLH-DSA is defined in {{?I-D.ietf-lamps-cms-sphincs-plus}}.
 
-   *  The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the LAMPS WG, and consensus may evolve over time regarding its adoption.
+   *  The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the LAMPS and PQUIP WGs, and consensus may evolve over time regarding its adoption.
 
-      *  Hybrid Signature: The hybrid signature refers to the output of a hybrid signature scheme's signature generation process. For     
-         instance, NIST defines a dual signature as "two or more signatures on a common message". The objective of this approach is to establish a signature format that necessitates the verification of both contained signatures. This concept is discussed in the document titled "Composite Signatures For Use In Internet PKI" (I-D.ounsworth-pq-composite-sigs).
+      *  Hybrid Signature: The hybrid signature refers to the output of a hybrid signature scheme's signature     
+         generation process. For instance, NIST defines a dual signature as "two or more signatures on a common message". The objective of this approach is to establish a signature format that necessitates the verification of both contained signatures. This concept is discussed in the document titled "Composite Signatures For Use In Internet PKI" {{?I-D.ietf-lamps-pq-composite-sigs}}.
 
       *  The non-composite hybrid authentication discussed in {{?I-D.ietf-lamps-cert-binding-for-multi-auth}} 
-         enables peers to employ the same certificates in hybrid authentication as in authentication done with only traditional or post-quantum algorithms. In {{?I-D.okubo-certdiscovery}}, the Primary Certificate uses a widely adopted cryptographic algorithm while the Secondary Certificate uses the algorithm that is new and not widely adopted. In TLS, peers can request that both traditional and PQ certificate be used for authentication. For instance, traditional certificates can be exchanged during the TLS handshake and PQ certificates can be exchanged after the session has been established using the mechanism defined in {{!RFC9261}}.
+         enables peers to employ the same certificates in hybrid authentication as in authentication done with only traditional or post-quantum algorithms. 
+         
+      *  In {{?I-D.okubo-certdiscovery}}, the Primary Certificate uses a widely adopted cryptographic algorithm 
+         while the Secondary Certificate uses the algorithm that is new and not widely adopted. In TLS, peers can request that both traditional and PQ certificate be used for authentication. For instance, traditional certificates can be exchanged during the TLS handshake and PQ certificates can be exchanged after the session has been established using the mechanism defined in {{!RFC9261}}.
 
-      *  {{?I-D.bonnell-lamps-chameleon-certs}} allows a relying party to extract information sufficient to construct the paired 
-         certificate and perform certification path validation using the constructed certificate.
+      *  {{?I-D.bonnell-lamps-chameleon-certs}} allows a relying party to extract information sufficient to       
+         construct the paired certificate and perform certification path validation using the constructed certificate.
 
 To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for client and server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs. For example, applications that have extremely short key lifetimes -- for example less than an hour -- may decide that it is an acceptable risk to leave those on Traditional algorithms for the foreseeable future under the assumption that quantum key factoring attacks take longer to run than the key lifetimes. It may be advantageous to explore heterogeneous PKI architectures where the long-lived CAs are using Post-Quantum algorithms but the server and client certificates are not. In summary, if the signature is not post-quantum secure, further evaluation is needed to determine whether the attempt to achieve post-quantum security using short-lived keys is effective or not.
 
