@@ -11,7 +11,7 @@
 This document describes characteristics unique to application protocols and best practices for deploying
 Quantum-Ready usage profiles for applications using TLS. 
     " name="description">
-<meta content="xml2rfc 3.19.2" name="generator">
+<meta content="xml2rfc 3.21.0" name="generator">
 <meta content="PQC" name="keyword">
 <meta content="DNS" name="keyword">
 <meta content="WebRTC" name="keyword">
@@ -20,14 +20,14 @@ Quantum-Ready usage profiles for applications using TLS.
 <meta content="PQ/T Hybrid" name="keyword">
 <meta content="draft-reddy-uta-pqc-app-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.19.2
-    Python 3.11.6
+  xml2rfc 3.21.0
+    Python 3.11.9
     ConfigArgParse 1.7
     google-i18n-address 3.1.0
     intervaltree 3.1.0
     Jinja2 3.1.2
     lxml 4.9.3
-    platformdirs 4.2.0
+    platformdirs 4.2.1
     pycountry 22.3.5
     PyYAML 6.0.1
     requests 2.31.0
@@ -1032,11 +1032,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">PQC Recommendations for Applications</td>
-<td class="right">February 2024</td>
+<td class="right">May 2024</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Reddy</td>
-<td class="center">Expires 9 August 2024</td>
+<td class="center">Expires 29 November 2024</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1049,12 +1049,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-reddy-uta-pqc-app-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2024-02-06" class="published">6 February 2024</time>
+<time datetime="2024-05-28" class="published">28 May 2024</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2024-08-09">9 August 2024</time></dd>
+<dd class="expires"><time datetime="2024-11-29">29 November 2024</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1103,7 +1103,7 @@ Quantum-Ready usage profiles for applications using TLS.<a href="#section-abstra
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 9 August 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 29 November 2024.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1162,12 +1162,6 @@ Quantum-Ready usage profiles for applications using TLS.<a href="#section-abstra
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
                     <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-interaction-with-encrypted-" class="internal xref">Interaction with Encrypted Client Hello</a></p>
 </li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.2">
-                    <p id="section-toc.1-1.7.2.2.2.2.1"><a href="#section-7.2.2" class="auto internal xref">7.2.2</a>.  <a href="#name-oblivious-http" class="internal xref">Oblivious HTTP</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.3">
-                    <p id="section-toc.1-1.7.2.2.2.3.1"><a href="#section-7.2.3" class="auto internal xref">7.2.3</a>.  <a href="#name-mls" class="internal xref">MLS</a></p>
-</li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
@@ -1219,10 +1213,10 @@ protocols have transitioned from RSA to Elliptic Curve Cryptography (ECC) improv
           <p id="section-1-4.1.1">are still being evaluated against both classical and post-quantum attacks,<a href="#section-1-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-4.2">
-          <p id="section-1-4.2.1">use larger key sizes (which increases handshake packet size), and<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.2.1">typically use larger key sizes (which increases handshake packet size). For example, the public key sizes of ML-KEM is much larger than ECDH (see Table 5 in <span>[<a href="#I-D.ietf-pquip-pqc-engineers" class="cite xref">I-D.ietf-pquip-pqc-engineers</a>]</span>) and the public key sizes of Dilithium/Falcon are much larger than P256 (see Table 6 in <span>[<a href="#I-D.ietf-pquip-pqc-engineers" class="cite xref">I-D.ietf-pquip-pqc-engineers</a>]</span>), and<a href="#section-1-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-1-4.3">
-          <p id="section-1-4.3.1">have higher CPU utilization than traditional algorithms.<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
+          <p id="section-1-4.3.1">While certain post-quantum (PQ) algorithms are comparatively slower than their traditional counterparts, it's important to note that specific PQ algorithms also showcase faster performance. For instance, ML-KEM utilizes less CPU than X25519, and both Dilithium and Falcon exhibit faster signature verification times than Ed25519, although with slower signature generation times.<a href="#section-1-4.3.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
 <p id="section-1-5">All applications transmitting messages over untrusted networks can be susceptible to active or passive attacks by adversaries using CRQCs, with varying degrees of significance for both users and the underlying systems. This document explores Quantum-Ready usage profiles for applications specifically designed to defend against passive and on-path attacks employing CRQCs. TLS client and server implementations, as well as applications, can mitigate the impact of these challenges through various techniques described in subsequent sections.<a href="#section-1-5" class="pilcrow">¶</a></p>
@@ -1265,7 +1259,8 @@ unbroken. It is referred to as PQ/T Hybrid Scheme in
 <p id="section-3-1">The timeline and driving motivation for Quantum-Ready transition differ between data confidentiality and data authentication (e.g., signature). Digital signatures are used within X.509 certificates, Certificate Revocation Lists (CRLs), and to sign messages.<a href="#section-3-1" class="pilcrow">¶</a></p>
 <p id="section-3-2">Encrypted payloads transmitted via Transport Layer Security (TLS) can be susceptible to decryption if an attacker equipped with a CRQC gains access to the traditional asymmetric public keys used in the TLS key exchange and the transmitted ciphertext. TLS implementations commonly utilize Diffie-Hellman schemes for key exchange. If an attacker has copies of an entire set of encrypted payloads, including the TLS setup, it could employ CRQCs to potentially decrypt the payload by determining the private key.<a href="#section-3-2" class="pilcrow">¶</a></p>
 <p id="section-3-3">For data confidentiality, we are concerned with the so-called "Harvest Now, Decrypt Later" attack where a malicious actor with adequate resources can launch an attack to store encrypted data today that can be decrypted once a CRQC is available. This implies that, even today, encrypted data is susceptible to the attack by not implementing quantum-safe strategies, as it corresponds to data being deciphered in the future. The storage time and effective security lifetime of this encrypted data might vary from seconds to decades.<a href="#section-3-3" class="pilcrow">¶</a></p>
-<p id="section-3-4">In client/server certificate-based authentication, it's common for the certificate's signature in the TLS handshake to have a short lifetime. This means that the time between the certificate signing the CertificateVerify message and its verification by the peer during the TLS handshake is limited. However, it's worth questioning the security lifetime of the digital signatures on X.509 certificates, including those issued by root Certificate Authorities (CAs). Root CAs can have lifetimes of 20 years or more. Additionally, root Certificate Revocation Lists (CRLs) may have lifetimes of a year or more, while delegated credentials like CRL Signing Certificates or OCSP response signing certificates can have lifetimes that fall anywhere in between.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-4">For data authentication, our concern lies with an on-path attacker who possesses devices equipped with CRQCs capable of breaking traditional authentication protocols. For instance, the attacker can fake the identity of the target, leading victims to connect to the attacker's device instead of connecting to the actual target, resulting in an impersonation attack. While not an immediate threat, it is still a concern when compared to the 'Harvest Now, Decrypt Later' attack.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">In client/server certificate-based authentication, it's common for the certificate's signature in the TLS handshake to have a short lifetime. This means that the time between the certificate signing the CertificateVerify message and its verification by the peer during the TLS handshake is limited. However, it's worth questioning the security lifetime of the digital signatures on X.509 certificates, including those issued by root Certificate Authorities (CAs). Root CAs can have lifetimes of 20 years or more. Additionally, root Certificate Revocation Lists (CRLs) may have lifetimes of a year or more, while delegated credentials like CRL Signing Certificates or OCSP response signing certificates can have lifetimes that fall anywhere in between.<a href="#section-3-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="confident">
@@ -1280,17 +1275,19 @@ but at the same time uncertainty about post-quantum algorithm implementation sec
 the establishment of a shared secret which remains secure as long as one of the component key exchange mechanisms remains unbroken.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3"><span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span> provides a construction for hybrid key exchange in TLS 1.3. It fulfils the primary goal of hybrid key exchange, with additional objectives discussed in Section 1.5 of the same document.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4">Applications that use (D)TLS and susceptible to CRQC attack <span class="bcp14">MUST</span> migrate to (D)TLS 1.3 and support the hybrid key exchange, as defined in <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>. In the future, we anticipate a shift away from traditional cryptographic algorithms in favor of post-quantum algorithms. This transition is expected to provide benefits in terms of CPU efficiency and reduced data transmission overhead compared to hybrid key exchange.<a href="#section-4-4" class="pilcrow">¶</a></p>
-<p id="section-4-5">The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of two strategies:<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-5">The client initiates the TLS handshake by sending a list of key agreement methods it supports in the key_share extension. One of the challenges during the PQC migration is that the client may not know whether the server supports the Hybrid key exchange. To address this uncertainty, the client can adopt one of three strategies:<a href="#section-4-5" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4-6">
 <li id="section-4-6.1">
-          <p id="section-4-6.1.1">Send Both Traditional and Hybrid Key Exchange Algorithms: In the first ClientHello message, the client can send both traditional and hybrid key exchange algorithm key shares to the server, avoiding the need for multiple round trips. However, this approach requires the client to perform additional computations and increases handshake traffic. During the TLS handshake, the server responds to the ClientHello with its public key and ciphertext. If the combined size of these exceeds the MTU, the ServerHello message may be split across multiple TCP packets, raising the risk of lost packets and delays due to retransmission.<a href="#section-4-6.1.1" class="pilcrow">¶</a></p>
+          <p id="section-4-6.1.1">Sending Both Traditional and Hybrid Key Exchange Algorithms: In the initial ClientHello message, the client has the option to send both traditional and hybrid key exchange algorithm key shares to the server, eliminating the need for multiple round trips. It's important to note that the size of the hybrid key exchange algorithm key share may exceed the MTU, leading to the possibility of splitting the ClientHello message across multiple packets. However, this approach necessitates additional computations on the client side and results in increased handshake traffic. During the TLS handshake, the server responds to the ClientHello by providing its public key and ciphertext. If the combined size of these components exceeds the MTU, there's a chance that the ServerHello message may be fragmented across multiple TCP packets. This fragmentation raises the risk of lost packets and potential delays due to retransmission. However, this approach has a disadvantage that a faulty middlebox may drop the split ClientHello message since it's uncommon for a ClientHello message to be split.<a href="#section-4-6.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-4-6.2">
-          <p id="section-4-6.2.1">Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message.<a href="#section-4-6.2.1" class="pilcrow">¶</a></p>
+          <p id="section-4-6.2.1">Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message. However, this approach has a disadvantage in that the roundtrip would introduce additional delay compared to the previous technique of sending both traditional and hybrid key exchange algorithm key shares to the server in the initial ClientHello message.<a href="#section-4-6.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-4-6.3">
+          <p id="section-4-6.3.1"><span>[<a href="#I-D.davidben-tls-key-share-prediction" class="cite xref">I-D.davidben-tls-key-share-prediction</a>]</span> defines a mechanism for servers to communicate key share preferences in DNS responses. TLS clients can use this information to reduce TLS handshake round-trips.<a href="#section-4-6.3.1" class="pilcrow">¶</a></p>
 </li>
       </ol>
-<p id="section-4-7">Clients <span class="bcp14">MAY</span> use information from completed handshakes to cache the server's preferences for key exchange algorithms (<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>, section 4.2.7).<a href="#section-4-7" class="pilcrow">¶</a></p>
-<p id="section-4-8">In order to avoid multiple packets to send ClientHello message, the client would have to prevent the duplication of PQC KEM public key shares in the ClientHello, avoiding duplication of key shares is discussed in Section 4 of <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>.<a href="#section-4-8" class="pilcrow">¶</a></p>
+<p id="section-4-7">Clients <span class="bcp14">MAY</span> use information from completed handshakes to cache the server's preferences for key exchange algorithms (<span>[<a href="#RFC8446" class="cite xref">RFC8446</a>]</span>, section 4.2.7). In order to avoid multiple packets to send ClientHello message, the client would have to prevent the duplication of PQC KEM public key shares in the ClientHello, avoiding duplication of key shares is discussed in Section 4 of <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>.<a href="#section-4-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authentication">
@@ -1303,20 +1300,28 @@ the establishment of a shared secret which remains secure as long as one of the 
 <p id="section-5-3">The Quantum-Ready authentication property ensures authentication through either a pure Post-Quantum or a PQ/T hybrid Certificate.<a href="#section-5-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-4.1">
-          <p id="section-5-4.1.1">A Post-Quantum X.509 Certificate using Module-Lattice Digital Signature Algorithm (ML-DSA), also called
-Dilithium, is defined in <span>[<a href="#I-D.ietf-lamps-dilithium-certificates" class="cite xref">I-D.ietf-lamps-dilithium-certificates</a>]</span>.<a href="#section-5-4.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-4.1.1">A Post-Quantum X.509 Certificate using Module-Lattice Digital Signature Algorithm (ML-DSA) is defined in <span>[<a href="#I-D.ietf-lamps-dilithium-certificates" class="cite xref">I-D.ietf-lamps-dilithium-certificates</a>]</span> and using SLH-DSA is defined in <span>[<a href="#I-D.ietf-lamps-cms-sphincs-plus" class="cite xref">I-D.ietf-lamps-cms-sphincs-plus</a>]</span>.<a href="#section-5-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-4.2">
-          <p id="section-5-4.2.1">The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the
-LAMPS WG, and consensus may evolve over time regarding its adoption.<a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
+          <p id="section-5-4.2.1">The PQ/T Hybrid Authentication property is currently still under active exploration and discussion in the LAMPS and PQUIP WGs, and consensus may evolve over time regarding its adoption.<a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5-4.2.2.1">
+              <p id="section-5-4.2.2.1.1">Hybrid Signature: The hybrid signature refers to the output of a hybrid signature scheme's signature
+generation process. For instance, NIST defines a dual signature as "two or more signatures on a common message". The objective of this approach is to establish a signature format that necessitates the verification of both contained signatures. This concept is discussed in the document titled "Composite Signatures For Use In Internet PKI" <span>[<a href="#I-D.ietf-lamps-pq-composite-sigs" class="cite xref">I-D.ietf-lamps-pq-composite-sigs</a>]</span>.<a href="#section-5-4.2.2.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-5-4.3">
-          <p id="section-5-4.3.1">The non-composite hybrid authentication discussed in <span>[<a href="#I-D.ietf-lamps-cert-binding-for-multi-auth" class="cite xref">I-D.ietf-lamps-cert-binding-for-multi-auth</a>]</span>
-enables peers to employ the same certificates in hybrid authentication as in authentication done with only traditional or post-quantum algorithms. In TLS, peers can request that both traditional and PQ certificate be used for authentication. For instance, traditional certificates can be exchanged during the TLS handshake and PQ certificates can be exchanged after the session has been established using the mechanism defined in <span>[<a href="#RFC9261" class="cite xref">RFC9261</a>]</span>.<a href="#section-5-4.3.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5-4.2.2.2">
+              <p id="section-5-4.2.2.2.1">The non-composite hybrid authentication discussed in <span>[<a href="#I-D.ietf-lamps-cert-binding-for-multi-auth" class="cite xref">I-D.ietf-lamps-cert-binding-for-multi-auth</a>]</span>
+enables peers to employ the same certificates in hybrid authentication as in authentication done with only traditional or post-quantum algorithms.<a href="#section-5-4.2.2.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-5-4.4">
-          <p id="section-5-4.4.1">The composite signature contains two signatures in a single atomic container that have been generated
-using two different cryptographic algorithms. For example, NIST define a dual signature as "two or more signatures on a common message". The goal of this approach is to define a signature format which requires both contained signatures to be verified. This concept is described in Composite Signatures For Use In Internet PKI <span>[<a href="#I-D.ounsworth-pq-composite-sigs" class="cite xref">I-D.ounsworth-pq-composite-sigs</a>]</span>.<a href="#section-5-4.4.1" class="pilcrow">¶</a></p>
+            <li class="normal" id="section-5-4.2.2.3">
+              <p id="section-5-4.2.2.3.1">In <span>[<a href="#I-D.okubo-certdiscovery" class="cite xref">I-D.okubo-certdiscovery</a>]</span>, the Primary Certificate uses a widely adopted cryptographic algorithm
+while the Secondary Certificate uses the algorithm that is new and not widely adopted. In TLS, peers can request that both traditional and PQ certificate be used for authentication. For instance, traditional certificates can be exchanged during the TLS handshake and PQ certificates can be exchanged after the session has been established using the mechanism defined in <span>[<a href="#RFC9261" class="cite xref">RFC9261</a>]</span>.<a href="#section-5-4.2.2.3.1" class="pilcrow">¶</a></p>
+</li>
+            <li class="normal" id="section-5-4.2.2.4">
+              <p id="section-5-4.2.2.4.1"><span>[<a href="#I-D.bonnell-lamps-chameleon-certs" class="cite xref">I-D.bonnell-lamps-chameleon-certs</a>]</span> allows a relying party to extract information sufficient to
+construct the paired certificate and perform certification path validation using the constructed certificate.<a href="#section-5-4.2.2.4.1" class="pilcrow">¶</a></p>
+</li>
+          </ul>
 </li>
       </ul>
 <p id="section-5-5">To decide whether and when to support a Post-Quantum Certificate (PQC) or a PQ/T hybrid scheme for client and server authentication, it is important to consider factors such as the frequency and duration of system upgrades, as well as the anticipated availability of CRQCs. For example, applications that have extremely short key lifetimes -- for example less than an hour -- may decide that it is an acceptable risk to leave those on Traditional algorithms for the foreseeable future under the assumption that quantum key factoring attacks take longer to run than the key lifetimes. It may be advantageous to explore heterogeneous PKI architectures where the long-lived CAs are using Post-Quantum algorithms but the server and client certificates are not. In summary, if the signature is not post-quantum secure, further evaluation is needed to determine whether the attempt to achieve post-quantum security using short-lived keys is effective or not.<a href="#section-5-5" class="pilcrow">¶</a></p>
@@ -1360,27 +1365,8 @@ using two different cryptographic algorithms. For example, NIST define a dual si
 <a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-interaction-with-encrypted-" class="section-name selfRef">Interaction with Encrypted Client Hello</a>
           </h4>
 <p id="section-7.2.1-1">Client TLS libraries and applications can use Encrypted Client Hello (ECH) <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span> to prevent passive observation of the intended server identity in the TLS handshake which requires also deploying Encrypted DNS (DNS over TLS), otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was being protected with ECH. ECH uses HPKE for public key encryption.<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.1-2">ECH <span class="bcp14">MUST</span> incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.2.1-2">ECH <span class="bcp14">MUST</span> incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack. ECH uses HPKE for public key encryption. HPKE can be extended to support PQ/T Hybrid post-quantum Key Encapsulation Mechanisms (KEMs) as defined in <span>[<a href="#I-D.connolly-cfrg-xwing-kem" class="cite xref">I-D.connolly-cfrg-xwing-kem</a>]</span>.<a href="#section-7.2.1-2" class="pilcrow">¶</a></p>
 <p id="section-7.2.1-3">To use ECH the client needs to learn the ECH configuration for a server before it attempts a connection to the server. Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings specification <span>[<a href="#I-D.draft-ietf-tls-svcb-ech" class="cite xref">I-D.draft-ietf-tls-svcb-ech</a>]</span> provides a mechanism for conveying the ECH configuration information via DNS, using a SVCB or HTTPS record. The "ech" SvcParamKey is used in SVCB or HTTPS or DNS records, and is intended to serve as the primary bootstrap mechanism for ECH. The value of the parameter is an ECHConfigList (Section 4 of <span>[<a href="#I-D.ietf-tls-esni" class="cite xref">I-D.ietf-tls-esni</a>]</span>). The public_key in HpkeKeyConfig structure would carry the concatenation of traditional and PQC KEM public keys which would increase DNS resposnse size that could exceed the path MTU. It would require the use of reliable transport and Encrypted DNS (e.g., DoT, DoH or DoQ).<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="oblivious-http">
-<section id="section-7.2.2">
-          <h4 id="name-oblivious-http">
-<a href="#section-7.2.2" class="section-number selfRef">7.2.2. </a><a href="#name-oblivious-http" class="section-name selfRef">Oblivious HTTP</a>
-          </h4>
-<p id="section-7.2.2-1">Oblivious HTTP <span>[<a href="#I-D.ietf-ohai-ohttp" class="cite xref">I-D.ietf-ohai-ohttp</a>]</span> allows clients to encrypt messages exchanged with an Oblivious Target Resource (target). The messages are encapsulated in encrypted messages to an Oblivious Gateway Resource (gateway), which offers Oblivious HTTP access to the target. The gateway is accessed via an Oblivious Relay Resource (relay), which proxies the encapsulated messages to hide the identity of the client. Overall, this architecture is designed in such a way that the relay cannot inspect the contents of messages, and the gateway and target cannot learn the client's identity from a single transaction. Oblivious HTTP uses HPKE for encapsulating binary HTTP messages to protect their contents.<a href="#section-7.2.2-1" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-2">Oblivious HTTP is vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the HPKE. If an attacker possesses copies of an entire set of encapsulated HTTP messages, it could use CRQC to potentially decrypt the message content by determining the private key. The attacker can potentially be the Oblivious Relay Resource.<a href="#section-7.2.2-2" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-3">The "ohttp" SvcParamKey defined in <span>[<a href="#I-D.ietf-ohai-svcb-config" class="cite xref">I-D.ietf-ohai-svcb-config</a>]</span> is used to indicate that a service described in an SVCB RR can be accessed as a target using an associated gateway. For the "dns" scheme, as defined in <span>[<a href="#I-D.draft-ietf-add-svcb-dns" class="cite xref">I-D.draft-ietf-add-svcb-dns</a>]</span>, the presence of the "ohttp" parameter means that the DNS server being described has a DNS over HTTP (DoH) <span>[<a href="#RFC8484" class="cite xref">RFC8484</a>]</span> service that can be accessed using Oblivious HTTP.<a href="#section-7.2.2-3" class="pilcrow">¶</a></p>
-<p id="section-7.2.2-4">Oblivious HTTP and DNS over Oblivious HTTP <span class="bcp14">MUST</span> incorporate support for PQ/T Hybrid post-quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack.<a href="#section-7.2.2-4" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="mls">
-<section id="section-7.2.3">
-          <h4 id="name-mls">
-<a href="#section-7.2.3" class="section-number selfRef">7.2.3. </a><a href="#name-mls" class="section-name selfRef">MLS</a>
-          </h4>
-<p id="section-7.2.3-1">TODO<a href="#section-7.2.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1393,7 +1379,7 @@ using two different cryptographic algorithms. For example, NIST define a dual si
 <p id="section-7.3-1">In WebRTC, secure channels are set up via DTLS and DTLS-SRTP <span>[<a href="#RFC5763" class="cite xref">RFC5763</a>]</span> keying for SRTP <span>[<a href="#RFC3711" class="cite xref">RFC3711</a>]</span> for media channels and the Stream Control Transmission Protocol (SCTP) over DTLS <span>[<a href="#RFC8261" class="cite xref">RFC8261</a>]</span> for data channels.<a href="#section-7.3-1" class="pilcrow">¶</a></p>
 <p id="section-7.3-2">Secure channels may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the DTLS key exchange. If an attacker possesses copies of an entire set of encrypted media, including the DTLS setup, it could use CRQC to potentially decrypt the media by determining the private key.<a href="#section-7.3-2" class="pilcrow">¶</a></p>
 <p id="section-7.3-3">WebRTC media and data channels <span class="bcp14">MUST</span> support the Quantum-Ready usage profile discussed in {#confident}.<a href="#section-7.3-3" class="pilcrow">¶</a></p>
-<p id="section-7.3-4">The other challenge with WebRTC is that PQC KEMs often come with large public keys and PQC Signature schemes come with large signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of <span>[<a href="#I-D.ietf-pquip-pqc-engineers" class="cite xref">I-D.ietf-pquip-pqc-engineers</a>]</span>). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels. One potential mitigation strategy to avoid the delay is to prevent the duplication PQC KEM public key shares in the ClientHello, avoiding duplication of key shares is discussed in Section 4 of <span>[<a href="#I-D.ietf-tls-hybrid-design" class="cite xref">I-D.ietf-tls-hybrid-design</a>]</span>.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
+<p id="section-7.3-4">The other challenge with WebRTC is that PQC KEMs often come with large public keys and PQC Signature schemes come with large signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of <span>[<a href="#I-D.ietf-pquip-pqc-engineers" class="cite xref">I-D.ietf-pquip-pqc-engineers</a>]</span>). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels.<a href="#section-7.3-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="https">
@@ -1442,7 +1428,8 @@ traditional cryptosystems.<a href="#section-8-1" class="pilcrow">¶</a></p>
       <h2 id="name-acknowledgements">
 <a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
       </h2>
-<p id="section-9-1">Thanks to Dan Wing for suggesting wider document scope. Thanks to Mike Ounsworth, Scott Fluhrer and Thom Wiggers for review and feedback.<a href="#section-9-1" class="pilcrow">¶</a></p>
+<p id="section-9-1">Thanks to Dan Wing for suggesting wider document scope. Thanks to Mike Ounsworth, Scott Fluhrer,
+Bas Westerbaan and Thom Wiggers for review and feedback.<a href="#section-9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-10">
@@ -1455,13 +1442,13 @@ traditional cryptosystems.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="I-D.draft-ietf-add-svcb-dns">[I-D.draft-ietf-add-svcb-dns]</dt>
+<dt id="I-D.davidben-tls-key-share-prediction">[I-D.davidben-tls-key-share-prediction]</dt>
         <dd>
-<span class="refAuthor">Schwartz, B. M.</span>, <span class="refTitle">"Service Binding Mapping for DNS Servers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-add-svcb-dns-09</span>, <time datetime="2023-06-26" class="refDate">26 June 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-add-svcb-dns-09">https://datatracker.ietf.org/doc/html/draft-ietf-add-svcb-dns-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Benjamin, D.</span>, <span class="refTitle">"TLS Key Share Prediction"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-davidben-tls-key-share-prediction-01</span>, <time datetime="2024-03-17" class="refDate">17 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-davidben-tls-key-share-prediction-01">https://datatracker.ietf.org/doc/html/draft-davidben-tls-key-share-prediction-01</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-hybrid-design">[I-D.ietf-tls-hybrid-design]</dt>
         <dd>
-<span class="refAuthor">Stebila, D.</span>, <span class="refAuthor">Fluhrer, S.</span>, and <span class="refAuthor">S. Gueron</span>, <span class="refTitle">"Hybrid key exchange in TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-hybrid-design-09</span>, <time datetime="2023-09-07" class="refDate">7 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-hybrid-design-09">https://datatracker.ietf.org/doc/html/draft-ietf-tls-hybrid-design-09</a>&gt;</span>. </dd>
+<span class="refAuthor">Stebila, D.</span>, <span class="refAuthor">Fluhrer, S.</span>, and <span class="refAuthor">S. Gueron</span>, <span class="refTitle">"Hybrid key exchange in TLS 1.3"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-hybrid-design-10</span>, <time datetime="2024-04-05" class="refDate">5 April 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-hybrid-design-10">https://datatracker.ietf.org/doc/html/draft-ietf-tls-hybrid-design-10</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
@@ -1491,10 +1478,6 @@ traditional cryptosystems.<a href="#section-8-1" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8446">https://www.rfc-editor.org/rfc/rfc8446</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8484">[RFC8484]</dt>
-        <dd>
-<span class="refAuthor">Hoffman, P.</span> and <span class="refAuthor">P. McManus</span>, <span class="refTitle">"DNS Queries over HTTPS (DoH)"</span>, <span class="seriesInfo">RFC 8484</span>, <span class="seriesInfo">DOI 10.17487/RFC8484</span>, <time datetime="2018-10" class="refDate">October 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8484">https://www.rfc-editor.org/rfc/rfc8484</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC9261">[RFC9261]</dt>
       <dd>
 <span class="refAuthor">Sullivan, N.</span>, <span class="refTitle">"Exported Authenticators in TLS"</span>, <span class="seriesInfo">RFC 9261</span>, <span class="seriesInfo">DOI 10.17487/RFC9261</span>, <time datetime="2022-07" class="refDate">July 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9261">https://www.rfc-editor.org/rfc/rfc9261</a>&gt;</span>. </dd>
@@ -1508,41 +1491,49 @@ traditional cryptosystems.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
+<dt id="I-D.bonnell-lamps-chameleon-certs">[I-D.bonnell-lamps-chameleon-certs]</dt>
+        <dd>
+<span class="refAuthor">Bonnell, C.</span>, <span class="refAuthor">Gray, J.</span>, <span class="refAuthor">Hook, D.</span>, <span class="refAuthor">Okubo, T.</span>, and <span class="refAuthor">M. Ounsworth</span>, <span class="refTitle">"A Mechanism for Encoding Differences in Paired Certificates"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-bonnell-lamps-chameleon-certs-03</span>, <time datetime="2024-01-04" class="refDate">4 January 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-bonnell-lamps-chameleon-certs-03">https://datatracker.ietf.org/doc/html/draft-bonnell-lamps-chameleon-certs-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.connolly-cfrg-xwing-kem">[I-D.connolly-cfrg-xwing-kem]</dt>
+        <dd>
+<span class="refAuthor">Connolly, D.</span>, <span class="refAuthor">Schwabe, P.</span>, and <span class="refAuthor">B. Westerbaan</span>, <span class="refTitle">"X-Wing: general-purpose hybrid post-quantum KEM"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-connolly-cfrg-xwing-kem-02</span>, <time datetime="2024-03-26" class="refDate">26 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-connolly-cfrg-xwing-kem-02">https://datatracker.ietf.org/doc/html/draft-connolly-cfrg-xwing-kem-02</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="I-D.draft-ietf-tls-svcb-ech">[I-D.draft-ietf-tls-svcb-ech]</dt>
         <dd>
-<span class="refAuthor">Schwartz, B. M.</span>, <span class="refAuthor">Bishop, M.</span>, and <span class="refAuthor">E. Nygren</span>, <span class="refTitle">"Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-svcb-ech-00</span>, <time datetime="2023-09-26" class="refDate">26 September 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-00">https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-00</a>&gt;</span>. </dd>
+<span class="refAuthor">Schwartz, B. M.</span>, <span class="refAuthor">Bishop, M.</span>, and <span class="refAuthor">E. Nygren</span>, <span class="refTitle">"Bootstrapping TLS Encrypted ClientHello with DNS Service Bindings"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-svcb-ech-02</span>, <time datetime="2024-05-23" class="refDate">23 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-02">https://datatracker.ietf.org/doc/html/draft-ietf-tls-svcb-ech-02</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-lamps-cert-binding-for-multi-auth">[I-D.ietf-lamps-cert-binding-for-multi-auth]</dt>
         <dd>
-<span class="refAuthor">Becker, A.</span>, <span class="refAuthor">Guthrie, R.</span>, and <span class="refAuthor">M. J. Jenkins</span>, <span class="refTitle">"Related Certificates for Use in Multiple Authentications within a Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-cert-binding-for-multi-auth-03</span>, <time datetime="2023-11-29" class="refDate">29 November 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cert-binding-for-multi-auth-03">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cert-binding-for-multi-auth-03</a>&gt;</span>. </dd>
+<span class="refAuthor">Becker, A.</span>, <span class="refAuthor">Guthrie, R.</span>, and <span class="refAuthor">M. J. Jenkins</span>, <span class="refTitle">"Related Certificates for Use in Multiple Authentications within a Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-cert-binding-for-multi-auth-05</span>, <time datetime="2024-04-29" class="refDate">29 April 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cert-binding-for-multi-auth-05">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cert-binding-for-multi-auth-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-lamps-cms-sphincs-plus">[I-D.ietf-lamps-cms-sphincs-plus]</dt>
+        <dd>
+<span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Fluhrer, S.</span>, <span class="refAuthor">Kampanakis, P.</span>, and <span class="refAuthor">B. Westerbaan</span>, <span class="refTitle">"Use of the SLH-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-cms-sphincs-plus-04</span>, <time datetime="2024-05-07" class="refDate">7 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-sphincs-plus-04">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-sphincs-plus-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-lamps-dilithium-certificates">[I-D.ietf-lamps-dilithium-certificates]</dt>
         <dd>
 <span class="refAuthor">Massimo, J.</span>, <span class="refAuthor">Kampanakis, P.</span>, <span class="refAuthor">Turner, S.</span>, and <span class="refAuthor">B. Westerbaan</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure: Algorithm Identifiers for ML-DSA"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-dilithium-certificates-03</span>, <time datetime="2024-02-05" class="refDate">5 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-dilithium-certificates-03">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-dilithium-certificates-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ietf-ohai-ohttp">[I-D.ietf-ohai-ohttp]</dt>
+<dt id="I-D.ietf-lamps-pq-composite-sigs">[I-D.ietf-lamps-pq-composite-sigs]</dt>
         <dd>
-<span class="refAuthor">Thomson, M.</span> and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"Oblivious HTTP"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ohai-ohttp-10</span>, <time datetime="2023-08-25" class="refDate">25 August 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ohai-ohttp-10">https://datatracker.ietf.org/doc/html/draft-ietf-ohai-ohttp-10</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="I-D.ietf-ohai-svcb-config">[I-D.ietf-ohai-svcb-config]</dt>
-        <dd>
-<span class="refAuthor">Pauly, T.</span> and <span class="refAuthor">T. Reddy.K</span>, <span class="refTitle">"Discovery of Oblivious Services via Service Binding Records"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-ohai-svcb-config-07</span>, <time datetime="2023-10-06" class="refDate">6 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-ohai-svcb-config-07">https://datatracker.ietf.org/doc/html/draft-ietf-ohai-svcb-config-07</a>&gt;</span>. </dd>
+<span class="refAuthor">Ounsworth, M.</span>, <span class="refAuthor">Gray, J.</span>, <span class="refAuthor">Pala, M.</span>, and <span class="refAuthor">J. Klaußner</span>, <span class="refTitle">"Composite Signatures For Use In Internet PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-pq-composite-sigs-00</span>, <time datetime="2024-05-24" class="refDate">24 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-pq-composite-sigs-00">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-pq-composite-sigs-00</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-pquip-pqc-engineers">[I-D.ietf-pquip-pqc-engineers]</dt>
         <dd>
-<span class="refAuthor">Banerjee, A.</span>, <span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Schoinianakis, D.</span>, and <span class="refAuthor">T. Hollebeek</span>, <span class="refTitle">"Post-Quantum Cryptography for Engineers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-pquip-pqc-engineers-02</span>, <time datetime="2023-10-20" class="refDate">20 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqc-engineers-02">https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqc-engineers-02</a>&gt;</span>. </dd>
+<span class="refAuthor">Banerjee, A.</span>, <span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Schoinianakis, D.</span>, and <span class="refAuthor">T. Hollebeek</span>, <span class="refTitle">"Post-Quantum Cryptography for Engineers"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-pquip-pqc-engineers-04</span>, <time datetime="2024-05-21" class="refDate">21 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqc-engineers-04">https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqc-engineers-04</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-pquip-pqt-hybrid-terminology">[I-D.ietf-pquip-pqt-hybrid-terminology]</dt>
         <dd>
-<span class="refAuthor">D, F.</span>, <span class="refTitle">"Terminology for Post-Quantum Traditional Hybrid Schemes"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-pquip-pqt-hybrid-terminology-02</span>, <time datetime="2024-02-02" class="refDate">2 February 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqt-hybrid-terminology-02">https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqt-hybrid-terminology-02</a>&gt;</span>. </dd>
+<span class="refAuthor">D, F.</span> and <span class="refAuthor">M. P</span>, <span class="refTitle">"Terminology for Post-Quantum Traditional Hybrid Schemes"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-pquip-pqt-hybrid-terminology-03</span>, <time datetime="2024-05-09" class="refDate">9 May 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqt-hybrid-terminology-03">https://datatracker.ietf.org/doc/html/draft-ietf-pquip-pqt-hybrid-terminology-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.ietf-tls-esni">[I-D.ietf-tls-esni]</dt>
         <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-17</span>, <time datetime="2023-10-09" class="refDate">9 October 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-17</a>&gt;</span>. </dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refAuthor">Oku, K.</span>, <span class="refAuthor">Sullivan, N.</span>, and <span class="refAuthor">C. A. Wood</span>, <span class="refTitle">"TLS Encrypted Client Hello"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-tls-esni-18</span>, <time datetime="2024-03-04" class="refDate">4 March 2024</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-18">https://datatracker.ietf.org/doc/html/draft-ietf-tls-esni-18</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="I-D.ounsworth-pq-composite-sigs">[I-D.ounsworth-pq-composite-sigs]</dt>
+<dt id="I-D.okubo-certdiscovery">[I-D.okubo-certdiscovery]</dt>
         <dd>
-<span class="refAuthor">Ounsworth, M.</span>, <span class="refAuthor">Gray, J.</span>, <span class="refAuthor">Pala, M.</span>, and <span class="refAuthor">J. Klaußner</span>, <span class="refTitle">"Composite Signatures For Use In Internet PKI"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ounsworth-pq-composite-sigs-11</span>, <time datetime="2023-12-20" class="refDate">20 December 2023</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ounsworth-pq-composite-sigs-11">https://datatracker.ietf.org/doc/html/draft-ounsworth-pq-composite-sigs-11</a>&gt;</span>. </dd>
+<span class="refTitle">"*** BROKEN REFERENCE ***"</span>. </dd>
 <dd class="break"></dd>
 <dt id="I-D.westerbaan-cfrg-hpke-xyber768d00-02">[I-D.westerbaan-cfrg-hpke-xyber768d00-02]</dt>
         <dd>
