@@ -4,8 +4,8 @@
 
 uta                                                             T. Reddy
 Internet-Draft                                                     Nokia
-Intended status: Standards Track                             28 May 2024
-Expires: 29 November 2024
+Intended status: Standards Track                             4 June 2024
+Expires: 6 December 2024
 
 
   Post-Quantum Cryptography Recommendations for Internet Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 November 2024.
+   This Internet-Draft will expire on 6 December 2024.
 
 Copyright Notice
 
@@ -292,7 +292,7 @@ Table of Contents
        traditional and hybrid key exchange algorithm key shares to the
        server in the initial ClientHello message.
 
-   3.  [I-D.davidben-tls-key-share-prediction] defines a mechanism for
+   3.  [I-D.ietf-tls-key-share-prediction] defines a mechanism for
        servers to communicate key share preferences in DNS responses.
        TLS clients can use this information to reduce TLS handshake
        round-trips.
@@ -576,19 +576,19 @@ References
 
 Normative References
 
-   [I-D.davidben-tls-key-share-prediction]
-              Benjamin, D., "TLS Key Share Prediction", Work in
-              Progress, Internet-Draft, draft-davidben-tls-key-share-
-              prediction-01, 17 March 2024,
-              <https://datatracker.ietf.org/doc/html/draft-davidben-tls-
-              key-share-prediction-01>.
-
    [I-D.ietf-tls-hybrid-design]
               Stebila, D., Fluhrer, S., and S. Gueron, "Hybrid key
               exchange in TLS 1.3", Work in Progress, Internet-Draft,
               draft-ietf-tls-hybrid-design-10, 5 April 2024,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
               hybrid-design-10>.
+
+   [I-D.ietf-tls-key-share-prediction]
+              Benjamin, D., "TLS Key Share Prediction", Work in
+              Progress, Internet-Draft, draft-ietf-tls-key-share-
+              prediction-00, 3 June 2024,
+              <https://datatracker.ietf.org/doc/html/draft-ietf-tls-key-
+              share-prediction-00>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -663,9 +663,9 @@ Informative References
               Housley, R., Fluhrer, S., Kampanakis, P., and B.
               Westerbaan, "Use of the SLH-DSA Signature Algorithm in the
               Cryptographic Message Syntax (CMS)", Work in Progress,
-              Internet-Draft, draft-ietf-lamps-cms-sphincs-plus-04, 7
+              Internet-Draft, draft-ietf-lamps-cms-sphincs-plus-05, 28
               May 2024, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-lamps-cms-sphincs-plus-04>.
+              ietf-lamps-cms-sphincs-plus-05>.
 
    [I-D.ietf-lamps-dilithium-certificates]
               Massimo, J., Kampanakis, P., Turner, S., and B.
