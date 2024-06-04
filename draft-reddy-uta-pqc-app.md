@@ -131,10 +131,9 @@ The client initiates the TLS handshake by sending a list of key agreement method
 
 2. Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message. However, this approach has a disadvantage in that the roundtrip would introduce additional delay compared to the previous technique of sending both traditional and hybrid key exchange algorithm key shares to the server in the initial ClientHello message.
 
-3. {{!I-D.davidben-tls-key-share-prediction}} defines a mechanism for servers to communicate key share preferences in DNS responses. TLS clients can use this information to reduce TLS handshake round-trips.
+3. {{!I-D.ietf-tls-key-share-prediction}} defines a mechanism for servers to communicate key share preferences in DNS responses. TLS clients can use this information to reduce TLS handshake round-trips.
 
 Clients MAY use information from completed handshakes to cache the server's preferences for key exchange algorithms ({{!RFC8446}}, section 4.2.7). In order to avoid multiple packets to send ClientHello message, the client would have to prevent the duplication of PQC KEM public key shares in the ClientHello, avoiding duplication of key shares is discussed in Section 4 of {{!I-D.ietf-tls-hybrid-design}}.
-
 
 # Authentication
 
