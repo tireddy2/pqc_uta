@@ -58,12 +58,12 @@ Post-quantum cryptography introduces new challenges for applications, end users,
 
 The visible face of the Internet largely consists of services that employ a client-server architecture in which a client communicates with an application service.  When a client communicates with an application service using protocols such as TLS 1.3 {{?RFC8446}}, DTLS 1.3 {{?RFC9147}}, or a protocol built on those (QUIC {{?RFC9001}} being a notable example), the client and server can perform ephemeral public-key exchange mechanism, such as ECDH, to derive the shared secret for forward secrecy. They can validate each other's identity using X.509 certificates to establish secure communication.
 
-The presence of a Cryptographically Relevant Quantum Computer (CRQC) would render state-of-the-art, traditional public-key algorithms deployed today obsolete and insecure, since the assumptions about the intractability of the mathematical problems for these algorithms that offer confident levels of security today no longer apply in the presence of a CRQC. This means there is a requirement to update protocols and infrastructure to use PQC algorithms, which are public-key algorithms designed to be secure against CRQCs and classical computers.The traditional cryptographic primitives that need to be replaced by PQC are discussed in {{?I-D.ietf-pquip-pqc-engineers}}, and the NIST PQC Standardization process has selected a set of algorithms, ML-KEM, SLH-DSA, and ML-DSA, as candidates for use in protocols.
+The presence of a Cryptographically Relevant Quantum Computer (CRQC) would render state-of-the-art, traditional public-key algorithms deployed today obsolete and insecure, since the assumptions about the intractability of the mathematical problems for these algorithms that offer confident levels of security today no longer apply in the presence of a CRQC. This means there is a requirement to update protocols and infrastructure to use PQC algorithms, which are public-key algorithms designed to be secure against CRQCs and classical computers. The traditional cryptographic primitives that need to be replaced by PQC are discussed in {{?I-D.ietf-pquip-pqc-engineers}}, and the NIST PQC Standardization process has selected a set of algorithms, ML-KEM, SLH-DSA, and ML-DSA, as candidates for use in protocols.
 
 The industry has successfully upgraded TLS versions while deprecating old versions (e.g., SSLv2), and many
 protocols have transitioned from RSA to Elliptic Curve Cryptography (ECC) improving security while also reducing key sizes. The transition to PQC brings different challenges, most significantly, the new PQC algorithms:
 
-   1. Algorithm Maturity: While NIST has finalized the selection of certain PQC algorithms, the correctness and security of implementations remain critical, as bugs in implementations can introduce vulnerabilities, regardless of the strength of the underlying algorithm. 
+   1. Algorithm Maturity: While NIST has finalized the selection of certain PQC algorithms, the correctness and security of implementations remain critical, as bugs in implementations can introduce vulnerabilities, regardless of the strength of the underlying algorithm.
 
    2. Key and Signature Sizes: Post-quantum algorithms often require larger key and signature sizes, which can significantly increase handshake packet sizes and impact network performance. For example: The public key sizes of ML-KEM are much larger than ECDH (see Table 5 in {{?I-D.ietf-pquip-pqc-engineers}}), and the public key sizes of SLH-DSA and ML-DSA are much larger than P256 (see Table 6 in {{?I-D.ietf-pquip-pqc-engineers}}). Similarly, the signature sizes of PQC algorithms like SLH-DSA and ML-DSA are considerably larger than those of traditional algorithms like Ed25519 or ECDSA-P256. Larger signatures can pose challenges in constrained environments (e.g., IoT) or increase handshake times over high-latency and lossy networks.
 
@@ -88,8 +88,8 @@ into three classes:
    Diffie-Hellman (ECDH); which is almost always used in the ephemeral mode referred to
    as Elliptic Curve Diffie-Hellman Ephemeral (ECDHE).
 
-* "Post-Quantum Algorithm": An asymmetric cryptographic algorithm that is believed to be secure against attacks 
-   using quantum computers as well as classical computers. Examples of PQC key exchange algorithms include the 
+* "Post-Quantum Algorithm": An asymmetric cryptographic algorithm that is believed to be secure against attacks
+   using quantum computers as well as classical computers. Examples of PQC key exchange algorithms include the
    Module-Lattice Key Encapsulation Mechanism (ML-KEM).
 
 *  "Hybrid" key exchange, in this context, means the use of two component
@@ -104,7 +104,7 @@ into three classes:
    algorithms where at least one is a Post-Quantum algorithm and at
    least one is a traditional algorithm.
 
-Digital signature algorithms are used in X.509 certificates, Certificate Transparency SCTs, OCSP statements, 
+Digital signature algorithms are used in X.509 certificates, Certificate Transparency SCTs, OCSP statements,
 Remote Attestations, and any other mechanism that contributes signatures to a TLS handshake.
 
 # Timeline for transition {#timeline}
@@ -125,13 +125,13 @@ Data in transit may need protection for years. The potential development of CRQC
 
 Applications using (D)TLS that are vulnerable to "Harvest Now, Decrypt Later" attacks MUST migrate to (D)TLS 1.3 and support one of the following approaches:
 
-* Hybrid Key Exchange: This approach combines traditional and PQC key exchange algorithms, providing resilience even if one     
+* Hybrid Key Exchange: This approach combines traditional and PQC key exchange algorithms, providing resilience even if one
   algorithm is compromised. As defined in {{!I-D.ietf-tls-hybrid-design}}, hybrid key exchange ensures continued security during the transition to PQC. For TLS 1.3, {{!I-D.kwiatkowski-tls-ecdhe-mlkem}} introduces hybrid Post-Quantum key exchange groups:
 
   1. X25519MLKEM768: Combines the classical X25519 key exchange with the ML-KEM-768 Post-Quantum key encapsulation mechanism.
   2. SecP256r1MLKEM768: Combines the classical SecP256r1 key exchange with the ML-KEM-768 Post-Quantum key encapsulation mechanism.
 
-* Pure Post-Quantum Key Exchange: For deployments requiring a purely Post-Quantum key exchange, {{!I-D.connolly-tls-mlkem-key-agreement}}  
+* Pure Post-Quantum Key Exchange: For deployments requiring a purely Post-Quantum key exchange, {{!I-D.connolly-tls-mlkem-key-agreement}}
   defines ML-KEM-512, ML-KEM-768, and ML-KEM-1024 as standalone NamedGroups for achieving Post-Quantum key agreement in TLS 1.3.
 
 Hybrid Key Exchange is preferred over pure PQC because it provides defense in depth by combining classical and PQC algorithms, ensuring security even if one algorithm is compromised. However, Pure PQC key exchange may be necessary for deployments that are mandated to use post-quantum cryptography exclusively, such as those with specific regulatory or compliance requirements.
@@ -156,15 +156,28 @@ The Quantum-Ready authentication property can be utilized in scenarios where an 
 
 The Quantum-Ready authentication property ensures authentication through either a pure Post-Quantum or a PQ/T hybrid Certificate.
 
-   *  A Post-Quantum X.509 Certificate using the Module-Lattice Digital Signature Algorithm (ML-DSA) is defined in 
-   {{?I-D.ietf-lamps-dilithium-certificates}}, and one using SLH-DSA is defined in {{?I-D.ietf-lamps-x509-slhdsa}}. {{?I-D.tls-westerbaan-mldsa}} discusses how ML-DSA is used for authentication in TLS 1.3, while {{?I-D.reddy-tls-slhdsa}} explains how 
+   *  A Post-Quantum X.509 Certificate using the Module-Lattice Digital Signature Algorithm (ML-DSA) is defined in
+   {{!I-D.ietf-lamps-dilithium-certificates}}, and one using SLH-DSA is defined in {{!I-D.ietf-lamps-x509-slhdsa}}. {{!I-D.tls-westerbaan-mldsa}} discusses how ML-DSA is used for authentication in TLS 1.3, while {{!I-D.reddy-tls-slhdsa}} explains how
    SLH-DSA is used for authentication in TLS 1.3. The pros and cons of SLH-DSA in comparison with ML-DSA are discussed in Section 2 of {{?I-D.reddy-tls-slhdsa}}.
 
-   *  A composite X.509 certificate is defined in {{?I-D.ietf-lamps-pq-composite-sigs}}. It defines Composite ML-DSA that is applicable to any application that would otherwise use ML-DSA, but wants the protection against breaks or catastrophic bugs in ML-DSA. {{!I-D.reddy-tls-composite-mldsa}} specifies how the Post-Quantum signature scheme ML-DSA, in combination with traditional algorithms RSA-PKCS#1v1.5,RSA-PSS, ECDSA, Ed25519, and Ed448 can be used for authentication in TLS 1.3.      
+   *  A composite X.509 certificate is defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. It defines Composite ML-DSA that is applicable to any application that would otherwise use ML-DSA, but wants the protection against breaks or catastrophic bugs in ML-DSA. {{!I-D.reddy-tls-composite-mldsa}} specifies how the Post-Quantum signature scheme ML-DSA, in combination with traditional algorithms RSA-PKCS#1v1.5,RSA-PSS, ECDSA, Ed25519, and Ed448 can be used for authentication in TLS 1.3.
 
 To determine whether and when to support a PQC certificate or a PQ/T hybrid scheme for client and server authentication, several factors should be considered, including the frequency and duration of system upgrades and the anticipated timeline for the availability of CRQCs. Deployments with limited flexibility to enable or disable algorithms benefit from hybrid signatures that combine a PQC algorithm with a traditional one. This approach mitigates risks associated with fallback strategies, where delays in transitioning to PQC leave systems exposed to attacks.
 
-Hybrid signatures provide immediate protection against zero-day vulnerabilities and enhance resilience during the adoption of PQC, reducing exposure to unforeseen threats. For example, Telecom networks, which already handle high-throughput data, are better positioned to manage the overhead of larger PQC keys and signatures, enabling earlier adoption of PQC signature algorithms. Additionally, their centralized infrastructure, fewer entities involved, and closer relationships with vendors make it easier to coordinate, implement, and deploy PQC digital signatures. Conversely, the Web PKI ecosystem may defer adoption until smaller and more efficient PQC signature algorithms, such as MAYO, UOC, HAWK, or SQISign, become available.
+Hybrid signatures provide immediate protection against zero-day vulnerabilities and enhance resilience during the adoption of PQC, reducing exposure to unforeseen threats. For example, Telecom networks, which already handle high-throughput data, are better positioned to manage the overhead of larger PQC keys and signatures, enabling earlier adoption of PQC signature algorithms. Additionally, their centralized infrastructure, internal CA, fewer entities involved, and closer relationships with vendors make it easier to coordinate, implement, and deploy PQC digital signatures. Conversely, the Web PKI ecosystem may defer adoption until smaller and more efficient PQC signature algorithms, such as MAYO, UOC, HAWK, or SQISign, become available.
+
+## Optimizing PQC Certificate Exchange in TLS
+
+The following mechanisms can be used to reduce the size of the Post-Quantum (PQ) or PQ/T hybrid certificate chain exchanged during the TLS handshake:
+
+* TLS Cached Information Extension ({{!RFC7924}})
+  This extension allows clients to indicate that they have cached certificate information from a previous connection. Servers can signal the client to use this cached information instead of transmitting a redundant set of certificates. However, this mechanism may enable attackers to correlate independent TLS exchanges, leading to client privacy concerns.
+
+* TLS Certificate Compression ({{!RFC8879}})
+  The compression schemes defined in this specification reduce the size of the server's certificate chain. However, in PQ or PQ/T hybrid certificates, the signatures and public keys are typically much larger compared to traditional algorithms. These large high-entropy fields, such as cryptographic keys and signatures, limit the effectiveness of existing TLS certificate compression schemes.
+
+* Abridged TLS Certificate ({?I-D.ietf-tls-cert-abridge})
+  This mechanism reduces the size of the certificate chain by omitting intermediate certificates that are already known to the client. The server provides a compact representation of the certificate chain, and the client reconstructs the omitted certificates using the well-known common CA database. This method significantly reduces bandwidth usage while maintaining compatibility with existing certificate validation processes. It also explores mechanisms to compress the end-entity certificate itself, this aspect is still under active discussion within the TLS Working Group.
 
 # Informing Users of PQC Security Compatibility Issues
 
@@ -174,11 +187,11 @@ Similarly, when the client detects that the server doesn't support PQC or hybrid
 
 Note that such alerts should be carefully designed to avoid overwhelming users with unnecessary warnings.
 
-# Application Protocols
+# PQC Enhancements for Internet Protocols and Applications
 
 ## Encrypted DNS
 
-The privacy risks for end users exchanging DNS messages in clear text are discussed in {{!RFC7518}}. Transport Layer Security (TLS) is employed to ensure privacy for DNS. DNS encryption provided by TLS (e.g., DNS-over-HTTPS, DNS-over-TLS, DNS-over-QUIC) eliminates opportunities for eavesdropping and on-path tampering while in transit through the network.
+The privacy risks for end users exchanging DNS messages in clear text are discussed in {{?RFC9076}}. Transport Layer Security (TLS) is employed to ensure privacy for DNS. DNS encryption provided by TLS (e.g., DNS-over-HTTPS, DNS-over-TLS, DNS-over-QUIC) eliminates opportunities for eavesdropping and on-path tampering while in transit through the network.
 
 Encrypted DNS messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the TLS key exchange. If an attacker possesses copies of an entire set of encrypted DNS messages, including the TLS setup, it could use a CRQC to potentially decrypt the message content by determining the ephemeral key exchange private key.
 
@@ -190,7 +203,7 @@ Note that Post-Quantum security of DNSSEC {{?RFC9364}}, which provides authentic
 
 Hybrid public-key encryption (HPKE) is a scheme that provides public key encryption of arbitrary-sized plaintexts given a recipient's public key. HPKE utilizes a non-interactive ephemeral-static Diffie-Hellman exchange to establish a shared secret.  The motivation for standardizing a public key encryption scheme is explained in the introduction of {{?RFC9180}}.
 
-HPKE can be extended to support PQ/T Hybrid Post-Quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.connolly-cfrg-xwing-kem}}. 
+HPKE can be extended to support PQ/T Hybrid Post-Quantum Key Encapsulation Mechanisms (KEMs) as defined in {{?I-D.connolly-cfrg-xwing-kem}}.
 
 ### Interaction with Encrypted Client Hello {#ech}
 
@@ -219,6 +232,8 @@ If an attacker can decrypt the message content before the expiry of the login cr
 Applications using HTTPS to exchange sensitive data MUST support the Quantum-Ready usage profile discussed in {#confident}. Similarly, reverse proxies operated between clients and origin servers will also have to support {#confident}.
 
 # Security Considerations
+
+The security considerations discussed in {{?I-D.ietf-pquip-pqc-engineers}} needs to be taken into account.
 
 Post-quantum algorithms selected for standardization are relatively new, and PQC implementations are also new, making them more prone to implementation bugs compared to the battle-tested cryptographic implementations in use today. Additionally, certain deployments may need to retain traditional algorithms due to regulatory requirements, such as FIPS {{SP-800-56C}} or PCI compliance. Hybrid key exchange offers a practical solution, providing protection against "Harvest Now, Decrypt Later" attacks while allowing time to respond to a catastrophic vulnerability in any single algorithm, without fully abandoning traditional cryptosystems.
 
