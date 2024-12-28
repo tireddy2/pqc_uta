@@ -4,8 +4,8 @@
 
 uta                                                             T. Reddy
 Internet-Draft                                                     Nokia
-Intended status: Standards Track                        26 December 2024
-Expires: 29 June 2025
+Intended status: Standards Track                        28 December 2024
+Expires: 1 July 2025
 
 
        Post-Quantum Cryptography Recommendations for Applications
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 29 June 2025.
+   This Internet-Draft will expire on 1 July 2025.
 
 Copyright Notice
 
@@ -424,8 +424,8 @@ Table of Contents
       certificate chain.  However, in PQ or PQ/T hybrid certificates,
       the signatures and public keys are typically much larger compared
       to traditional algorithms.  These large high-entropy fields, such
-      as cryptographic keys and signatures, limit the effectiveness of
-      existing TLS certificate compression schemes.
+      as public keys and signatures, limit the effectiveness of existing
+      TLS certificate compression schemes.
 
    *  Abridged TLS Certificate ({?I-D.ietf-tls-cert-abridge}) This
       mechanism reduces the size of the certificate chain by omitting
@@ -436,8 +436,7 @@ Table of Contents
       reduces bandwidth usage while maintaining compatibility with
       existing certificate validation processes.  It also explores
       mechanisms to compress the end-entity certificate itself, this
-      aspect is still under active discussion within the TLS Working
-      Group.
+      aspect is still under discussion within the TLS Working Group.
 
 6.  Informing Users of PQC Security Compatibility Issues
 
