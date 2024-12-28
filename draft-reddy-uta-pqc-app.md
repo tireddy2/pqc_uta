@@ -174,10 +174,10 @@ The following mechanisms can be used to reduce the size of the Post-Quantum (PQ)
   This extension allows clients to indicate that they have cached certificate information from a previous connection. Servers can signal the client to use this cached information instead of transmitting a redundant set of certificates. However, this mechanism may enable attackers to correlate independent TLS exchanges, leading to client privacy concerns.
 
 * TLS Certificate Compression ({{!RFC8879}})
-  The compression schemes defined in this specification reduce the size of the server's certificate chain. However, in PQ or PQ/T hybrid certificates, the signatures and public keys are typically much larger compared to traditional algorithms. These large high-entropy fields, such as cryptographic keys and signatures, limit the effectiveness of existing TLS certificate compression schemes.
+  The compression schemes defined in this specification reduce the size of the server's certificate chain. However, in PQ or PQ/T hybrid certificates, the signatures and public keys are typically much larger compared to traditional algorithms. These large high-entropy fields, such as public keys and signatures, limit the effectiveness of existing TLS certificate compression schemes.
 
 * Abridged TLS Certificate ({?I-D.ietf-tls-cert-abridge})
-  This mechanism reduces the size of the certificate chain by omitting intermediate certificates that are already known to the client. The server provides a compact representation of the certificate chain, and the client reconstructs the omitted certificates using the well-known common CA database. This method significantly reduces bandwidth usage while maintaining compatibility with existing certificate validation processes. It also explores mechanisms to compress the end-entity certificate itself, this aspect is still under active discussion within the TLS Working Group.
+  This mechanism reduces the size of the certificate chain by omitting intermediate certificates that are already known to the client. The server provides a compact representation of the certificate chain, and the client reconstructs the omitted certificates using the well-known common CA database. This method significantly reduces bandwidth usage while maintaining compatibility with existing certificate validation processes. It also explores mechanisms to compress the end-entity certificate itself, this aspect is still under discussion within the TLS Working Group.
 
 # Informing Users of PQC Security Compatibility Issues
 
