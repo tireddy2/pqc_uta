@@ -50,7 +50,7 @@ informative:
 
 --- abstract
 
-Post-quantum cryptography introduces new challenges for applications, end users, and system administrators. This document outlines characteristics unique to application protocols and provides best practices for deploying Quantum-Ready usage profiles in applications utilizing TLS.
+Post-quantum cryptography introduces new challenges for applications, end users, and system administrators. This document outlines characteristics unique to applications and provides best practices for deploying Quantum-Ready usage profiles in applications utilizing TLS.
 
 --- middle
 
@@ -187,7 +187,9 @@ Similarly, when the client detects that the server doesn't support PQC or hybrid
 
 Note that such alerts should be carefully designed to avoid overwhelming users with unnecessary warnings.
 
-# PQC Enhancements for Internet Protocols and Applications
+# PQC Transition for Critical Application Protocols
+
+This document primarily focuses on the transition to PQC within applications using TLS, while also addressing other essential application protocols, such as DNS, that are critical to application functionality.
 
 ## Encrypted DNS
 
@@ -210,26 +212,6 @@ HPKE can be extended to support PQ/T Hybrid Post-Quantum Key Encapsulation Mecha
 Client TLS libraries and applications can use Encrypted Client Hello (ECH) {{?I-D.ietf-tls-esni}} to prevent passive observation of the intended server identity in the TLS handshake which requires also deploying Encrypted DNS (e.g., DNS-over-TLS), otherwise a passive listener can observe DNS queries (or responses) and infer same server identity that was being protected with ECH. ECH uses HPKE for public key encryption.
 
 ECH deployments will have to incorporate support for PQ/T Hybrid Post-Quantum KEMs to protect against the 'Harvest Now, Decrypt Later' attack. The public_key in HpkeKeyConfig structure would have to carry the concatenation of traditional and PQC KEM public keys.
-
-## WebRTC
-
-In WebRTC, secure channels are set up via DTLS and DTLS-SRTP {{!RFC5763}} keying for SRTP {{!RFC3711}} for media channels and the Stream Control Transmission Protocol (SCTP) over DTLS {{!RFC8261}} for data channels.
-
-Secure channels may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the DTLS key exchange. If an attacker possesses copies of an entire set of encrypted media, including the DTLS setup, it could use CRQC to potentially decrypt the media by determining the private key.
-
-WebRTC media and data channels MUST support the Quantum-Ready usage profile discussed in {#confident}.
-
-The other challenge with WebRTC is that PQC KEMs often come with large public keys and PQC Signature schemes come with large signatures in comparison with traditional algorithms (as discussed in Section 12 and 13 of {{?I-D.ietf-pquip-pqc-engineers}}). In many cases, UDP datagrams are restricted to sizes smaller than 1500 bytes. If IP fragmentation needs to be avoided, each DTLS handshake message must be fragmented over several DTLS records, with each record intended to fit within a single UDP datagram. This approach could potentially lead to increased time to complete the DTLS handshake and involve multiple round-trips in lossy networks. It may also extend the time required to set up secure WebRTC channels.
-
-## HTTPS
-
-HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP used for secure data exchange over the web. HTTPS primarily relies on the TLS (Transport Layer Security) protocol to provide encryption, integrity, and authenticity for data in transit.
-
-HTTP messages transmitted using Transport Layer Security (TLS) may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the TLS key exchange. If an attacker possesses copies of an entire set of encrypted HTTP messages, including the TLS setup, it could use CRQC to potentially decrypt the message content by determining the private key. This traffic can include sensitive information, such as login credentials, personal data, or financial details, depending on the nature of the communication.
-
-If an attacker can decrypt the message content before the expiry of the login credentials, the attacker can steal the credentials. The theft of login credentials is a serious security concern that can have a wide range of consequences for individuals and organizations. The most immediate and obvious challenge is that the attacker gains unauthorized access to the victim's accounts, systems, or data. This can lead to data breaches, privacy violations, and various forms of cybercrime.
-
-Applications using HTTPS to exchange sensitive data MUST support the Quantum-Ready usage profile discussed in {#confident}. Similarly, reverse proxies operated between clients and origin servers will also have to support {#confident}.
 
 # Security Considerations
 
