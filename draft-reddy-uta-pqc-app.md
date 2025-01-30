@@ -75,7 +75,7 @@ Historically, the industry has successfully transitioned between cryptographic p
 
    3. Performance Trade-Offs: While some PQC algorithms exhibit slower operations compared to traditional algorithms, others provide specific advantages. For instance, ML-KEM requires less CPU than X25519, and ML-DSA offers faster signature verification times compared to Ed25519, although its signature generation process is slower.
 
-Any application transmitting messages over untrusted networks is potentially vulnerable to active or passive attacks by adversaries equipped with CRQCs. The degree of vulnerability varies in significance depending on the application and underlying systems. This document outlines quantum-ready usage profiles for applications designed to protect against passive and on-path attacks leveraging CRQCs. It also discusses how TLS client and server implementations, along with essential support applications, can address these challenges using various techniques detailed in subsequent sections.
+Any application transmitting messages over untrusted networks is potentially vulnerable to active or passive attacks by adversaries equipped with CRQCs. The degree of vulnerability varies in significance depending on the application and underlying systems. This document outlines quantum-ready usage profiles for applications designed to protect against passive and on-path attacks leveraging CRQCs. It also discusses how TLS client and server implementations, along with essential supporting applications, can address these challenges using various techniques detailed in subsequent sections.
 
 # Conventions and Definitions
 
@@ -198,13 +198,13 @@ It is important to design such alerts thoughtfully to ensure they are clear and 
 
 # PQC Transition for Critical Application Protocols
 
-This document primarily focuses on the transition toPQC in applications that utilize TLS, while also covering other essential protocols, such as DNS, that play a critical role in supporting application functionality.
+This document primarily focuses on the transition to PQC in applications that utilize TLS, while also covering other essential protocols, such as DNS, that play a critical role in supporting application functionality.
 
 ## Encrypted DNS
 
-The privacy risks associated with exchanging DNS messages in clear text are detailed in {{?RFC9076}}. To mitigate these risks, Transport Layer Security (TLS) is employed to provide privacy for DNS communications. Encrypted DNS protocols, such as DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), and DNS-over-QUIC (DoQ), safeguard messages against eavesdropping and on-path tampering during transit.
+The privacy risks associated with exchanging DNS messages in clear text are detailed in {{?RFC9076}}. To mitigate these risks, Transport Layer Security (TLS) is employed to provide privacy for DNS communications. Encrypted DNS protocols, such as DNS-over-HTTPS (DoH) {{!RFC8484}}, DNS-over-TLS (DoT) {{!RFC7858}}, and DNS-over-QUIC (DoQ) {{!RFC9250}}, safeguard messages against eavesdropping and on-path tampering during transit.
 
-However, encrypted DNS messages transmitted using TLS may be vulnerable to decryption if an attacker gains access to the traditional asymmetric public keys used in the TLS key exchange. Should an attacker obtain copies of an entire set of encrypted DNS messages, including the TLS handshake details, they could potentially leverage a CRQC to decrypt the content by determining the ephemeral key exchange private key.
+However, encrypted DNS messages transmitted over TLS may be vulnerable to decryption if an attacker gains access to the public keys used in the TLS key exchange. If an attacker obtains a complete set of encrypted DNS messages, including the TLS handshake details, they could potentially use a CRQC to determine the ephemeral private key used in the key exchange, thereby decrypting the content.
 
 To address these vulnerabilities, encrypted DNS protocols MUST support the quantum-ready usage profile discussed in {#confident}.
 
