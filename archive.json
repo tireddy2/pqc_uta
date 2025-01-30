@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-28T01:10:02.999527+00:00",
+  "timestamp": "2025-01-30T01:09:10.083496+00:00",
   "repo": "tireddy2/pqc_uta",
   "labels": [
     {
@@ -227,6 +227,54 @@
           "updatedAt": "2023-10-27T09:39:25Z"
         }
       ]
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOKcY3I86nyGx4",
+      "title": "Define the term \"Quantum-Ready\"",
+      "url": "https://github.com/tireddy2/pqc_uta/issues/15",
+      "state": "OPEN",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-28T08:20:35Z",
+      "updatedAt": "2025-01-28T08:20:35Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 16,
+      "id": "I_kwDOKcY3I86nyZzv",
+      "title": "Add references to  MAYO, UOV, HAWK, or SQISign",
+      "url": "https://github.com/tireddy2/pqc_uta/issues/16",
+      "state": "OPEN",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-28T08:55:51Z",
+      "updatedAt": "2025-01-28T09:41:50Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOKcY3I86nyfbK",
+      "title": "Add references to DNS-over-HTTPS (DoH), DNS-over-TLS (DoT), and DNS-over-QUIC (DoQ),",
+      "url": "https://github.com/tireddy2/pqc_uta/issues/17",
+      "state": "OPEN",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-28T09:04:34Z",
+      "updatedAt": "2025-01-28T09:04:34Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -644,6 +692,60 @@
       "mergeCommit": {
         "oid": "1357fc97c66d702677e3ae431de828b1cf06f3bb"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOKcY3I86JMVjL",
+      "title": "Editorial Updates",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/18",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I worked my way through the draft and made changes here and there. The diff looks more dramatic than the changes I have actually made. In the process I also filed a few minor issues - mostly related to missing references that should be added in a future version of the document.",
+      "createdAt": "2025-01-28T09:12:04Z",
+      "updatedAt": "2025-01-29T14:22:42Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "06b67cc54a8ca9ad15e577a3929d674e762f524d",
+      "headRepository": "hannestschofenig/pqc_uta",
+      "headRefName": "patch-1",
+      "headRefOid": "cdc0de1cb930185cf884de5e9846b9a207583bef",
+      "closedAt": "2025-01-29T14:22:42Z",
+      "mergedAt": "2025-01-29T14:22:42Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "cb74e4ec750e8534c831632dd5fd367253636239"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 19,
+      "id": "PR_kwDOKcY3I86JXzS-",
+      "title": "Editorial Updates",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/19",
+      "state": "OPEN",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-01-29T14:35:36Z",
+      "updatedAt": "2025-01-29T14:35:36Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "cb74e4ec750e8534c831632dd5fd367253636239",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "tireddy2-patch-2",
+      "headRefOid": "3c24bd8416e285e8885e3e5cf90686499762809f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
