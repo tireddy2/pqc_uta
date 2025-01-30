@@ -120,7 +120,7 @@ Applications utilizing (D)TLS that are vulnerable to "Harvest Now, Decrypt Later
    1. X25519MLKEM768: Combines the classical X25519 key exchange with the ML-KEM-768 Post-Quantum Key Encapsulation Mechanism.
    2. SecP256r1MLKEM768: Combines the classical SecP256r1 key exchange with the ML-KEM-768 Post-Quantum Key Encapsulation Mechanism.
 
-* Pure Post-Quantum Key Exchange: For deployments that require exclusively Post-Quantum key exchange, {{!I-D.connolly-tls-mlkem-key-agreement}} defines the following standalone NamedGroups for Post-Quantum key agreement in TLS 1.3: ML-KEM-512, ML-KEM-768, and ML-KEM-1024 
+* Pure Post-Quantum Key Exchange: For deployments that require exclusively Post-Quantum key exchange, {{!I-D.connolly-tls-mlkem-key-agreement}} defines the following standalone NamedGroups for Post-Quantum key agreement in TLS 1.3: ML-KEM-512, ML-KEM-768, and ML-KEM-1024
 
 Hybrid Key Exchange is generally preferred over pure PQC key exchange because it provides defense-in-depth by combining the strengths of both classical and PQC algorithms. This ensures continued security, even if one algorithm is compromised during the transitional period.
 
@@ -204,7 +204,7 @@ This document primarily focuses on the transition to PQC in applications that ut
 
 The privacy risks associated with exchanging DNS messages in clear text are detailed in {{?RFC9076}}. To mitigate these risks, Transport Layer Security (TLS) is employed to provide privacy for DNS communications. Encrypted DNS protocols, such as DNS-over-HTTPS (DoH) {{!RFC8484}}, DNS-over-TLS (DoT) {{!RFC7858}}, and DNS-over-QUIC (DoQ) {{!RFC9250}}, safeguard messages against eavesdropping and on-path tampering during transit.
 
-However, encrypted DNS messages transmitted over TLS may be vulnerable to decryption if an attacker gains access to the public keys used in the TLS key exchange. If an attacker obtains a complete set of encrypted DNS messages, including the TLS handshake details, they could potentially use a CRQC to determine the ephemeral private key used in the key exchange, thereby decrypting the content.
+However, encrypted DNS messages transmitted using TLS may be vulnerable to decryption if an attacker gains access to the public keys used in the TLS key exchange. If an attacker obtains a complete set of encrypted DNS messages, including the TLS handshake details, they could potentially use a CRQC to determine the ephemeral private key used in the key exchange, thereby decrypting the content.
 
 To address these vulnerabilities, encrypted DNS protocols MUST support the quantum-ready usage profile discussed in {#confident}.
 
