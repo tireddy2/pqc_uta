@@ -145,6 +145,25 @@ The client initiates the TLS handshake by sending a list of supported key agreem
 
 Clients MAY also use information from completed handshakes to cache the server's key exchange algorithm preferences, as described in Section 4.2.7 of {{!RFC8446}}. To minimize the risk of the ClientHello message being split across multiple packets, clients should avoid duplicating PQC KEM public key shares. Strategies for preventing duplication are outlined in Section 4 of {{!I-D.ietf-tls-hybrid-design}}. By carefully managing key shares, the client can reduce the size of the ClientHello message and improve compatibility with network infrastructure.
 
+# Use of External PSK with Traditional Key Exchange for Data Confidentiality
+
+{{!RFC8772}} provides an alternative approach for ensuring data confidentiality by combining an external pre-shared key (PSK)
+with a traditional key exchange mechanism, such as ECDHE. The external PSK is incorporated into the TLS 1.3 key schedule,
+where it is mixed with the (EC)DHE-derived secret to strengthen confidentiality.
+
+While using an external PSK in combination with (EC)DHE can enhance confidentiality, it has the following limitations:
+
+* Key Management Complexity: Unlike ephemeral ECDHE keys, external PSKs require secure provisioning and lifecycle management.
+* Limited Forward Secrecy: If an external PSK is static and reused across sessions, its compromise can retroactively expose
+  past communications if the traditional key exchange is broken by a CRQC.
+* Scalability Challenges: Establishing unique PSKs for many clients can be impractical, especially in large-scale deployments.
+* Quantum Resistance Dependence: While PSKs can provide additional secrecy against quantum threats, they must be
+  generated using a secure key-management technique. If a weak PSK is used, it may not offer sufficient security against
+  brute-force attacks.
+
+Despite these limitations, external PSKs can serve as a complementary mechanism in PQC transition strategies, providing additional
+confidentiality protection when combined with traditional key exchange.
+
 # Authentication
 
 Although CRQCs could potentially decrypt past TLS sessions, client/server authentication based on certificates cannot be retroactively compromised. However, the multi-year process required to establish, certify, and embed new root CAs presents a significant challenge. If CRQCs emerge earlier than anticipated, responding promptly to secure authentication systems would be difficult. While the migration to PQ X.509 certificates allows for more time compared to key exchanges, delaying these preparations should be avoided.
@@ -232,7 +251,7 @@ Hybrid key exchange provides a practical and flexible solution, offering protect
 # Acknowledgements
 {:numbered="false"}
 
-Thanks to Dan Wing for suggesting a broader scope for the document, and to Mike Ounsworth, Scott Fluhrer, Bas Westerbaan, and Thom Wiggers for their helpful feedback and reviews.
+Thanks to Dan Wing for suggesting a broader scope for the document, and to Mike Ounsworth, Scott Fluhrer, Russ Housley, Loganaden Velvindron, Bas Westerbaan, and Thom Wiggers for their helpful feedback and reviews.
 
 
 
