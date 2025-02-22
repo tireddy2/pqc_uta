@@ -240,18 +240,43 @@ Client TLS libraries and applications can utilize Encrypted Client Hello (ECH) {
 
 To safeguard against "Harvest Now, Decrypt Later" attacks, ECH deployments must incorporate support for PQ/T Hybrid Post-Quantum KEMs. In this context, the public_key field in the HpkeKeyConfig structure would need to accommodate a concatenation of traditional and PQC KEM public keys to ensure robust protection against quantum-enabled adversaries.
 
+# Operational Considerations
+
+The adoption of PQC in TLS-based applications will not be a binary choice but rather a transition requiring careful evaluation of
+trade-offs and deployment considerations. Application providers will need to assess algorithm selection, performance impact,
+interoperability, and security requirements specific to their use cases. While the IETF defines cryptographic mechanisms for TLS and
+provides guidance on PQC transition strategies, it does not prescribe a one-size-fits-all approach. Instead, this document highlights key
+considerations to help stakeholders adopt PQC in a manner that aligns with their operational and security needs.
+
 # Security Considerations
 
 The security considerations outlined in {{?I-D.ietf-pquip-pqc-engineers}} must be carefully evaluated and taken into account.
 
-Post-quantum algorithms selected for standardization are relatively new, and their implementations are still in the early stages of maturity. This makes them more susceptible to implementation bugs compared to the well-established and extensively tested cryptographic algorithms currently in use. Furthermore, certain deployments may need to continue using traditional algorithms to meet regulatory requirements, such as Federal Information Processing Standard (FIPS) {{SP-800-56C}} or Payment Card Industry (PCI) compliance.
+Post-quantum algorithms selected for standardization are relatively new, and their implementations are still in the early stages of
+maturity. This makes them more susceptible to implementation bugs compared to the well-established and extensively tested cryptographic
+algorithms currently in use. Furthermore, certain deployments may need to continue using traditional algorithms to meet regulatory
+requirements, such as Federal Information Processing Standard (FIPS) {{SP-800-56C}} or Payment Card Industry (PCI) compliance.
 
-Hybrid key exchange provides a practical and flexible solution, offering protection against "Harvest Now, Decrypt Later" attacks while maintaining the ability to respond to potential catastrophic vulnerabilities in any single algorithm. This approach enables a gradual transition to PQC without the need to completely abandon traditional cryptosystems.
+Hybrid key exchange provides a practical and flexible solution, offering protection against "Harvest Now, Decrypt Later" attacks while
+maintaining the ability to respond to potential catastrophic vulnerabilities in any single algorithm. This approach enables a gradual
+transition to PQC without the need to completely abandon traditional cryptosystems.
+
+## MITM Attacks with CRQC 
+
+A MITM attack is possible if an adversary possesses a CRQC capable of breaking traditional public-key signatures. The attacker can generate
+a forged signature on a legitimate certificate, allowing them to impersonate a server. This completely undermines the authentication
+guarantees of TLS when relying on traditional certificates.
+
+To mitigate such attacks, several steps should be taken:
+
+1. Revocation and Transition: Servers should revoke traditional certificates and migrate to PQC authentication.
+2. Client-Side Verification:  Clients should avoid establishing TLS sessions with servers that do not support PQC authentication.
+3. PKI Migration: Organizations should transition their PKI to post-quantum-safe certificate authorities and discontinue issuing certificates based on traditional cryptographic methods.
 
 # Acknowledgements
 {:numbered="false"}
 
-Thanks to Dan Wing for suggesting a broader scope for the document, and to Mike Ounsworth, Scott Fluhrer, Russ Housley, Loganaden Velvindron, Bas Westerbaan, and Thom Wiggers for their helpful feedback and reviews.
+Thanks to Dan Wing for suggesting a broader scope for the document, and to Mike Ounsworth, Scott Fluhrer, Russ Housley, Loganaden Velvindron, Bas Westerbaan, Richard Sohn, Andrei Popov, and Thom Wiggers for their helpful feedback and reviews.
 
 
 
