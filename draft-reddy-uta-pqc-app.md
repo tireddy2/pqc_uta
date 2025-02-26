@@ -259,7 +259,7 @@ requirements, such as Federal Information Processing Standard (FIPS) {{SP-800-56
 
 Hybrid key exchange provides a practical and flexible solution, offering protection against "Harvest Now, Decrypt Later" attacks while
 ensuring resilience to potential catastrophic vulnerabilities in any single algorithm. This approach allows for a gradual
-transition to PQC without the need to completely abandon traditional cryptosystems.
+transition to PQC, preserving the benefits of traditional cryptosystems without requiring their immediate replacement.
 
 ## MITM Attacks with CRQC 
 
