@@ -271,7 +271,7 @@ To mitigate such attacks, several steps should be taken:
 
 1. Revocation and Transition: Servers should revoke traditional certificates and migrate to PQC authentication.
 2. Client-Side Verification:  Clients should avoid establishing TLS sessions with servers that do not support PQC authentication.
-3. PKI Migration: Organizations should transition their PKI to post-quantum-safe certificate authorities and discontinue issuing certificates based on traditional cryptographic methods.
+3. PKI Migration: Organizations should transition their PKI to post-quantum-safe certification authorities and discontinue issuing certificates based on traditional cryptographic methods.
 
 # Acknowledgements
 {:numbered="false"}
