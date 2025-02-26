@@ -244,7 +244,7 @@ To safeguard against "Harvest Now, Decrypt Later" attacks, ECH deployments must 
 
 The adoption of PQC in TLS-based applications will not be a simple binary decision but rather a gradual transition that  demands a careful evaluation of
 trade-offs and deployment considerations. Application providers will need to assess algorithm selection, performance impact,
-interoperability, and security requirements specific to their use cases. While the IETF defines cryptographic mechanisms for TLS and
+interoperability, and security requirements tailored to their specific use cases. While the IETF defines cryptographic mechanisms for TLS and
 provides guidance on PQC transition strategies, it does not prescribe a one-size-fits-all approach. Instead, this document highlights key
 considerations to help stakeholders adopt PQC in a manner that aligns with their operational and security needs.
 
