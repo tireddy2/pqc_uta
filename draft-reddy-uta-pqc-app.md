@@ -258,7 +258,7 @@ algorithms currently in use. Furthermore, certain deployments may need to contin
 requirements, such as Federal Information Processing Standard (FIPS) {{SP-800-56C}} or Payment Card Industry (PCI) compliance.
 
 Hybrid key exchange provides a practical and flexible solution, offering protection against "Harvest Now, Decrypt Later" attacks while
-maintaining the ability to respond to potential catastrophic vulnerabilities in any single algorithm. This approach enables a gradual
+ensuring resilience to potential catastrophic vulnerabilities in any single algorithm. This approach allows for a gradual
 transition to PQC without the need to completely abandon traditional cryptosystems.
 
 ## MITM Attacks with CRQC 
