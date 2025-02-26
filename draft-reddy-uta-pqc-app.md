@@ -264,7 +264,7 @@ transition to PQC, preserving the benefits of traditional cryptosystems without 
 ## MITM Attacks with CRQC 
 
 A MITM attack is possible if an adversary possesses a CRQC capable of breaking traditional public-key signatures. The attacker can generate
-a forged signature on a legitimate certificate, allowing them to impersonate a server. This completely undermines the authentication
+a forged certificate and create a valid signature, enabling them to impersonate a TLS peer, whether a server or a client. This completely undermines the authentication
 guarantees of TLS when relying on traditional certificates.
 
 To mitigate such attacks, several steps should be taken:
