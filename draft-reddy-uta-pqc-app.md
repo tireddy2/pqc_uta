@@ -36,7 +36,7 @@ author:
     city: Bangalore
     region: Karnataka
     country: India
-    email: "kondtir@gmail.com"
+    email: "k.tirumaleswar_reddy@nokia.com"
  -
     ins: H. Tschofenig
     name: Hannes Tschofenig
@@ -183,7 +183,7 @@ Post-quantum certificates contain only a PQC public key and are signed using a p
 
 ## Hybrid (Composite) X.509 Certificates
   
-A composite certificate contains both a traditional public key algorithm (e.g., ECDSA) and a post-quantum algorithm (e.g., ML-DSA) within a single X.509 certificate. This design enables both algorithms to be used in parallel, the traditional component ensures compatibility with existing infrastructure, while the post-quantum component introduces resistance against future quantum attacks. This approach facilitates early adoption of PQC without requiring immediate disruption to established PKI deployments. 
+A composite certificate contains both a traditional public key algorithm (e.g., ECDSA) and a post-quantum algorithm (e.g., ML-DSA) within a single X.509 certificate. This design enables both algorithms to be used in parallel, the traditional component ensures compatibility with existing infrastructure, while the post-quantum component introduces resistance against future quantum attacks. 
 
 Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. These combine Post-Quantum algorithms like ML-DSA with traditional algorithms such as RSA-PKCS#1v1.5, RSA-PSS, ECDSA, Ed25519, or Ed448, to provide additional protection against vulnerabilities or implementation bugs in a single algorithm. {{!I-D.reddy-tls-composite-mldsa}} specifies how composite signatures, including ML-DSA, are used for TLS 1.3 authentication.
 
@@ -202,9 +202,11 @@ Composite certificates enhance resilience during the adoption of PQC by:
 - Providing defense-in-depth: They maintain security even if one algorithm is compromised.
 - Reducing exposure to unforeseen vulnerabilities: They offer immediate protection against potential weaknesses in PQC algorithms.
 
-However, composite certificates comes with long-term implications. Once the traditional algorithm is no longer considered secure, due to CRQCs, it must be deprecated. To complete the transition to a fully quantum-resistant authentication model, it will be necessary to provision a new trust anchor, a new root CA certificate, that uses only a PQC signature algorithm and public key. This new root CA would issue a hierarchy of intermediate certificates, each also signed using a PQC algorithm and ultimately issue end-entity certificates that likewise contain only PQC public keys and are signed with PQC algorithms. This ensures that the entire certification path from the root of trust to the end-entity is cryptographically resistant to quantum attacks and does not depend on any traditional algorithms.
+However, composite certificates comes with long-term implications. Once the traditional algorithm is no longer considered secure, due to CRQCs, it will have to be deprecated. To complete the transition to a fully quantum-resistant authentication model, it will be necessary to provision a new root CA certificate, that uses only a PQC signature algorithm and public key. This new root CA would issue a hierarchy of intermediate certificates, each also signed using a PQC algorithm and ultimately issue end-entity certificates that likewise contain only PQC public keys and are signed with PQC algorithms. This ensures that the entire certification path from the root of trust to the end-entity is cryptographically resistant to quantum attacks and does not depend on any traditional algorithms.
 
-Alternatively, an deployment can choose to continue using the same hybrid certificate even after the traditional algorithm becomes insecure. While this avoids the operational complexity of provisioning a new trust anchor, it poses security risks of not achieving Strong Unforgeability (SUF). If the traditional algorithm is not SUF-secure, an CRQC will be able to forge part of the composite signature, undermining the integrity of the overall authentication process despite reliance on the PQC component.
+Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a significant risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.2 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 11.2 of {{!I-D.reddy-tls-composite-mldsa}}.
+
+In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a new composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This highlights the critical need to retire hybrid certificates containing broken algorithms once CRQCs are available.
 
 ## Deployment Realities
 
@@ -279,12 +281,11 @@ transition to PQC, preserving the benefits of traditional cryptosystems without 
 
 ## MITM Attacks with CRQC 
 
-A MITM attack is possible if an adversary possesses a CRQC capable of breaking traditional public-key signatures. The attacker can generate
-a forged certificate and create a valid signature, enabling them to impersonate a TLS peer, whether a server or a client. This completely undermines the authentication guarantees of TLS when relying on traditional certificates.
+A MITM attack is possible if an adversary possesses a CRQC capable of breaking traditional public-key signatures. The attacker can generate a forged certificate and create a valid signature, enabling them to impersonate a TLS peer, whether a server or a client. This completely undermines the authentication guarantees of TLS when relying on traditional certificates.
 
 To mitigate such attacks, several steps need to be taken:
 
-1. Revocation and Transition: Both clients and servers that use traditional certificates should revoke them and migrate to PQC authentication.
+1. Revocation and Transition: Both clients and servers that use traditional certificates will have to revoke them and migrate to PQC authentication.
 2. Client-Side Verification:  Clients should avoid establishing TLS sessions with servers that do not support PQC authentication.
 3. PKI Migration: Organizations should transition their PKI to post-quantum-safe certification authorities and discontinue issuing certificates based on traditional cryptographic methods.
 
