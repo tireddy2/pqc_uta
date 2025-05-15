@@ -36,7 +36,7 @@ author:
     city: Bangalore
     region: Karnataka
     country: India
-    email: "kondtir@gmail.com"
+    email: "k.tirumaleswar_reddy@nokia.com"
  -
     ins: H. Tschofenig
     name: Hannes Tschofenig
@@ -115,13 +115,13 @@ Data in transit may require protection for years, making the potential emergence
 
 Applications utilizing (D)TLS that are vulnerable to "Harvest Now, Decrypt Later" attacks MUST transition to (D)TLS 1.3 and adopt one of the following strategies:
 
-* Hybrid Key Exchange: Hybrid key exchange combines traditional and PQC key exchange algorithms, offering resilience even if one algorithm is compromised. As defined in {{!I-D.ietf-tls-hybrid-design}}, this approach ensures robust security during the migration to PQC. For TLS 1.3, hybrid Post-Quantum key exchange groups are introduced in {{!I-D.kwiatkowski-tls-ecdhe-mlkem}}:
+* Hybrid Key Exchange: Hybrid key exchange combines traditional and PQC key exchange algorithms, offering resilience even if one algorithm is compromised. As defined in {{!I-D.ietf-tls-hybrid-design}}, this approach ensures robust security during the migration to PQC. For TLS 1.3, hybrid Post-Quantum key exchange groups are introduced in {{!I-D.ietf-tls-ecdhe-mlkem}}:
 
    1. X25519MLKEM768: Combines the classical X25519 key exchange with the ML-KEM-768 Post-Quantum Key Encapsulation Mechanism.
    2. SecP256r1MLKEM768: Combines the classical SecP256r1 key exchange with the ML-KEM-768 Post-Quantum Key Encapsulation Mechanism.
    3. SecP384r1MLKEM1024: Combines the classical SecP384r1 key exchange with the ML-KEM-1024 Post-Quantum Key Encapsulation Mechanism.
 
-* Pure Post-Quantum Key Exchange: For deployments that require exclusively Post-Quantum key exchange, {{!I-D.connolly-tls-mlkem-key-agreement}} defines the following standalone NamedGroups for Post-Quantum key agreement in TLS 1.3: ML-KEM-512, ML-KEM-768, and ML-KEM-1024
+* Pure Post-Quantum Key Exchange: For deployments that require exclusively Post-Quantum key exchange, {{!I-D.ietf-tls-mlkem-key-agreement}} defines the following standalone NamedGroups for Post-Quantum key agreement in TLS 1.3: ML-KEM-512, ML-KEM-768, and ML-KEM-1024.
 
 Hybrid Key Exchange is generally preferred over pure PQC key exchange because it provides defense-in-depth by combining the strengths of both classical and PQC algorithms. This ensures continued security, even if one algorithm is compromised during the transitional period.
 
@@ -168,16 +168,26 @@ confidentiality protection when combined with traditional key exchange.
 
 Although CRQCs could potentially decrypt past TLS sessions, client/server authentication based on certificates cannot be retroactively compromised. However, the multi-year process required to establish, certify, and embed new root CAs presents a significant challenge. If CRQCs emerge earlier than anticipated, responding promptly to secure authentication systems would be difficult. While the migration to PQ X.509 certificates allows for more time compared to key exchanges, delaying these preparations should be avoided.
 
+## Quantum-Ready Authentication
+
 The quantum-ready authentication property becomes critical in scenarios where an on-path attacker uses network devices equipped with CRQCs to break traditional authentication protocols. For example, if an attacker determines the private key of a server certificate before its expiration, they could impersonate the server, causing users to believe their connections are legitimate. This impersonation leads to serious security threats, including unauthorized data disclosure, interception of communications, and overall system compromise.
 
 The quantum-ready authentication property ensures robust authentication through the use of either a pure Post-Quantum certificate or a PQ/T hybrid certificate:
 
-1. Post-Quantum X.509 Certificates
+## Post-Quantum X.509 Certificates
 
-  - ML-DSA Certificates: Defined in {{!I-D.ietf-lamps-dilithium-certificates}}, these use the Module-Lattice Digital Signature Algorithm (ML-DSA). {{!I-D.tls-westerbaan-mldsa}} explains how ML-DSA is applied for authentication in TLS 1.3.
-  - SLH-DSA Certificates: Defined in {{!I-D.ietf-lamps-x509-slhdsa}}, these use the SLH-DSA algorithm. {{!I-D.reddy-tls-slhdsa}} details how SLH-DSA is used in TLS 1.3 and compares its advantages and disadvantages with ML-DSA in Section 2 of the document
+Post-quantum certificates contain only a PQC public key and are signed using a post-quantum algorithm. They are suitable for deployments capable of fully embracing post-quantum cryptography.
 
-2. Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. These combine Post-Quantum algorithms like ML-DSA with traditional algorithms such as RSA-PKCS#1v1.5, RSA-PSS, ECDSA, Ed25519, or Ed448, to provide additional protection against vulnerabilities or implementation bugs in a single algorithm. {{!I-D.reddy-tls-composite-mldsa}} specifies how composite signatures, including ML-DSA, are used for TLS 1.3 authentication.
+  * ML-DSA Certificates: Defined in {{!I-D.ietf-lamps-dilithium-certificates}}, these use the Module-Lattice Digital Signature Algorithm (ML-DSA). {{!I-D.tls-westerbaan-mldsa}} explains how ML-DSA is applied for authentication in TLS 1.3.
+  * SLH-DSA Certificates: Defined in {{!I-D.ietf-lamps-x509-slhdsa}}, these use the SLH-DSA algorithm. {{!I-D.reddy-tls-slhdsa}} details how SLH-DSA is used in TLS 1.3 and compares its advantages and disadvantages with ML-DSA in Section 2 of the document
+
+## Hybrid (Composite) X.509 Certificates
+  
+A composite certificate contains both a traditional public key algorithm (e.g., ECDSA) and a post-quantum algorithm (e.g., ML-DSA) within a single X.509 certificate. This design enables both algorithms to be used in parallel, the traditional component ensures compatibility with existing infrastructure, while the post-quantum component introduces resistance against future quantum attacks. 
+
+Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. These combine Post-Quantum algorithms like ML-DSA with traditional algorithms such as RSA-PKCS#1v1.5, RSA-PSS, ECDSA, Ed25519, or Ed448, to provide additional protection against vulnerabilities or implementation bugs in a single algorithm. {{!I-D.reddy-tls-composite-mldsa}} specifies how composite signatures, including ML-DSA, are used for TLS 1.3 authentication.
+
+## Transition Considerations
 
 Determining whether and when to adopt PQC certificates or PQ/T hybrid schemes depends on several factors, including:
 
@@ -187,12 +197,20 @@ Determining whether and when to adopt PQC certificates or PQ/T hybrid schemes de
 
 Deployments with limited flexibility benefit significantly from hybrid signatures, which combine traditional algorithms with PQC algorithms. This approach mitigates the risks associated with delays in transitioning to PQC and provides an immediate safeguard against zero-day vulnerabilities.
 
-Hybrid signatures enhance resilience during the adoption of PQC by:
+Composite certificates enhance resilience during the adoption of PQC by:
 
 - Providing defense-in-depth: They maintain security even if one algorithm is compromised.
 - Reducing exposure to unforeseen vulnerabilities: They offer immediate protection against potential weaknesses in PQC algorithms.
 
-For example, telecom networks—characterized by centralized infrastructure, internal CAs, and close relationships with vendors are well-positioned to manage the overhead of larger PQC keys and signatures. These networks can adopt PQC signature algorithms earlier due to their ability to coordinate and deploy changes effectively.
+However, composite certificates comes with long-term implications. Once the traditional algorithm is no longer considered secure, due to CRQCs, it will have to be deprecated. To complete the transition to a fully quantum-resistant authentication model, it will be necessary to provision a new root CA certificate, that uses only a PQC signature algorithm and public key. This new root CA would issue a hierarchy of intermediate certificates, each also signed using a PQC algorithm and ultimately issue end-entity certificates that likewise contain only PQC public keys and are signed with PQC algorithms. This ensures that the entire certification path from the root of trust to the end-entity is cryptographically resistant to quantum attacks and does not depend on any traditional algorithms.
+
+Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a significant risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.2 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 11.2 of {{!I-D.reddy-tls-composite-mldsa}}.
+
+In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a new composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This highlights the critical need to retire hybrid certificates containing broken algorithms once CRQCs are available.
+
+## Deployment Realities
+
+Telecom networks, characterized by centralized infrastructure, internal CAs, and close relationships with vendors are well-positioned to manage the overhead of larger PQC keys and signatures. These networks can adopt PQC signature algorithms earlier due to their ability to coordinate and deploy changes effectively.
 
 Conversely, the Web PKI ecosystem may delay adoption until more efficient and compact PQC signature algorithms, such as MAYO, UOV, HAWK, or SQISign, become available. This is due to the broader, more decentralized nature of the Web PKI ecosystem, which makes coordination and implementation more challenging.
 
@@ -263,13 +281,11 @@ transition to PQC, preserving the benefits of traditional cryptosystems without 
 
 ## MITM Attacks with CRQC 
 
-A MITM attack is possible if an adversary possesses a CRQC capable of breaking traditional public-key signatures. The attacker can generate
-a forged certificate and create a valid signature, enabling them to impersonate a TLS peer, whether a server or a client. This completely undermines the authentication
-guarantees of TLS when relying on traditional certificates.
+A MITM attack is possible if an adversary possesses a CRQC capable of breaking traditional public-key signatures. The attacker can generate a forged certificate and create a valid signature, enabling them to impersonate a TLS peer, whether a server or a client. This completely undermines the authentication guarantees of TLS when relying on traditional certificates.
 
-To mitigate such attacks, several steps should be taken:
+To mitigate such attacks, several steps need to be taken:
 
-1. Revocation and Transition: Servers should revoke traditional certificates and migrate to PQC authentication.
+1. Revocation and Transition: Both clients and servers that use traditional certificates will have to revoke them and migrate to PQC authentication.
 2. Client-Side Verification:  Clients should avoid establishing TLS sessions with servers that do not support PQC authentication.
 3. PKI Migration: Organizations should transition their PKI to post-quantum-safe certification authorities and discontinue issuing certificates based on traditional cryptographic methods.
 
