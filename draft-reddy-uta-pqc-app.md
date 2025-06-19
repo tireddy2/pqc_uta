@@ -224,6 +224,9 @@ To address the challenge of large PQ or PQ/T hybrid certificate chains during th
 
 * Abridged TLS Certificate ({?I-D.ietf-tls-cert-abridge}): This approach minimizes the size of the certificate chain by omitting intermediate certificates that are already known to the client. Instead, the server provides a compact representation of the certificate chain, and the client reconstructs the omitted certificates using a well-known common CA database. This mechanism significantly reduces bandwidth requirements while preserving compatibility with existing certificate validation processes. Additionally, it explores potential methods to compress the end-entity certificate itself, though this aspect remains under discussion within the TLS Working Group.
 
+* Trust Anchor Identifiers ({?I-D.ietf-tls-trust-anchor-ids}): This extension allows a client to signal a compact list of trusted root CAs using unique trust anchor identifiers rather than full Distinguished Names. This reduces the size of the "certificate_authorities" extension and helps the server select an appropriate certificate chain,
+especially when multiple hierarchies are used (e.g., separate traditional and PQ roots). This mechanism can help reduce handshake size and improve efficiency in hybrid or PQC deployments.
+
 These techniques aim to optimize the exchange of certificate chains during the TLS handshake, particularly in scenarios involving large PQC-related certificates, while balancing efficiency and compatibility.
 
 # Informing Users of PQC Security Compatibility Issues
