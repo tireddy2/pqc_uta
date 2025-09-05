@@ -235,7 +235,7 @@ These techniques aim to optimize the exchange of certificate chains during the T
 
 # Informing Users of PQC Security Compatibility Issues
 
-When the server detects that the client does not support PQC or hybrid key exchange, it may send an insufficient_security fatal alert to the client. The client, in turn, can notify end-users or generate logs indicating that the server they are attempting to access requires a level of security that the client cannot provide due to the lack of PQC support. Additionally, the client may log this event for diagnostic purposes, security auditing, or reporting the issue to the client development team for further analysis.
+When the server detects that the client does not support PQC or hybrid key exchange, it may send an insufficient_security fatal alert to the client. The client, in turn, can notify service providers via device management systems or generate logs indicating that the server they are attempting to access requires a level of security that the client cannot provide due to the lack of PQC support. Additionally, the client may log this event for diagnostic purposes, security auditing, or reporting the issue to the application developments for further analysis.
 
 Conversely, if the client detects that the server does not support PQC or hybrid key exchange, it may present an alert or error message to the end-user or record the event in diagnostic logs. This message or record should explain that the server is incompatible with the PQC security features supported by the client.
 
