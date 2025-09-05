@@ -57,7 +57,7 @@ informative:
 
 --- abstract
 
-Post-quantum cryptography presents new challenges for applications, end-users, and system administrators. This document highlights the unique characteristics of applications and offers best practices for implementing quantum-ready usage profiles in applications that use TLS and key supporting protocols such as DNS.
+Post-quantum cryptography presents new challenges for device manufacturers, application developers, and service providers. This document highlights the unique characteristics of applications and offers best practices for implementing quantum-ready usage profiles in applications that use TLS and key supporting protocols such as DNS.
 
 --- middle
 
