@@ -129,6 +129,7 @@ However, Pure PQC Key Exchange may be required for specific deployments with reg
 
 In practice, applications that rely on TLS typically depend on the underlying TLS library. Upgrading to a library version that supports TLS 1.3 and PQC key exchange extensions is a necessary first step, but it may not be sufficient, as it is not known whether PQC groups are enabled by default across different implementations. Applications that configure protocol versions or cipher suites explicitly MUST update these settings to ensure that hybrid or pure PQC key exchange groups are enabled. Applications that rely on library defaults SHOULD review the library documentation or perform interoperability testing to confirm that PQC groups are negotiated as intended. Operators should also consider potential interoperability issues with legacy peers that do not yet support TLS 1.3 and PQC key exchange extensions.
 
+
 ## Optimizing ClientHello for Hybrid Key Exchange in TLS Handshake
 
 The client initiates the TLS handshake by sending a list of supported key agreement methods in the key_share extension. One of the important challenges during the migration to PQC is that the client may not know whether the server supports hybrid key exchange. To address this uncertainty, the client can adopt one of the following three strategies:
