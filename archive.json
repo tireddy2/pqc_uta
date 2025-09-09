@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-30T01:09:10.083496+00:00",
+  "timestamp": "2025-09-09T00:54:43.050907+00:00",
   "repo": "tireddy2/pqc_uta",
   "labels": [
     {
@@ -283,21 +283,21 @@
       "id": "PR_kwDOKcY3I85cVA3C",
       "title": "expanded scope, but this is mostly a table of contents",
       "url": "https://github.com/tireddy2/pqc_uta/pull/1",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "danwing",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2023-10-10T04:34:52Z",
-      "updatedAt": "2023-10-10T04:34:52Z",
+      "updatedAt": "2025-09-04T14:07:48Z",
       "baseRepository": "tireddy2/pqc_uta",
       "baseRefName": "main",
       "baseRefOid": "630ba048f7d3aa23cc0e710547ac7775e6bc9a05",
       "headRepository": "tireddy2/pqc_uta",
       "headRefName": "expand-scope",
       "headRefOid": "c29804a54755fac3830b550a9c61c8403002eb66",
-      "closedAt": null,
+      "closedAt": "2025-09-04T14:07:48Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -309,21 +309,21 @@
       "id": "PR_kwDOKcY3I85cr0f8",
       "title": "re-focus text to discuss specifics of moving to PQ for each protocol,\u2026",
       "url": "https://github.com/tireddy2/pqc_uta/pull/2",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "danwing",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "\u2026 less on why-PQ-is-great",
       "createdAt": "2023-10-12T23:05:11Z",
-      "updatedAt": "2023-10-12T23:05:11Z",
+      "updatedAt": "2025-09-04T14:07:40Z",
       "baseRepository": "tireddy2/pqc_uta",
       "baseRefName": "main",
       "baseRefOid": "b798afb31b9aadd11e77b06aea8154c87e9961d9",
       "headRepository": "tireddy2/pqc_uta",
       "headRefName": "reduce_redundancy",
       "headRefOid": "14831f80f6021678a707ea6b3e696eb7f4f62b6c",
-      "closedAt": null,
+      "closedAt": "2025-09-04T14:07:40Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
@@ -728,26 +728,411 @@
       "id": "PR_kwDOKcY3I86JXzS-",
       "title": "Editorial Updates",
       "url": "https://github.com/tireddy2/pqc_uta/pull/19",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "tireddy2",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-01-29T14:35:36Z",
-      "updatedAt": "2025-01-29T14:35:36Z",
+      "updatedAt": "2025-01-30T05:04:32Z",
       "baseRepository": "tireddy2/pqc_uta",
       "baseRefName": "main",
       "baseRefOid": "cb74e4ec750e8534c831632dd5fd367253636239",
       "headRepository": "tireddy2/pqc_uta",
       "headRefName": "tireddy2-patch-2",
       "headRefOid": "3c24bd8416e285e8885e3e5cf90686499762809f",
-      "closedAt": null,
+      "closedAt": "2025-01-30T05:04:32Z",
+      "mergedAt": "2025-01-30T05:04:32Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "67f8262ada51f1fceb69ad976e97c4a3573081e6"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOKcY3I86JzhBd",
+      "title": "SecP384r1mlkem1024 from new I-D rev",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/20",
+      "state": "MERGED",
+      "author": "loganaden",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-03T07:59:25Z",
+      "updatedAt": "2025-02-03T13:12:36Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "563075f87fcf01d5b2f49af440603a24c313f6b6",
+      "headRepository": "cyberstormdotmu/pqc_uta",
+      "headRefName": "main",
+      "headRefOid": "ddf3eefc0dbe1db071216e0f49e1115e9e7f1d66",
+      "closedAt": "2025-02-03T13:12:36Z",
+      "mergedAt": "2025-02-03T13:12:36Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "d1eac1f49096cc869762be7541e8f5de56cb887c"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKcY3I86aXlHc",
+          "commit": {
+            "abbreviatedOid": "ddf3eef"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-02-03T13:12:27Z",
+          "updatedAt": "2025-02-03T13:12:27Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOKcY3I86J8vHN",
+      "title": "Use of External PSK with Traditional Key Exchange",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/21",
+      "state": "CLOSED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-04T07:37:48Z",
+      "updatedAt": "2025-02-17T06:53:52Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "d1eac1f49096cc869762be7541e8f5de56cb887c",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "tireddy2-patch-4",
+      "headRefOid": "2c0c46f5c6ace3826b034d2103dfbad2b2bdaa71",
+      "closedAt": "2025-02-17T06:53:52Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOKcY3I86MIbtq",
+      "title": "Update to address comments",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/22",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-02-22T07:37:42Z",
+      "updatedAt": "2025-02-26T07:37:44Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "3ef1a31c410a8938384e0fcb2f7eb7285d77b12e",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "tireddy2-patch-5",
+      "headRefOid": "e8e2a2666a2e38603fabe77c02e6fbcb609c8631",
+      "closedAt": "2025-02-26T07:37:44Z",
+      "mergedAt": "2025-02-26T07:37:44Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "58f5073956c77b48b749bef80646dc8a95f1f1bd"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKcY3I86deLwN",
+          "commit": {
+            "abbreviatedOid": "c324d6b"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "I put a few suggestions inline. Just minor edits - nothing major.",
+          "createdAt": "2025-02-25T17:32:44Z",
+          "updatedAt": "2025-02-25T17:46:12Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "```suggestion\r\nThe adoption of PQC in TLS-based applications will not be a simple binary decision but rather a gradual transition that  demands a careful evaluation of\r\n```",
+              "createdAt": "2025-02-25T17:32:44Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 8,
+              "body": "```suggestion\r\ninteroperability, and security requirements tailored to their specific use cases. While the IETF defines cryptographic mechanisms for TLS and\r\n```",
+              "createdAt": "2025-02-25T17:33:45Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 9,
+              "body": "```suggestion\r\nprovides guidance on PQC transition strategies, it does not prescribe a one-size-fits-all approach. Instead, this document outlines key\r\n```",
+              "createdAt": "2025-02-25T17:34:19Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 10,
+              "body": "```suggestion\r\nconsiderations to assist stakeholders in adopting PQC in a way that aligns with their operational and security requirements.\r\n```",
+              "createdAt": "2025-02-25T17:34:58Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\nensuring resilience to potential catastrophic vulnerabilities in any single algorithm. This approach allows for a gradual\r\n```",
+              "createdAt": "2025-02-25T17:37:26Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 24,
+              "body": "```suggestion\r\ntransition to PQC, preserving the benefits of traditional cryptosystems without requiring their immediate replacement.\r\n```",
+              "createdAt": "2025-02-25T17:38:30Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 29,
+              "body": "```suggestion\r\na forged certificate and create a valid signature, enabling them to impersonate a TLS peer, whether a server or a client. This completely undermines the authentication\r\n```",
+              "createdAt": "2025-02-25T17:44:16Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 32,
+              "body": "\"should\" be taken?",
+              "createdAt": "2025-02-25T17:44:40Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            },
+            {
+              "originalPosition": 37,
+              "body": "```suggestion\r\n3. PKI Migration: Organizations should transition their PKI to post-quantum-safe certification authorities and discontinue issuing certificates based on traditional cryptographic methods.\r\n```",
+              "createdAt": "2025-02-25T17:45:39Z",
+              "updatedAt": "2025-02-25T17:46:12Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I86dj11W",
+          "commit": {
+            "abbreviatedOid": "c324d6b"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-02-26T07:37:36Z",
+          "updatedAt": "2025-02-26T07:37:36Z",
+          "comments": [
+            {
+              "originalPosition": 32,
+              "body": "replaced \"should\" with \"need\"",
+              "createdAt": "2025-02-26T07:37:36Z",
+              "updatedAt": "2025-02-26T07:37:36Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOKcY3I86VrCpI",
+      "title": "Updates to the draft",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/23",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-05-10T06:27:37Z",
+      "updatedAt": "2025-05-15T06:37:16Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "58f5073956c77b48b749bef80646dc8a95f1f1bd",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "tireddy2-patch-6",
+      "headRefOid": "35975439f49c96f1c2f95d85f9be7701640a3d4e",
+      "closedAt": "2025-05-15T06:37:16Z",
+      "mergedAt": "2025-05-15T06:37:16Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "4a7f273c1232f8101811931b2a8b796f682975ec"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 24,
+      "id": "PR_kwDOKcY3I86bQ6vM",
+      "title": "Update draft to discuss trust anchor id",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/24",
+      "state": "CLOSED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-06-19T13:49:21Z",
+      "updatedAt": "2025-09-04T14:07:27Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "4a7f273c1232f8101811931b2a8b796f682975ec",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "tireddy2-patch-8",
+      "headRefOid": "deb4113ab94e0e5455bba11f458c4d3ef753e255",
+      "closedAt": "2025-09-04T14:07:27Z",
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 25,
+      "id": "PR_kwDOKcY3I86m4CZ8",
+      "title": "Address comments from the WG",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/25",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-09-04T14:30:57Z",
+      "updatedAt": "2025-09-08T10:44:08Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "4a7f273c1232f8101811931b2a8b796f682975ec",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "tireddy2-patch-10",
+      "headRefOid": "abc20a226b6a95a30c5cfb4369ba43982d16f8d1",
+      "closedAt": "2025-09-08T10:44:08Z",
+      "mergedAt": "2025-09-08T10:44:08Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "4b7ecdf58f14533cbda415c2d9ce2b1b6ff62c79"
+      },
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks for the work, Tiru. Great PR. I just had a few minor text suggestions.",
+          "createdAt": "2025-09-05T11:24:52Z",
+          "updatedAt": "2025-09-05T11:24:52Z"
+        },
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Go ahead and merge the PR",
+          "createdAt": "2025-09-08T08:46:30Z",
+          "updatedAt": "2025-09-08T08:46:30Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKcY3I86-E09d",
+          "commit": {
+            "abbreviatedOid": "9e0c9a0"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-05T11:07:52Z",
+          "updatedAt": "2025-09-05T11:07:52Z",
+          "comments": [
+            {
+              "originalPosition": 74,
+              "body": "```suggestion\r\n   * Middleboxes that do not handle fragmented ClientHello messages properly may drop them, as this behavior is uncommon. More generally, middleboxes may also mishandle fragmented IP/UDP packets, which makes this issue particularly significant for DTLS deployments.\r\n```",
+              "createdAt": "2025-09-05T11:07:52Z",
+              "updatedAt": "2025-09-05T11:07:52Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I86-E2hI",
+          "commit": {
+            "abbreviatedOid": "9e0c9a0"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-05T11:10:36Z",
+          "updatedAt": "2025-09-05T11:10:36Z",
+          "comments": [
+            {
+              "originalPosition": 109,
+              "body": "```suggestion\r\n* TLS Cached Information Extension ({{!RFC7924}}): This extension enables clients to indicate that they have cached certificate information from a prior connection. The server can then signal the client to reuse the cached data instead of retransmitting the full certificate chain. While this mechanism reduces bandwidth usage, it introduces potential privacy concerns: the client includes fingerprints of cached objects in the ClientHello, which are visible to eavesdroppers. These values can be used to correlate independent TLS sessions from the same client, potentially compromising anonymity. While this is not a concern for many industrial IoT scenarios, it may be inacceptable to smart home deployments.\r\n```",
+              "createdAt": "2025-09-05T11:10:36Z",
+              "updatedAt": "2025-09-05T11:10:37Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I86-E4W_",
+          "commit": {
+            "abbreviatedOid": "9e0c9a0"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-05T11:13:41Z",
+          "updatedAt": "2025-09-05T11:13:41Z",
+          "comments": [
+            {
+              "originalPosition": 5,
+              "body": "```suggestion\r\nPost-quantum cryptography presents new challenges for device manufacturers, application developers, and service providers. This document highlights the unique characteristics of applications and offers best practices for implementing quantum-ready usage profiles in applications that use TLS and key supporting protocols such as DNS.\r\n```",
+              "createdAt": "2025-09-05T11:13:41Z",
+              "updatedAt": "2025-09-05T11:13:41Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I86-E7yw",
+          "commit": {
+            "abbreviatedOid": "9e0c9a0"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-05T11:19:36Z",
+          "updatedAt": "2025-09-05T11:19:36Z",
+          "comments": [
+            {
+              "originalPosition": 115,
+              "body": "```suggestion\r\n* Trust Anchor Identifiers ({?I-D.ietf-tls-trust-anchor-ids}): This extension allows a client to signal a compact list of trusted root CAs using unique trust anchor identifiers rather than Distinguished Names. This reduces the size of the \"certificate_authorities\" extension and helps the server select an appropriate certificate chain,\r\n```",
+              "createdAt": "2025-09-05T11:19:36Z",
+              "updatedAt": "2025-09-05T11:19:36Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I86-E9bp",
+          "commit": {
+            "abbreviatedOid": "9e0c9a0"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-09-05T11:21:44Z",
+          "updatedAt": "2025-09-05T11:21:45Z",
+          "comments": [
+            {
+              "originalPosition": 123,
+              "body": "```suggestion\r\nWhen the server detects that the client does not support PQC or hybrid key exchange, it may send an insufficient_security fatal alert to the client. The client, in turn, can notify service providers via device management systems or generate logs indicating that the server they are attempting to access requires a level of security that the client cannot provide due to the lack of PQC support. Additionally, the client may log this event for diagnostic purposes, security auditing, or reporting the issue to the application developments for further analysis.\r\n```",
+              "createdAt": "2025-09-05T11:21:44Z",
+              "updatedAt": "2025-09-05T11:21:45Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
