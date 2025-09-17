@@ -138,8 +138,9 @@ The client initiates the TLS handshake by sending a list of supported key agreem
 
 - Advantage: Reduces latency since the server can immediately select an appropriate key exchange method.
 - Challenges:
-   * The size of the hybrid key exchange algorithm key share may exceed the Maximum Transmission Unit (MTU), potentially causing the ClientHello message to be fragmented across multiple packets in both TLS and DTLS. This fragmentation increases the risk of packet loss and retransmissions, leading to potential delays. During the TLS handshake, the server will respond to the ClientHello with its public key and ciphertext. If these components also exceed the MTU, the ServerHello message may be fragmented, further compounding the risk of delays due to packet loss and retransmissions.
+   * The size of the hybrid key exchange algorithm key share may exceed the Maximum Transmission Unit (MTU), potentially causing the ClientHello message to be fragmented across multiple packets. In TLS, this results in multiple TCP segments. In DTLS, handshake messages are explicitly fragmented at the record layer as specified in {{!RFC9147}}, with each fragment sent in its own UDP datagram. In both cases, ClientHello message increase latency and risk of handshake delay, especially in lossy networks.
    * Middleboxes that do not handle fragmented ClientHello messages properly may drop them, as this behavior is uncommon. More generally, middleboxes may also mishandle fragmented IP/UDP packets, which makes this issue particularly significant for DTLS deployments.
+   * The server’s ServerHello and associated traditional public key and PQC ciphertext may also exceed the MTU, leading to fragmentation in both TLS and DTLS, further compounding the risk of delays due to packet loss and retransmissions.
    * Additionally, this approach requires more computational resources on the client and increases handshake traffic.
 
 2. Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message. However, this approach has a disadvantage in that the roundtrip would introduce additional delay compared to the previous technique of sending both traditional and hybrid key exchange algorithm key shares to the server in the initial ClientHello message.
@@ -191,6 +192,19 @@ A composite certificate contains both a traditional public key algorithm (e.g., 
 
 Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. These combine Post-Quantum algorithms like ML-DSA with traditional algorithms such as RSA-PKCS#1v1.5, RSA-PSS, ECDSA, Ed25519, or Ed448, to provide additional protection against vulnerabilities or implementation bugs in a single algorithm. {{!I-D.reddy-tls-composite-mldsa}} specifies how composite signatures, including ML-DSA, are used for TLS 1.3 authentication.
 
+## Negotiation of Authentication Schemes
+
+During the transition, clients and servers may be configured to support
+multiple authentication schemes (e.g., traditional, composite, and
+PQ-only). Clients indicate supported signature schemes in the
+"signature_algorithms" extension {{!RFC8446}}, listed in decreasing order
+of preference.
+
+For migration, clients SHOULD give higher precedence to composite and
+PQ-only schemes over traditional ones. Within that set, clients may
+prefer PQ-only to satisfy regulatory or compliance requirements, or prefer
+composite if they want defense-in-depth security.
+
 ## Transition Considerations
 
 Determining whether and when to adopt PQC certificates or PQ/T hybrid schemes depends on several factors, including:
@@ -206,11 +220,13 @@ Composite certificates enhance resilience during the adoption of PQC by:
 - Providing defense-in-depth: They maintain security even if one algorithm is compromised.
 - Reducing exposure to unforeseen vulnerabilities: They offer immediate protection against potential weaknesses in PQC algorithms.
 
-However, composite certificates comes with long-term implications. Once the traditional algorithm is no longer considered secure, due to CRQCs, it will have to be deprecated. To complete the transition to a fully quantum-resistant authentication model, it will be necessary to provision a new root CA certificate, that uses only a PQC signature algorithm and public key. This new root CA would issue a hierarchy of intermediate certificates, each also signed using a PQC algorithm and ultimately issue end-entity certificates that likewise contain only PQC public keys and are signed with PQC algorithms. This ensures that the entire certification path from the root of trust to the end-entity is cryptographically resistant to quantum attacks and does not depend on any traditional algorithms.
+However, composite certificates comes with long-term implications. Once the traditional algorithm is no longer considered secure, due to CRQCs, it will have to be deprecated. To complete the transition to a fully quantum-resistant authentication model, it will be necessary to provision a new root CA certificate, that uses only a PQC signature algorithm and public key. This new root CA would issue a hierarchy of intermediate certificates, each also signed using a PQC algorithm and ultimately issue end-entity certificates that likewise contain only PQC public keys and are signed with PQC algorithms. This ensures that the entire certification path from the root of trust to the end-entity is cryptographically resistant to quantum attacks and does not depend on any traditional algorithms. 
 
-Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a significant risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.2 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 11.2 of {{!I-D.reddy-tls-composite-mldsa}}.
+Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a significant risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.1.1 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 10.2 of {{!I-D.ietf-lamps-pq-composite-sigs}}.
 
-In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a new composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This highlights the critical need to retire hybrid certificates containing broken algorithms once CRQCs are available.
+In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a new composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This highlights the critical need to retire hybrid certificates containing broken algorithms once CRQCs are available and to update TLS protocol configuration to negotiate only PQC-based authentication. 
+
+Note that in TLS, a composite signature remains secure against impersonation as long as at least one component algorithm remains unbroken, because verification succeeds only if every component signature validates over the same canonical message defined by the authentication procedure. This property provides some operational flexibility during the transition, but does not remove the requirement to deprecate broken traditional algorithms once CRQCs are available.
 
 ## Deployment Realities
 
