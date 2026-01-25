@@ -3,7 +3,7 @@ title: "Post-Quantum Cryptography Recommendations for TLS-based Applications"
 abbrev: "PQC Recommendations for TLS-based Applications"
 category: std
 
-docname: draft-reddy-uta-pqc-app-latest
+docname: draft-ietf-uta-pqc-app-latest
 submissiontype: IETF
 number:
 date:
@@ -57,7 +57,7 @@ informative:
 
 --- abstract
 
-Post-quantum cryptography presents new challenges for device manufacturers, application developers, and service providers. This document highlights the unique characteristics of applications and offers best practices for implementing quantum-ready usage profiles in applications that use TLS and key supporting protocols such as DNS.
+Post-quantum cryptography presents new challenges for device manufacturers, application developers, and service providers. This document highlights the unique characteristics of applications and offers best practices for implementing quantum ready usage profiles in applications that use TLS and key supporting protocols such as DNS.
 
 --- middle
 
@@ -75,13 +75,13 @@ Historically, the industry has successfully transitioned between cryptographic p
 
    3. Performance Trade-Offs: While some PQC algorithms exhibit slower operations compared to traditional algorithms, others provide specific advantages. For instance, ML-KEM requires less CPU than X25519, and ML-DSA offers faster signature verification times compared to Ed25519, although its signature generation process is slower.
 
-Any application transmitting messages over untrusted networks is potentially vulnerable to active or passive attacks by adversaries, including those equipped with CRQCs. The degree of vulnerability varies depending on the application, the underlying systems, the value of the data being transmitted, and the attractiveness of attacking a particular individual, device, or flow. This document outlines quantum-ready usage profiles for applications designed to protect against passive and on-path attacks leveraging CRQCs. It also discusses how TLS client and server implementations, together with essential supporting protocols (e.g., DNS), can address these challenges using various techniques detailed in subsequent sections.
+Any application transmitting messages over untrusted networks is potentially vulnerable to active or passive attacks by adversaries, including those equipped with CRQCs. The degree of vulnerability varies depending on the application, the underlying systems, the value of the data being transmitted, and the attractiveness of attacking a particular individual, device, or flow. This document outlines quantum ready usage profiles for applications designed to protect against passive and on-path attacks leveraging CRQCs. It also discusses how TLS client and server implementations, together with essential supporting protocols (e.g., DNS), can address these challenges using various techniques detailed in subsequent sections.
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
 
-This document adopts terminology defined in {{?I-D.ietf-pquip-pqt-hybrid-terminology}}. For the purposes of this document, it is useful to categorize cryptographic algorithms into three distinct classes:
+This document adopts terminology defined in {{?RFC9794}}. For the purposes of this document, it is useful to categorize cryptographic algorithms into three distinct classes:
 
 * Traditional Algorithm: An asymmetric cryptographic algorithm based on integer factorization, finite field discrete logarithms, or elliptic curve discrete logarithms. In the context of TLS, an example of a traditional key exchange algorithm is Elliptic Curve Diffie-Hellman (ECDH), which is almost exclusively used in its ephemeral mode, referred to as Elliptic Curve Diffie-Hellman Ephemeral (ECDHE).
 
@@ -95,9 +95,11 @@ This document adopts terminology defined in {{?I-D.ietf-pquip-pqt-hybrid-termino
 
 Digital signature algorithms play a critical role in X.509 certificates, Certificate Transparency Signed Certificate Timestamps, Online Certificate Status Protocol (OCSP) statements, remote attestation evidence, and any other mechanism that contributes signatures during a TLS handshake or in context of a secure communication establishment.
 
+This document adopts terminology from {{?I-D.ietf-pquip-pqc-engineers}}. As described there, terms such as "post-quantum," "quantum ready,"quantum resistant," and "quantum secure" are often used interchangeably to describe algorithms intended to resist attacks by CRQCs.
+
 # Timeline for Transition {#timeline}
 
-The timeline and driving motivations for transitioning to quantum-ready cryptography differ between data confidentiality and data authentication (e.g., signatures). The risk of "Harvest Now, Decrypt Later" (HNDL) attacks demands immediate action to protect data confidentiality (see Section 7 of {{?I-D.ietf-pquip-pqc-engineers}}), while the threat to authentication systems, although less urgent, requires forward-thinking planning to mitigate future risks.
+The timeline and driving motivations for transitioning to quantum ready cryptography differ between data confidentiality and data authentication (e.g., signatures). The risk of "Harvest Now, Decrypt Later" (HNDL) attacks demands immediate action to protect data confidentiality (see Section 7 of {{?I-D.ietf-pquip-pqc-engineers}}), while the threat to authentication systems, although less urgent, requires forward-thinking planning to mitigate future risks.
 
 Encrypted payloads transmitted using Transport Layer Security (TLS) are vulnerable to decryption if an attacker equipped with a CRQC gains access to the traditional asymmetric public keys used in the TLS key exchange along with the transmitted ciphertext. TLS implementations typically use Diffie-Hellman-based key exchange schemes. If an attacker obtains a complete set of encrypted payloads, including the TLS setup, they could theoretically use a CRQC to derive the private key and decrypt the data.
 
@@ -138,8 +140,9 @@ The client initiates the TLS handshake by sending a list of supported key agreem
 
 - Advantage: Reduces latency since the server can immediately select an appropriate key exchange method.
 - Challenges:
-   * The size of the hybrid key exchange algorithm key share may exceed the Maximum Transmission Unit (MTU), potentially causing the ClientHello message to be fragmented across multiple packets in both TLS and DTLS. This fragmentation increases the risk of packet loss and retransmissions, leading to potential delays. During the TLS handshake, the server will respond to the ClientHello with its public key and ciphertext. If these components also exceed the MTU, the ServerHello message may be fragmented, further compounding the risk of delays due to packet loss and retransmissions.
+   * The size of the hybrid key exchange algorithm key share may exceed the Maximum Transmission Unit (MTU), potentially causing the ClientHello message to be fragmented across multiple packets. In TLS, this results in multiple TCP segments. In DTLS, handshake messages are explicitly fragmented at the record layer as specified in {{!RFC9147}}, with each fragment sent in its own UDP datagram. In both cases, ClientHello message increase latency and risk of handshake delay, especially in lossy networks.
    * Middleboxes that do not handle fragmented ClientHello messages properly may drop them, as this behavior is uncommon. More generally, middleboxes may also mishandle fragmented IP/UDP packets, which makes this issue particularly significant for DTLS deployments.
+   * The server’s ServerHello and associated traditional public key and PQC ciphertext may also exceed the MTU, leading to fragmentation in both TLS and DTLS, further compounding the risk of delays due to packet loss and retransmissions.
    * Additionally, this approach requires more computational resources on the client and increases handshake traffic.
 
 2. Indicate Support for Hybrid Key Exchange: Alternatively, the client may initially indicate support for hybrid key exchange and send a traditional key exchange algorithm key share in the first ClientHello message. If the server supports hybrid key exchange, it will use the HelloRetryRequest to request a hybrid key exchange algorithm key share from the client. The client can then send the hybrid key exchange algorithm key share in the second ClientHello message. However, this approach has a disadvantage in that the roundtrip would introduce additional delay compared to the previous technique of sending both traditional and hybrid key exchange algorithm key shares to the server in the initial ClientHello message.
@@ -172,24 +175,31 @@ confidentiality protection when combined with traditional key exchange.
 
 Although CRQCs could potentially decrypt past TLS sessions, client/server authentication based on certificates cannot be retroactively compromised. However, the multi-year process required to establish, certify, and embed new root CAs presents a significant challenge. If CRQCs emerge earlier than anticipated, responding promptly to secure authentication systems would be difficult. While the migration to PQ X.509 certificates allows for more time compared to key exchanges, delaying these preparations should be avoided.
 
-## Quantum-Ready Authentication
+## Quantum Ready Authentication
 
-The quantum-ready authentication property becomes critical in scenarios where an on-path attacker uses network devices equipped with CRQCs to break traditional authentication protocols. For example, if an attacker determines the private key of a server certificate before its expiration, they could impersonate the server, causing users to believe their connections are legitimate. This impersonation leads to serious security threats, including unauthorized data disclosure, interception of communications, and overall system compromise.
+The quantum ready authentication property becomes critical in scenarios where an on-path attacker uses network devices equipped with CRQCs to break traditional authentication protocols. For example, if an attacker determines the private key of a server certificate before its expiration, they could impersonate the server, causing users to believe their connections are legitimate. This impersonation leads to serious security threats, including unauthorized data disclosure, interception of communications, and overall system compromise.
 
-The quantum-ready authentication property ensures robust authentication through the use of either a pure Post-Quantum certificate or a PQ/T hybrid certificate:
+The quantum ready authentication property ensures robust authentication through the use of either a pure Post-Quantum certificate or a PQ/T hybrid certificate:
 
 ## Post-Quantum X.509 Certificates
 
 Post-quantum certificates contain only a PQC public key and are signed using a post-quantum algorithm. They are suitable for deployments capable of fully embracing post-quantum cryptography.
 
-  * ML-DSA Certificates: Defined in {{!I-D.ietf-lamps-dilithium-certificates}}, these use the Module-Lattice Digital Signature Algorithm (ML-DSA). {{!I-D.tls-westerbaan-mldsa}} explains how ML-DSA is applied for authentication in TLS 1.3.
-  * SLH-DSA Certificates: Defined in {{!I-D.ietf-lamps-x509-slhdsa}}, these use the SLH-DSA algorithm. {{!I-D.reddy-tls-slhdsa}} details how SLH-DSA is used in TLS 1.3 and compares its advantages and disadvantages with ML-DSA in Section 2 of the document.
+  * ML-DSA Certificates: Defined in {{!I-D.ietf-lamps-dilithium-certificates}}, these use the Module-Lattice Digital Signature Algorithm (ML-DSA). {{!I-D.ietf-tls-mldsa}} explains how ML-DSA is applied for authentication in TLS 1.3.
+  * SLH-DSA Certificates: Defined in {{!I-D.ietf-lamps-x509-slhdsa}}, these use the SLH-DSA algorithm. SLH-DSA is supported for use with TLS through registered SignatureScheme values in the IANA TLS Parameters registry. SLH-DSA produces significantly larger signatures than ML-DSA, which increases TLS handshake sizes, but it offers strong security properties and flexibility across multiple parameter variants. Its performance impact is typically negligible for long-lived TLS connections and large data transfers, particularly in low-loss network environments. An advantage of SLH-DSA is that it is used as a pure post-quantum signature algorithm and does not require a PQ/T hybrid composite.
 
 ## Hybrid (Composite) X.509 Certificates
   
 A composite certificate contains both a traditional public key algorithm (e.g., ECDSA) and a post-quantum algorithm (e.g., ML-DSA) within a single X.509 certificate. This design enables both algorithms to be used in parallel, the traditional component ensures compatibility with existing infrastructure, while the post-quantum component introduces resistance against future quantum attacks. 
 
 Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. These combine Post-Quantum algorithms like ML-DSA with traditional algorithms such as RSA-PKCS#1v1.5, RSA-PSS, ECDSA, Ed25519, or Ed448, to provide additional protection against vulnerabilities or implementation bugs in a single algorithm. {{!I-D.reddy-tls-composite-mldsa}} specifies how composite signatures, including ML-DSA, are used for TLS 1.3 authentication.
+
+## Negotiation of Authentication Schemes
+
+During the transition, clients and servers may be configured to support multiple authentication schemes (e.g., traditional, composite, and PQ-only). Clients indicate supported signature schemes in the "signature_algorithms" extension {{!RFC8446}}, listed in decreasing order of preference.
+
+For migration, clients SHOULD give higher precedence to composite and PQ-only schemes over traditional ones. Within that set, clients may prefer PQ-only to satisfy regulatory or compliance requirements, or prefer
+composite if they want defense-in-depth security.
 
 ## Transition Considerations
 
@@ -203,14 +213,14 @@ Deployments with limited flexibility benefit significantly from hybrid signature
 
 Composite certificates enhance resilience during the adoption of PQC by:
 
-- Providing defense-in-depth: They maintain security even if one algorithm is compromised.
+- Providing defense-in-depth: they maintain security as long as at least one component algorithm remains secure.
 - Reducing exposure to unforeseen vulnerabilities: They offer immediate protection against potential weaknesses in PQC algorithms.
 
-However, composite certificates comes with long-term implications. Once the traditional algorithm is no longer considered secure, due to CRQCs, it will have to be deprecated. To complete the transition to a fully quantum-resistant authentication model, it will be necessary to provision a new root CA certificate, that uses only a PQC signature algorithm and public key. This new root CA would issue a hierarchy of intermediate certificates, each also signed using a PQC algorithm and ultimately issue end-entity certificates that likewise contain only PQC public keys and are signed with PQC algorithms. This ensures that the entire certification path from the root of trust to the end-entity is cryptographically resistant to quantum attacks and does not depend on any traditional algorithms.
+However, composite certificates comes with long-term implications. Once the traditional algorithm is no longer considered secure due to the availability of CRQCs, it will have to be eventually deprecated. To complete the transition to a fully quantum-resistant authentication model, it will be necessary to provision a new root CA certificate, that uses only a PQC public key and signature algorithm. This new root CA would issue a hierarchy of intermediate certificates, each also signed using a PQC algorithm, and ultimately issue end-entity certificates that likewise contain only PQC public keys and are signed with PQC algorithms. This ensures that the entire certification path from the root of trust to the end-entity is cryptographically resistant to quantum attacks and does not depend on any traditional algorithms.
 
-Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a significant risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.2 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 11.2 of {{!I-D.reddy-tls-composite-mldsa}}.
+Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.2 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 10.2 of {{!I-D.ietf-lamps-pq-composite-sigs}}.
 
-In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a new composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This highlights the critical need to retire hybrid certificates containing broken algorithms once CRQCs are available.
+In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This loss of SUF is a property of the composite signature algorithm itself and does not impact protocols such as TLS, which treat composite ML-DSA as a black-box signature algorithm. Such protocols rely only on the signature generation and verification interfaces exposed by the composite algorithm, and signature verification results in a success or failure outcome. This property provides some operational flexibility during the transition, but does not remove the eventual need to deprecate broken traditional algorithms once CRQCs are available.
 
 ## Deployment Realities
 
@@ -251,7 +261,7 @@ The privacy risks associated with exchanging DNS messages in clear text are deta
 
 However, encrypted DNS messages transmitted using TLS may be vulnerable to HNDL attacks if an attacker gains access to the public keys used in the TLS key exchange. If an attacker records a complete set of encrypted DNS messages, including the TLS handshake details, they could store this data today and later use a CRQC to determine the ephemeral private key used in the key exchange, thereby decrypting the content.
 
-To address these vulnerabilities, encrypted DNS protocols MUST support the quantum-ready usage profile discussed in {#confident}.
+To address these vulnerabilities, encrypted DNS protocols MUST support the quantum ready usage profile discussed in {#confident}.
 
 It is important to note that the Post-Quantum security of DNSSEC {{?RFC9364}}, which provides authenticity for DNS records, is a distinct issue separate from the requirements for encrypted DNS transport protocols.
 
