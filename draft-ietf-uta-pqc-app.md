@@ -196,9 +196,9 @@ Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. The
 
 ## Negotiation of Authentication Schemes
 
-During the transition, clients and servers may be configured to support multiple authentication schemes (e.g., traditional, composite, and PQ-only). Clients indicate supported signature schemes in the "signature_algorithms" extension {{!RFC8446}}, listed in decreasing order of preference.
+During the transition, clients and servers may be configured to support multiple authentication schemes (e.g., traditional, composite, and PQC-only). Clients indicate supported signature schemes in the "signature_algorithms" extension {{!RFC8446}}, listed in decreasing order of preference.
 
-For migration, clients SHOULD give higher precedence to composite and PQ-only schemes over traditional ones. Within that set, clients may prefer PQ-only to satisfy regulatory or compliance requirements, or prefer
+For migration, clients SHOULD give higher precedence to composite and PQC-only schemes over traditional ones. Within that set, clients may prefer PQC-only to satisfy regulatory or compliance requirements, or prefer
 composite if they want defense-in-depth security.
 
 ## Transition Considerations
@@ -220,7 +220,9 @@ However, composite certificates comes with long-term implications. Once the trad
 
 Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.2 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 10.2 of {{!I-D.ietf-lamps-pq-composite-sigs}}.
 
-In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This loss of SUF is a property of the composite signature algorithm itself and does not impact protocols such as TLS, which treat composite ML-DSA as a black-box signature algorithm. Such protocols rely only on the signature generation and verification interfaces exposed by the composite algorithm, and signature verification results in a success or failure outcome. This property provides some operational flexibility during the transition, but does not remove the eventual need to deprecate broken traditional algorithms once CRQCs are available.
+In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This loss of SUF is a property of the composite signature algorithm itself and does not impact protocols such as TLS, which treat composite ML-DSA as a black-box signature algorithm. Such protocols rely only on the signature generation and verification interfaces exposed by the composite algorithm, and signature verification results in a success or failure outcome. 
+
+This property provides operational flexibility: it means that the arrival of CRQCs does not require an immediate, emergency migration. Instead, organizations can use this window to execute a phased, well-planned transition to PQC-only certificates.
 
 ## Deployment Realities
 
