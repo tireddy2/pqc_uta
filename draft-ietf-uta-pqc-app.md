@@ -222,7 +222,7 @@ Alternatively, a deployment may choose to continue using the same hybrid certifi
 
 In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This loss of SUF is a property of the composite signature algorithm itself and does not impact protocols such as TLS, which treat composite ML-DSA as a black-box signature algorithm. Such protocols rely only on the signature generation and verification interfaces exposed by the composite algorithm, and signature verification results in a success or failure outcome. 
 
-This property provides operational flexibility: it means that the arrival of CRQCs does not require an immediate, emergency migration. Instead, organizations can use this window to execute a phased, well-planned transition to PQC-only certificates.
+This property provides operational flexibility: even when the arrival of CRQCs is considered imminent and the timeline is known with high confidence, it does not necessitate an immediate emergency migration. Instead, it allows organizations a limited but sufficient transition window to execute a phased and carefully planned move to certificates that rely exclusively on PQC.
 
 ## Deployment Realities
 
