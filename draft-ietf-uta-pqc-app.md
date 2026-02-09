@@ -123,7 +123,7 @@ Applications utilizing (D)TLS that are vulnerable to "Harvest Now, Decrypt Later
    2. SecP256r1MLKEM768: Combines the classical SecP256r1 key exchange with the ML-KEM-768 Post-Quantum Key Encapsulation Mechanism.
    3. SecP384r1MLKEM1024: Combines the classical SecP384r1 key exchange with the ML-KEM-1024 Post-Quantum Key Encapsulation Mechanism.
 
-* Pure Post-Quantum Key Exchange: For deployments that require exclusively Post-Quantum key exchange, {{!I-D.ietf-tls-mlkem-key-agreement}} defines the following standalone NamedGroups for Post-Quantum key agreement in TLS 1.3: ML-KEM-512, ML-KEM-768, and ML-KEM-1024.
+* Pure Post-Quantum Key Exchange: For deployments that require exclusively Post-Quantum key exchange, {{!I-D.ietf-ietf-tls-mlkem}} defines the following standalone NamedGroups for Post-Quantum key agreement in TLS 1.3: ML-KEM-512, ML-KEM-768, and ML-KEM-1024.
 
 Hybrid Key Exchange is generally preferred over pure PQC key exchange because it provides defense-in-depth by combining the strengths of both classical and PQC algorithms. This ensures continued security, even if one algorithm is compromised during the transitional period.
 
@@ -220,7 +220,9 @@ However, composite certificates come with long-term implications. Once the tradi
 
 Alternatively, a deployment may choose to continue using the same hybrid certificate even after the traditional algorithm has been broken by the advent of a CRQC. While this may simplify operations by avoiding re-provisioning of trust anchors, it introduces a risk: the composite signature will no longer achieve Strong Unforgeability (SUF) (Section 10.1 of {{?I-D.ietf-pquip-pqc-engineers}}), as explained in Section 9.2 of {{!I-D.ietf-lamps-pq-composite-sigs}}.
 
-In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. This loss of SUF is a property of the composite signature algorithm itself and does not impact protocols such as TLS, which treat composite ML-DSA as a black-box signature algorithm. Such protocols rely only on the signature generation and verification interfaces exposed by the composite algorithm, and signature verification results in a success or failure outcome. 
+In this scenario, a CRQC can forge the broken traditional signature component (s1*) over a message (m). That forged component can then be combined with the valid post-quantum component (s2) to produce a composite signature (m, (s1*, s2)) that verifies successfully, thereby violating SUF. 
+
+This loss of SUF is a property of the composite signature algorithm itself and does not impact TLS, which treats composite ML-DSA as a black-box signature algorithm where signature verification results in a binary success or failure. As long as the post-quantum component remains existentially unforgeable, an attacker cannot impersonate a peer or compromise TLS authentication.
 
 As a result, the continued use of composite certificates after the traditional algorithm is broken can provide operational flexibility. Even when the arrival of CRQCs is considered imminent and the timeline is known with high confidence, this situation does not necessitate an immediate emergency migration. Instead, it allows organizations a limited but sufficient transition window to execute a phased and carefully planned migration to certificates that rely exclusively on PQC.
 
