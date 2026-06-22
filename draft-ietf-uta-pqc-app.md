@@ -97,7 +97,7 @@ This document adopts terminology defined in {{?RFC9794}}. For the purposes of th
 
 Digital signature algorithms play a critical role in X.509 certificates, Certificate Transparency Signed Certificate Timestamps, Online Certificate Status Protocol (OCSP) statements, remote attestation evidence, and any other mechanism that contributes signatures during a TLS handshake or in context of a secure communication establishment.
 
-This document adopts terminology from {{?I-D.ietf-pquip-pqc-engineers}}. As described there, terms such as "post-quantum," "quantum ready," "quantum resistant," and "quantum secure" are often used interchangeably to describe algorithms intended to resist attacks by CRQCs.
+This document adopts terminology from {{?RFC9958}}. As described there, terms such as "post-quantum," "quantum ready," "quantum resistant," and "quantum secure" are often used interchangeably to describe algorithms intended to resist attacks by CRQCs.
 
 # Timeline for Transition {#timeline}
 
