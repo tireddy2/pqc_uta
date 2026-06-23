@@ -67,13 +67,13 @@ Post-quantum cryptography presents new challenges for device manufacturers, appl
 
 The visible face of the Internet predominantly comprises services operating on a client-server architecture, where a client communicates with an application service. When using protocols such as TLS 1.3 {{?RFC8446}}, DTLS 1.3 {{?RFC9147}}, or protocols built on these foundations (e.g., QUIC {{?RFC9001}}), clients and servers perform ephemeral public-key exchanges, such as Elliptic Curve Diffie-Hellman (ECDH), to derive a shared secret that ensures forward secrecy. Additionally, they validate each other's identities through X.509 certificates, establishing secure communication.
 
-The emergence of a Cryptographically Relevant Quantum Computer (CRQC) would render current public-key algorithms insecure and obsolete. This is because the mathematical assumptions underpinning these algorithms, which currently offer high levels of security, would no longer hold in the presence of a CRQC. Consequently, there is an urgent need to update protocols and infrastructure with post-quantum cryptographic (PQC) algorithms. These algorithms are designed to remain secure against both CRQCs and classical computers. The traditional cryptographic primitives requiring replacement are discussed in {{?I-D.ietf-pquip-pqc-engineers}}, and the NIST PQC Standardization process has standardized algorithms such as ML-KEM, SLH-DSA, and ML-DSA for deployment in protocols.
+The emergence of a Cryptographically Relevant Quantum Computer (CRQC) would render current public-key algorithms insecure and obsolete. This is because the mathematical assumptions underpinning these algorithms, which currently offer high levels of security, would no longer hold in the presence of a CRQC. Consequently, there is an urgent need to update protocols and infrastructure with post-quantum cryptographic (PQC) algorithms. These algorithms are designed to remain secure against both CRQCs and classical computers. The traditional cryptographic primitives requiring replacement are discussed in {{?RFC9958}}, and the NIST PQC Standardization process has standardized algorithms such as ML-KEM, SLH-DSA, and ML-DSA for deployment in protocols.
 
 Historically, the industry has successfully transitioned between cryptographic protocols, such as upgrading TLS versions and deprecating older ones (e.g., SSLv2), and shifting from RSA to Elliptic Curve Cryptography (ECC), which improved security and reduced key sizes. However, the transition to PQC presents unique challenges, primarily due to the following:
 
    1. Algorithm Maturity: While NIST has finalized a set of PQC algorithms, ensuring the correctness and security of implementations remains critical. Even the most secure algorithm is vulnerable if implementation flaws introduce security risks.
 
-   2. Key and Signature Sizes: Many PQC algorithms require significantly larger key and signature sizes, which can inflate handshake packet sizes and impact network performance. For example, ML-KEM public keys are substantially larger than ECDH keys (see Table 5 in {{?I-D.ietf-pquip-pqc-engineers}}). Similarly, public keys for SLH-DSA and ML-DSA are much larger than those for P256 (see Table 6 in {{?I-D.ietf-pquip-pqc-engineers}}). Signature sizes for algorithms like SLH-DSA and ML-DSA are also considerably larger compared to traditional options like Ed25519 or ECDSA-P256, posing challenges for constrained environments (e.g., IoT) and increasing handshake times in high-latency or lossy networks.
+   2. Key and Signature Sizes: Many PQC algorithms require significantly larger key and signature sizes, which can inflate handshake packet sizes and impact network performance. For example, ML-KEM public keys are substantially larger than ECDH keys (see Table 5 in {{?RFC9958}}). Similarly, public keys for SLH-DSA and ML-DSA are much larger than those for P256 (see Table 6 in {{?RFC9958}}). Signature sizes for algorithms like SLH-DSA and ML-DSA are also considerably larger compared to traditional options like Ed25519 or ECDSA-P256, posing challenges for constrained environments (e.g., IoT) and increasing handshake times in high-latency or lossy networks.
 
    3. Performance Trade-Offs: While some PQC algorithms exhibit slower operations compared to traditional algorithms, others provide specific advantages. For instance, ML-KEM requires less CPU than X25519, and ML-DSA offers faster signature verification times compared to Ed25519, although its signature generation process is slower.
 
@@ -101,7 +101,7 @@ This document adopts terminology from {{?RFC9958}}. As described there, terms su
 
 # Timeline for Transition {#timeline}
 
-The timeline and driving motivations for transitioning to quantum-ready cryptography differ between data confidentiality and data authentication (e.g., signatures). The risk of "Harvest Now, Decrypt Later" (HNDL) attacks demands immediate action to protect data confidentiality (see Section 7 of {{?I-D.ietf-pquip-pqc-engineers}}), while the threat to authentication systems, although less urgent, requires forward-thinking planning to mitigate future risks.
+The timeline and driving motivations for transitioning to quantum-ready cryptography differ between data confidentiality and data authentication (e.g., signatures). The risk of "Harvest Now, Decrypt Later" (HNDL) attacks demands immediate action to protect data confidentiality (see Section 7 of {{?RFC9958}}), while the threat to authentication systems, although less urgent, requires forward-thinking planning to mitigate future risks.
 
 Encrypted payloads transmitted using Transport Layer Security (TLS) are vulnerable to decryption if an attacker equipped with a CRQC gains access to the traditional asymmetric public keys used in the TLS key exchange along with the transmitted ciphertext. TLS implementations typically use Diffie-Hellman-based key exchange schemes. If an attacker obtains a complete set of encrypted payloads, including the TLS setup, they could theoretically use a CRQC to derive the private key and decrypt the data.
 
@@ -187,8 +187,8 @@ The quantum-ready authentication property ensures robust authentication through 
 
 Post-quantum certificates contain only a PQC public key and are signed using a post-quantum algorithm. They are suitable for deployments capable of fully embracing post-quantum cryptography.
 
-  * ML-DSA Certificates: Defined in {{!I-D.ietf-lamps-dilithium-certificates}}, these use the Module-Lattice Digital Signature Algorithm (ML-DSA). {{!I-D.ietf-tls-mldsa}} explains how ML-DSA is applied for authentication in TLS 1.3.
-  * SLH-DSA Certificates: Defined in {{!I-D.ietf-lamps-x509-slhdsa}}, these use the SLH-DSA algorithm. SLH-DSA is supported for use with TLS through registered SignatureScheme values in the IANA TLS Parameters registry. SLH-DSA produces significantly larger signatures than ML-DSA, which increases TLS handshake sizes, but it offers strong security properties and flexibility across multiple parameter variants. Its performance impact is typically negligible for long-lived TLS connections and large data transfers, particularly in low-loss network environments. An advantage of SLH-DSA is that it is used as a pure post-quantum signature algorithm and does not require a PQ/T hybrid composite.
+  * ML-DSA Certificates: Defined in {{!RFC9881}}, these use the Module-Lattice Digital Signature Algorithm (ML-DSA). {{!I-D.ietf-tls-mldsa}} explains how ML-DSA is applied for authentication in TLS 1.3.
+  * SLH-DSA Certificates: Defined in {{!RFC9909}}, these use the SLH-DSA algorithm. SLH-DSA is supported for use with TLS through registered SignatureScheme values in the IANA TLS Parameters registry. SLH-DSA produces significantly larger signatures than ML-DSA, which increases TLS handshake sizes, but it offers strong security properties and flexibility across multiple parameter variants. Its performance impact is typically negligible for long-lived TLS connections and large data transfers, particularly in low-loss network environments. An advantage of SLH-DSA is that it is used as a pure post-quantum signature algorithm and does not require a PQ/T hybrid composite.
 
 ## Hybrid (Composite) X.509 Certificates
 
@@ -291,7 +291,7 @@ considerations to assist stakeholders in adopting PQC in a way that aligns with 
 
 # Security Considerations
 
-The security considerations outlined in {{?I-D.ietf-pquip-pqc-engineers}} must be carefully evaluated and taken into account.
+The security considerations outlined in {{?RFC9958}} must be carefully evaluated and taken into account.
 
 Post-quantum algorithms selected for standardization are relatively new, and their implementations are still in the early stages of
 maturity. This makes them more susceptible to implementation bugs compared to the well-established and extensively tested cryptographic
