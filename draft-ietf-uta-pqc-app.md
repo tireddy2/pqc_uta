@@ -71,7 +71,7 @@ The emergence of a Cryptographically Relevant Quantum Computer (CRQC) would rend
 
 Historically, the industry has successfully transitioned between cryptographic protocols, such as upgrading TLS versions and deprecating older ones (e.g., SSLv2), and shifting from RSA to Elliptic Curve Cryptography (ECC), which improved security and reduced key sizes. However, the transition to PQC presents unique challenges, primarily due to the following:
 
-   1. Algorithm Maturity: While NIST has finalized a set of PQC algorithms, ensuring the correctness and security of implementations remains critical. Even the most secure algorithm is vulnerable if implementation flaws introduce security risks.
+   1. Algorithm Maturity: While NIST has finalized a set of PQC algorithms, ensuring the correctness and security of implementations remains critical. Even the most secure algorithm is vulnerable if implementation flaws introduce security risks. Updates to protocol stacks and cryptographic libraries to support PQC algorithms introduces a substantial amount of new code.
 
    2. Key and Signature Sizes: Many PQC algorithms require significantly larger key and signature sizes, which can inflate handshake packet sizes and impact network performance. For example, ML-KEM public keys are substantially larger than ECDH keys (see Table 5 in {{?I-D.ietf-pquip-pqc-engineers}}). Similarly, public keys for SLH-DSA and ML-DSA are much larger than those for P256 (see Table 6 in {{?I-D.ietf-pquip-pqc-engineers}}). Signature sizes for algorithms like SLH-DSA and ML-DSA are also considerably larger compared to traditional options like Ed25519 or ECDSA-P256, posing challenges for constrained environments (e.g., IoT) and increasing handshake times in high-latency or lossy networks.
 
@@ -161,13 +161,13 @@ where it is mixed with the (EC)DHE-derived secret to strengthen confidentiality.
 
 While using an external PSK in combination with (EC)DHE can enhance confidentiality, it has the following limitations:
 
-* Key Management Complexity: Unlike ephemeral ECDHE keys, external PSKs require secure provisioning and lifecycle management.
+* Key Management Complexity: External PSKs require a key distribution system that ensures confidentiality of the exchanged secrets.
 * Limited Forward Secrecy: If an external PSK is static and reused across sessions, its compromise can retroactively expose
   past communications if the traditional key exchange is broken by a CRQC.
-* Scalability Challenges: Establishing unique PSKs for many clients can be impractical, especially in large-scale deployments.
-* Impersonation Risk: Because PSKs are symmetric, any party in possession of the PSK can authenticate as either the client or the server. This differs from certificate-based authentication, where compromise of a private key only enables impersonation of the corresponding entity.
+* Scalability Challenges: Distributing unique PSKs for many clients may be challenging. While there are successfully large-scale deployments of PSK-based authentication systems, their management requires good operational security practices.
+* Impersonation Risk: Because PSKs are symmetric, any party in possession of the PSK can authenticate as either the client or the server. This differs from certificate-based authentication, where compromise of a private key only enables impersonation of the corresponding entity. Whether this property introduced security problems is application deployment specific.
 * Quantum Resistance Dependence: While PSKs can provide additional secrecy against quantum threats, they must be
-  generated using a secure key-management technique. If a weak PSK is used, it may not offer sufficient security against
+  generated using a cryptographically secure random number generator. If a weak PSK is used, it may not offer sufficient security against
   brute-force attacks.
 
 Despite these limitations, external PSKs can serve as a complementary mechanism in PQC transition strategies, providing additional
@@ -195,6 +195,10 @@ Post-quantum certificates contain only a PQC public key and are signed using a p
 A composite certificate contains both a traditional public key algorithm (e.g., ECDSA) and a post-quantum algorithm (e.g., ML-DSA) within a single X.509 certificate. This design enables both algorithms to be used in parallel: the traditional component preserves a traditional security assumption during the transition and supports compatibility with existing infrastructure, while the post-quantum component introduces resistance against future quantum attacks.
 
 Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. These combine post-quantum algorithms like ML-DSA with traditional algorithms such as RSA-PKCS#1v1.5, RSA-PSS, ECDSA, Ed25519, or Ed448, to provide additional protection against vulnerabilities or implementation bugs in a single algorithm. {{!I-D.reddy-tls-composite-mldsa}} specifies how composite signatures, including ML-DSA, are used for TLS 1.3 authentication.
+
+## Using Certificates with an External Pre-Shared Key
+
+As a transitional measure, {{I-D.ietf-tls-8773bis}} allows certificate-based authentication to be combined with a strong external PSK. This provides confidentiality protection against CRQCs, provided that the external PSK is generated and distributed securely. It does not make the certificate-based authentication quantum resistant. Deployments can use this mechanism as a migration path while PQC algorithms are being introduced, at certificate-based authentication quantum resistant.
 
 ## Negotiation of Authentication Schemes
 
