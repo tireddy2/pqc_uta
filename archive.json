@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-09-18T00:52:37.333075+00:00",
+  "timestamp": "2026-06-25T02:29:11.492582+00:00",
   "repo": "tireddy2/pqc_uta",
   "labels": [
     {
@@ -305,6 +305,78 @@
           "body": "Done. ",
           "createdAt": "2025-09-17T09:29:52Z",
           "updatedAt": "2025-09-17T09:29:52Z"
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "id": "I_kwDOKcY3I88AAAABGbd4ew",
+      "title": "Comment from Russ",
+      "url": "https://github.com/tireddy2/pqc_uta/issues/29",
+      "state": "OPEN",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Two comments...\n\nIn Section 6, there needs to be a discussion of trust anchors to validate PQC certificates.\n\nThese documents are now RFCs:\n[I-D.ietf-lamps-dilithium-certificates]\n[I-D.ietf-lamps-x509-slhdsa]\n[I-D.ietf-pquip-pqc-engineers]\n\nRuss\n",
+      "createdAt": "2026-06-23T13:41:29Z",
+      "updatedAt": "2026-06-24T10:55:45Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Created PR here: \nhttps://github.com/tireddy2/pqc_uta/pull/30\n\nUpdated references already",
+          "createdAt": "2026-06-24T10:55:45Z",
+          "updatedAt": "2026-06-24T10:55:45Z"
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "id": "I_kwDOKcY3I88AAAABGjK-GQ",
+      "title": "DNS & Merkle Tree Ladder (MTL) Mode Signatures",
+      "url": "https://github.com/tireddy2/pqc_uta/issues/31",
+      "state": "OPEN",
+      "author": "hannestschofenig",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Should we discuss and reference MTL in the context of introducing PQC for DNS",
+      "createdAt": "2026-06-24T11:47:06Z",
+      "updatedAt": "2026-06-24T14:06:50Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "body": "It seems you are referring https://datatracker.ietf.org/doc/draft-fregly-dnsop-slh-dsa-mtl-dnssec/ ?",
+          "createdAt": "2026-06-24T14:06:50Z",
+          "updatedAt": "2026-06-24T14:06:50Z"
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "id": "I_kwDOKcY3I88AAAABGjLNPg",
+      "title": "PLANTS",
+      "url": "https://github.com/tireddy2/pqc_uta/issues/32",
+      "state": "OPEN",
+      "author": "hannestschofenig",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "When we talk about PQC and the WebPKI then we should reference & discuss the recent efforts around PLANTS",
+      "createdAt": "2026-06-24T11:47:44Z",
+      "updatedAt": "2026-06-24T14:04:17Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "body": "Agreed. ",
+          "createdAt": "2026-06-24T14:04:17Z",
+          "updatedAt": "2026-06-24T14:04:17Z"
         }
       ]
     }
@@ -1171,26 +1243,251 @@
       "id": "PR_kwDOKcY3I86pB4nR",
       "title": "Address comments from WG",
       "url": "https://github.com/tireddy2/pqc_uta/pull/26",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "tireddy2",
       "authorAssociation": "OWNER",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2025-09-17T09:18:29Z",
-      "updatedAt": "2025-09-17T09:32:57Z",
+      "updatedAt": "2026-01-25T11:33:26Z",
       "baseRepository": "tireddy2/pqc_uta",
       "baseRefName": "main",
       "baseRefOid": "4b7ecdf58f14533cbda415c2d9ce2b1b6ff62c79",
       "headRepository": "tireddy2/pqc_uta",
       "headRefName": "tireddy2-patch-11",
       "headRefOid": "517400d9dfb88467468d3b4b6ea97b261e42cd0e",
-      "closedAt": null,
+      "closedAt": "2026-01-25T11:33:26Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOKcY3I86_Ob0C",
+      "title": "Address comments from the WG",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/27",
+      "state": "MERGED",
+      "author": "tireddy2",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-01-25T11:38:12Z",
+      "updatedAt": "2026-06-22T14:10:24Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "761b5d1ba8020e655f4d873a7957740a41d1bdff",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "tireddy2-patch-12",
+      "headRefOid": "6236bf5713908e8ed99e33ebc9ea40bfd31f3de2",
+      "closedAt": "2026-06-22T14:10:24Z",
+      "mergedAt": "2026-06-22T14:10:24Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "fa15ca5e15b0feb852a48d29f816e6027e3d84c1"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKcY3I88AAAABDuOoOg",
+          "commit": {
+            "abbreviatedOid": "ca11a17"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-22T14:01:17Z",
+          "updatedAt": "2026-06-22T14:10:06Z",
+          "comments": [
+            {
+              "originalPosition": 58,
+              "body": "```suggestion\nThis document adopts terminology from {{?RFC9958}}. As described there, terms such as \"post-quantum,\" \"quantum ready,\" \"quantum resistant,\" and \"quantum secure\" are often used interchangeably to describe algorithms intended to resist attacks by CRQCs.\n```",
+              "createdAt": "2026-06-22T14:01:17Z",
+              "updatedAt": "2026-06-22T14:10:06Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOKcY3I87pO4_H",
+      "title": "Sync-up text again",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/28",
+      "state": "MERGED",
+      "author": "hannestschofenig",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-22T15:02:17Z",
+      "updatedAt": "2026-06-23T05:41:18Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "fa15ca5e15b0feb852a48d29f816e6027e3d84c1",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "sync-up",
+      "headRefOid": "33333248de92bfd55a5092696e2423fce872d495",
+      "closedAt": "2026-06-23T05:41:18Z",
+      "mergedAt": "2026-06-23T05:41:18Z",
+      "mergedBy": "tireddy2",
+      "mergeCommit": {
+        "oid": "2991926b8b0db915a2fdcfcc8c30056a74c078e4"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKcY3I88AAAABDziZSg",
+          "commit": {
+            "abbreviatedOid": "3333324"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-23T05:41:07Z",
+          "updatedAt": "2026-06-23T05:41:07Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "id": "PR_kwDOKcY3I87pu2im",
+      "title": "Clarifications regarding certificate chains.",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/30",
+      "state": "OPEN",
+      "author": "hannestschofenig",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-23T16:09:04Z",
+      "updatedAt": "2026-06-24T14:03:36Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "2991926b8b0db915a2fdcfcc8c30056a74c078e4",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "chains",
+      "headRefOid": "25f081503353a1016cb78b280c7d20d972455f46",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Created PR here: \r\nhttps://github.com/tireddy2/pqc_uta/pull/30\r\n\r\nUpdated references already",
+          "createdAt": "2026-06-24T10:55:17Z",
+          "updatedAt": "2026-06-24T10:55:17Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKcY3I88AAAABD_dJYg",
+          "commit": {
+            "abbreviatedOid": "25f0815"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-24T13:55:35Z",
+          "updatedAt": "2026-06-24T14:03:35Z",
+          "comments": [
+            {
+              "originalPosition": 12,
+              "body": "```suggestion\nTrust-anchor provisioning and update mechanisms are therefore a central part of PQC authentication migration. Long-lived or difficult-to-update systems, such as embedded devices and industrial deployments, may need PQC or hybrid trust anchors provisioned early, potentially at manufacture, because later field updates may be infeasible. The trust anchor must be in place before the PQC end-entity certificates that chain to it come into use.\n```",
+              "createdAt": "2026-06-24T13:55:35Z",
+              "updatedAt": "2026-06-24T14:03:36Z"
+            },
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\n* Trust Anchor Identifiers ({{?I-D.ietf-tls-trust-anchor-ids}}): This extension allows a client to signal a compact list of locally configured trust anchors using unique trust anchor identifiers rather than Distinguished Names. This reduces the size of the \"certificate_authorities\" extension and helps the server select an appropriate certificate chain, especially when multiple hierarchies are used (e.g., separate traditional, composite, and PQC roots). Trust Anchor Identifiers are an optimization and chain-selection mechanism; they do not establish trust anchors, change the client's trust-store policy, or by themselves make a certification path quantum-ready. The client still has to validate the path presented by the server against its locally configured trust anchors and local policy.\n```",
+              "createdAt": "2026-06-24T14:00:32Z",
+              "updatedAt": "2026-06-24T14:03:36Z"
+            },
+            {
+              "originalPosition": 23,
+              "body": "Removed the trailing sentence on local policy deciding traditional vs. PQC acceptance: a client only advertises trust anchors it actually trusts, so the server must select a chain under a trust anchor already acceptable to the client.",
+              "createdAt": "2026-06-24T14:03:29Z",
+              "updatedAt": "2026-06-24T14:03:36Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "id": "PR_kwDOKcY3I87qHkgE",
+      "title": "Misc Updates",
+      "url": "https://github.com/tireddy2/pqc_uta/pull/33",
+      "state": "OPEN",
+      "author": "hannestschofenig",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-06-24T13:04:45Z",
+      "updatedAt": "2026-06-24T13:36:30Z",
+      "baseRepository": "tireddy2/pqc_uta",
+      "baseRefName": "main",
+      "baseRefOid": "e80ef2bdb0eeba9da8a8975c6e6a038c363026eb",
+      "headRepository": "tireddy2/pqc_uta",
+      "headRefName": "hannestschofenig-patch-1",
+      "headRefOid": "e7fb411604145f1bdfd57c0ff384aff91100034a",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOKcY3I88AAAABD_O-dA",
+          "commit": {
+            "abbreviatedOid": "e7fb411"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-24T13:26:22Z",
+          "updatedAt": "2026-06-24T13:26:22Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "ietf-tls-8773bis only helps to provide protection against HNDL attack. PSK is not used for mutual authentication. The section can be simplified as follows : \n\n{{I-D.ietf-tls-8773bis}} allows certificate-based authentication to be combined with a strong external PSK. The PSK contributes to the key schedule, providing confidentiality protection against HNDL attacks by a CRQC, provided that the external PSK is generated and distributed securely. The PSK is not used for authentication, and this mechanism does not make the certificate-based authentication quantum resistant. Once the deployment migrates to a PQC or hybrid KEM, HNDL is addressed by the key exchange itself and this mechanism is no longer needed for confidentiality.\n\n",
+              "createdAt": "2026-06-24T13:26:22Z",
+              "updatedAt": "2026-06-24T13:33:25Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I88AAAABD_TdQQ",
+          "commit": {
+            "abbreviatedOid": "e7fb411"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-24T13:35:51Z",
+          "updatedAt": "2026-06-24T13:36:30Z",
+          "comments": [
+            {
+              "originalPosition": 20,
+              "body": "```suggestion\n* Impersonation Risk: Because PSKs are symmetric, any party in possession of the PSK can authenticate as either the client or the server. This differs from certificate-based authentication, where compromise of a private key only enables impersonation of the corresponding entity. Whether this is a problem depends on the specific deployment.\n```",
+              "createdAt": "2026-06-24T13:35:51Z",
+              "updatedAt": "2026-06-24T13:36:30Z"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
