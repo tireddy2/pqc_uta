@@ -165,7 +165,7 @@ While using an external PSK in combination with (EC)DHE can enhance confidential
 * Limited Forward Secrecy: If an external PSK is static and reused across sessions, its compromise can retroactively expose
   past communications if the traditional key exchange is broken by a CRQC.
 * Scalability Challenges: Distributing unique PSKs for many clients may be challenging. While there are successfully large-scale deployments of PSK-based authentication systems, their management requires good operational security practices.
-* Impersonation Risk: Because PSKs are symmetric, any party in possession of the PSK can authenticate as either the client or the server. This differs from certificate-based authentication, where compromise of a private key only enables impersonation of the corresponding entity. Whether this property introduced security problems is application deployment specific.
+* Impersonation Risk: Because PSKs are symmetric, any party in possession of the PSK can authenticate as either the client or the server. This differs from certificate-based authentication, where compromise of a private key only enables impersonation of the corresponding entity. Whether this is a problem depends on the specific deployment.
 * Quantum Resistance Dependence: While PSKs can provide additional secrecy against quantum threats, they must be
   generated using a cryptographically secure random number generator. If a weak PSK is used, it may not offer sufficient security against
   brute-force attacks.
