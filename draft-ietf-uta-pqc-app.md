@@ -196,6 +196,16 @@ A composite certificate contains both a traditional public key algorithm (e.g., 
 
 Composite certificates are defined in {{!I-D.ietf-lamps-pq-composite-sigs}}. These combine post-quantum algorithms like ML-DSA with traditional algorithms such as RSA-PKCS#1v1.5, RSA-PSS, ECDSA, Ed25519, or Ed448, to provide additional protection against vulnerabilities or implementation bugs in a single algorithm. {{!I-D.reddy-tls-composite-mldsa}} specifies how composite signatures, including ML-DSA, are used for TLS 1.3 authentication.
 
+## Trust Anchors for PQC Certificate Validation
+
+Deploying a PQC or PQ/T hybrid end-entity certificate is not sufficient by itself to provide quantum-ready authentication. The certificate path has to validate to a trust anchor that is appropriate for the intended security property. In TLS, the trust anchor is local client configuration, typically provisioned through an operating system, browser, application, device-management system, or private PKI trust store. It is not established by the server during the TLS handshake.
+
+For a certification path to provide post-quantum authentication, each validation-critical signature from the end-entity certificate up to the configured trust anchor needs to be protected by a PQC or PQ/T hybrid signature scheme. A PQC end-entity certificate issued under a purely traditional CA hierarchy does not by itself provide post-quantum authentication, because an attacker equipped with a CRQC could potentially forge signatures made with traditional CA keys.
+
+During migration, deployments may use separate PQC trust anchors, composite trust anchors, or parallel traditional and PQC certification paths. Clients need local policy to determine which trust anchors are acceptable for a given application and whether a traditional-only path is still permitted as fallback. Such fallback policies should be explicit, because accepting a traditional-only certification path can silently downgrade the authentication security property.
+
+Trust-anchor provisioning and update mechanisms are therefore a central part of PQC authentication migration. Long-lived or difficult-to-update systems, such as embedded devices and industrial deployments, may need PQC or hybrid trust anchors provisioned early, potentially at manufacture, because later field updates may be infeasible. The trust anchor must be in place before the PQC end-entity certificates that chain to it come into use.
+
 ## Negotiation of Authentication Schemes
 
 During the transition, clients and servers may be configured to support multiple authentication schemes (e.g., traditional, composite, and PQC-only). Clients indicate supported signature schemes in the "signature_algorithms" extension {{!RFC8446}}, listed in decreasing order of preference.
@@ -244,8 +254,7 @@ To address the challenge of large PQ or PQ/T hybrid certificate chains during th
 
 * Abridged TLS Certificate ({{?I-D.ietf-tls-cert-abridge}}): This approach minimizes the size of the certificate chain by omitting intermediate certificates that are already known to the client. Instead, the server provides a compact representation of the certificate chain, and the client reconstructs the omitted certificates using a well-known common CA database. This mechanism significantly reduces bandwidth requirements while preserving compatibility with existing certificate validation processes. Additionally, it explores potential methods to compress the end-entity certificate itself, though this aspect remains under discussion within the TLS Working Group.
 
-* Trust Anchor Identifiers ({{?I-D.ietf-tls-trust-anchor-ids}}): This extension allows a client to signal a compact list of trusted root CAs using unique trust anchor identifiers rather than Distinguished Names. This reduces the size of the "certificate_authorities" extension and helps the server select an appropriate certificate chain,
-especially when multiple hierarchies are used (e.g., separate traditional and PQ roots). This mechanism can help reduce handshake size and improve efficiency in hybrid or PQC deployments.
+* Trust Anchor Identifiers ({{?I-D.ietf-tls-trust-anchor-ids}}): This extension allows a client to signal a compact list of locally configured trust anchors using unique trust anchor identifiers rather than Distinguished Names. This reduces the size of the "certificate_authorities" extension and helps the server select an appropriate certificate chain, especially when multiple hierarchies are used (e.g., separate traditional, composite, and PQC roots). Trust Anchor Identifiers are an optimization and chain-selection mechanism; they do not establish trust anchors, change the client's trust-store policy, or by themselves make a certification path quantum-ready. The client still has to validate the path presented by the server against its locally configured trust anchors and local policy.
 
 These techniques aim to optimize the exchange of certificate chains during the TLS handshake, particularly in scenarios involving large PQC-related certificates, while balancing efficiency and compatibility.
 
