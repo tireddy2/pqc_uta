@@ -5,8 +5,8 @@
 uta                                                             T. Reddy
 Internet-Draft                                                     Nokia
 Intended status: Standards Track                           H. Tschofenig
-Expires: 25 December 2026                                       UniBw M.
-                                                            23 June 2026
+Expires: 31 December 2026                                       UniBw M.
+                                                            29 June 2026
 
 
   Post-Quantum Cryptography Recommendations for TLS-based Applications
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 December 2026.
+   This Internet-Draft will expire on 31 December 2026.
 
 Copyright Notice
 
@@ -907,9 +907,9 @@ Normative References
    [I-D.ietf-tls-mlkem]
               Connolly, D., "ML-KEM Post-Quantum Key Agreement for TLS
               1.3", Work in Progress, Internet-Draft, draft-ietf-tls-
-              mlkem-07, 12 February 2026,
+              mlkem-08, 24 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-tls-
-              mlkem-07>.
+              mlkem-08>.
 
    [I-D.reddy-tls-composite-mldsa]
               Reddy.K, T., Hollebeek, T., Gray, J., Fluhrer, S., and D.
