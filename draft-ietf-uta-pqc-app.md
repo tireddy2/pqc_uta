@@ -204,7 +204,7 @@ For a certification path to provide post-quantum authentication, each validation
 
 During migration, deployments may use separate PQC trust anchors, composite trust anchors, or parallel traditional and PQC certification paths. Clients need local policy to determine which trust anchors are acceptable for a given application and whether a traditional-only path is still permitted as fallback. Such fallback policies should be explicit, because accepting a traditional-only certification path can silently downgrade the authentication security property.
 
-Trust-anchor provisioning and update mechanisms are therefore a central part of PQC authentication migration. Long-lived or difficult-to-update systems, such as embedded devices and industrial deployments, may need to install PQC or hybrid trust anchors before PQC end-entity certificates are widely deployed.
+Trust-anchor provisioning and update mechanisms are therefore a central part of PQC authentication migration. Long-lived or difficult-to-update systems, such as embedded devices and industrial deployments, may need PQC or hybrid trust anchors provisioned early, potentially at manufacture, because later field updates may be infeasible. The trust anchor must be in place before the PQC end-entity certificates that chain to it come into use.
 
 ## Negotiation of Authentication Schemes
 
