@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-06-25T02:29:11.492582+00:00",
+  "timestamp": "2026-06-30T02:32:38.072652+00:00",
   "repo": "tireddy2/pqc_uta",
   "labels": [
     {
@@ -1367,13 +1367,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-06-23T16:09:04Z",
-      "updatedAt": "2026-06-24T14:03:36Z",
+      "updatedAt": "2026-06-29T12:45:12Z",
       "baseRepository": "tireddy2/pqc_uta",
       "baseRefName": "main",
       "baseRefOid": "2991926b8b0db915a2fdcfcc8c30056a74c078e4",
       "headRepository": "tireddy2/pqc_uta",
       "headRefName": "chains",
-      "headRefOid": "25f081503353a1016cb78b280c7d20d972455f46",
+      "headRefOid": "ba0a8eeb0cf2bc6e88a2bb05bb90db5e2a8de345",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1419,6 +1419,19 @@
               "updatedAt": "2026-06-24T14:03:36Z"
             }
           ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I88AAAABEbMyLw",
+          "commit": {
+            "abbreviatedOid": "ba0a8ee"
+          },
+          "author": "tireddy2",
+          "authorAssociation": "OWNER",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2026-06-29T12:45:12Z",
+          "updatedAt": "2026-06-29T12:45:12Z",
+          "comments": []
         }
       ]
     },
@@ -1434,13 +1447,13 @@
       "labels": [],
       "body": "",
       "createdAt": "2026-06-24T13:04:45Z",
-      "updatedAt": "2026-06-24T13:36:30Z",
+      "updatedAt": "2026-06-29T09:06:01Z",
       "baseRepository": "tireddy2/pqc_uta",
       "baseRefName": "main",
       "baseRefOid": "e80ef2bdb0eeba9da8a8975c6e6a038c363026eb",
       "headRepository": "tireddy2/pqc_uta",
       "headRefName": "hannestschofenig-patch-1",
-      "headRefOid": "e7fb411604145f1bdfd57c0ff384aff91100034a",
+      "headRefOid": "23c0b34053e90b4e5e7b62ab2780e4f6ecb53579",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
@@ -1484,6 +1497,26 @@
               "body": "```suggestion\n* Impersonation Risk: Because PSKs are symmetric, any party in possession of the PSK can authenticate as either the client or the server. This differs from certificate-based authentication, where compromise of a private key only enables impersonation of the corresponding entity. Whether this is a problem depends on the specific deployment.\n```",
               "createdAt": "2026-06-24T13:35:51Z",
               "updatedAt": "2026-06-24T13:36:30Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOKcY3I88AAAABEZtRLg",
+          "commit": {
+            "abbreviatedOid": "e7fb411"
+          },
+          "author": "hannestschofenig",
+          "authorAssociation": "COLLABORATOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-06-29T09:06:00Z",
+          "updatedAt": "2026-06-29T09:06:01Z",
+          "comments": [
+            {
+              "originalPosition": 33,
+              "body": "I am not sure why you are saying that the PSK is not used for authentication. There is the assumption that there is some PSK key distribution being used here so that each party gets a unique PSK. How is this not another layer of authentication?",
+              "createdAt": "2026-06-29T09:06:00Z",
+              "updatedAt": "2026-06-29T09:06:01Z"
             }
           ]
         }
